@@ -7,6 +7,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,8 +26,29 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://rickandmortyapi.com/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
         findViewById<Button>(R.id.mainButton).setOnClickListener {
-            findViewById<TextView>(R.id.mainTextView).text = getString(R.string.changed_string)
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = retrofit.create(RickAndMortyApiService::class.java).getCharacters()
+
+                if (response.isSuccessful) {
+                    val characterList = response.body()
+                    runOnUiThread {
+                        findViewById<TextView>(R.id.mainTextView).text = characterList.toString()
+                    }
+                } else {
+                    Snackbar.make(findViewById(R.id.main), "Error: ${response.code()}", Snackbar.LENGTH_LONG).show()
+                }
+            }
         }
     }
+}
+
+interface RickAndMortyApiService {
+    @GET("character")
+    suspend fun getCharacters(): Response<Any>
 }
