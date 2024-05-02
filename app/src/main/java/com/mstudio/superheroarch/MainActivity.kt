@@ -2,11 +2,13 @@ package com.mstudio.superheroarch
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,8 +39,13 @@ class MainActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val characterList = response.body()
+                    val character = characterList?.results?.first()
                     runOnUiThread {
-                        findViewById<TextView>(R.id.mainTextView).text = characterList.toString()
+                        findViewById<TextView>(R.id.nameTextView).text = character?.name
+                        findViewById<TextView>(R.id.statusTextView).text = character?.status
+                        Glide.with(this@MainActivity)
+                            .load(character?.image)
+                            .into(findViewById(R.id.characterImageView))
                     }
                 } else {
                     Snackbar.make(findViewById(R.id.main), "Error: ${response.code()}", Snackbar.LENGTH_LONG).show()
@@ -50,5 +57,5 @@ class MainActivity : AppCompatActivity() {
 
 interface RickAndMortyApiService {
     @GET("character")
-    suspend fun getCharacters(): Response<Any>
+    suspend fun getCharacters(): Response<ApiResponseWrapper>
 }
