@@ -2,6 +2,6 @@
 
 Project to learn about architecture and design patterns in Android.
 
-You will need an API key from https://superheroapi.com/ to run this project.
+We didn't find a proper super hero API, so we decided to go with Rick & Morty!
 
-Use it as `super_hero_api_key` in the local.properties file.
+API docs: https://rickandmortyapi.com/documentation
