@@ -18,10 +18,6 @@ import retrofit2.http.GET
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        private const val BASE_URL = "https://rickandmortyapi.com/api/"
-    }
-
     private val adapter = CharactersAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +53,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        adapter.setItemClickedListener {
+            startActivity(CharacterDetailsActivity.newIntent(this, it))
+        }
+    }
+
+    companion object {
+        private const val BASE_URL = "https://rickandmortyapi.com/api/"
     }
 }
 

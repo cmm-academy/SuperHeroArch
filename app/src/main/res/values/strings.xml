@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">SuperHeroArch</string>
-    <string name="get_heroes">Get heroes</string>
+    <string name="app_name">Rick and Morty</string>
+    <string name="get_heroes">Get characters</string>
     <string name="placeholder">Here we\'ll show the list</string>
     <string name="changed_string">This is another text.</string>
     <string name="character_image">Character Image</string>
+    <string name="gender">Gender:</string>
+    <string name="species">Species:</string>
+    <string name="location">Current location:</string>
 </resources>
