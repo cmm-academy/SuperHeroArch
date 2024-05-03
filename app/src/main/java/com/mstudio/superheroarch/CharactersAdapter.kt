@@ -8,33 +8,42 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class CharactersAdapter: RecyclerView.Adapter<CharactersAdapter.CharacterViewHolder>(){
+class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharacterViewHolder>() {
 
     private var characters = listOf<Character>()
+    private var listener: ((Character) -> Unit)? = null
 
-    fun setCharacters(characters: List<Character>){
+    fun setCharacters(characters: List<Character>) {
         this.characters = characters
         notifyItemRangeInserted(0, characters.size)
+    }
+
+    fun setItemClickedListener(listener: (Character) -> Unit) {
+        this.listener = listener
     }
 
     override fun getItemCount(): Int {
         return characters.size
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.character_row, parent, false)
         return CharacterViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        holder.bind(characters[position])
+        holder.bind(characters[position], listener)
     }
 
-    class CharacterViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+    class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
         private val statusTextView: TextView = itemView.findViewById(R.id.statusTextView)
         private val characterImageView: ImageView = itemView.findViewById(R.id.characterImageView)
 
-        fun bind(character: Character){
+        fun bind(character: Character, listener: ((Character) -> Unit)?) {
+            itemView.setOnClickListener {
+                listener?.invoke(character)
+            }
             nameTextView.text = character.name
             statusTextView.text = character.status
             Glide.with(itemView.context)
