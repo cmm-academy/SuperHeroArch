@@ -2,13 +2,11 @@ package com.mstudio.superheroarch
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +17,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val BASE_URL = "https://rickandmortyapi.com/api/"
+    }
+
+    private val adapter = CharactersAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -29,23 +33,24 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        val retrieveCharsButton = findViewById<Button>(R.id.mainButton)
+        findViewById<RecyclerView>(R.id.characterList).adapter = adapter
+
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://rickandmortyapi.com/api/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        findViewById<Button>(R.id.mainButton).setOnClickListener {
+        retrieveCharsButton.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 val response = retrofit.create(RickAndMortyApiService::class.java).getCharacters()
 
                 if (response.isSuccessful) {
                     val characterList = response.body()
-                    val character = characterList?.results?.first()
                     runOnUiThread {
-                        findViewById<TextView>(R.id.nameTextView).text = character?.name
-                        findViewById<TextView>(R.id.statusTextView).text = character?.status
-                        Glide.with(this@MainActivity)
-                            .load(character?.image)
-                            .into(findViewById(R.id.characterImageView))
+                        adapter.setCharacters(characterList?.results ?: emptyList())
+                        if(characterList?.results.isNullOrEmpty().not()){
+                            retrieveCharsButton.visibility = Button.GONE
+                        }
                     }
                 } else {
                     Snackbar.make(findViewById(R.id.main), "Error: ${response.code()}", Snackbar.LENGTH_LONG).show()
