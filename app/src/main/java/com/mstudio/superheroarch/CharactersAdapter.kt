@@ -1,5 +1,6 @@
 package com.mstudio.superheroarch
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +14,10 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharacterViewHo
     private var characters = listOf<Character>()
     private var listener: ((Character) -> Unit)? = null
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setCharacters(characters: List<Character>) {
         this.characters = characters
-        notifyItemRangeInserted(0, characters.size)
+        notifyDataSetChanged()
     }
 
     fun setItemClickedListener(listener: (Character) -> Unit) {
