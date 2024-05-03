@@ -3,4 +3,5 @@
     <string name="get_heroes">Get heroes</string>
     <string name="placeholder">Here we\'ll show the list</string>
     <string name="changed_string">This is another text.</string>
+    <string name="character_image">Character Image</string>
 </resources>
