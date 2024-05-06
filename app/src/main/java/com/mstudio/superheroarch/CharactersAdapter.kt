@@ -1,5 +1,6 @@
 package com.mstudio.superheroarch
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +11,14 @@ import com.bumptech.glide.Glide
 
 class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharacterViewHolder>() {
 
-    private var characters = listOf<Character>()
+    private var characters = mutableListOf<Character>()
     private var listener: ((Character) -> Unit)? = null
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setCharacters(characters: List<Character>) {
-        this.characters = characters
-        notifyItemRangeInserted(0, characters.size)
+        this.characters.clear()
+        this.characters.addAll(characters)
+        notifyDataSetChanged()
     }
 
     fun setItemClickedListener(listener: (Character) -> Unit) {
