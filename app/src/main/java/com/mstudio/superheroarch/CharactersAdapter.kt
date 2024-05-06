@@ -11,12 +11,13 @@ import com.bumptech.glide.Glide
 
 class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharacterViewHolder>() {
 
-    private var characters = listOf<Character>()
+    private var characters = mutableListOf<Character>()
     private var listener: ((Character) -> Unit)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setCharacters(characters: List<Character>) {
-        this.characters = characters
+        this.characters.clear()
+        this.characters.addAll(characters)
         notifyDataSetChanged()
     }
 

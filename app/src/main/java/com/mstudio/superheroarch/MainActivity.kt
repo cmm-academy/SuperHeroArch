@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,11 @@ class MainActivity : AppCompatActivity() {
 
     private val adapter = CharactersAdapter()
     private val characterList = mutableListOf<Character>()
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -45,11 +51,14 @@ class MainActivity : AppCompatActivity() {
             startActivity(CharacterDetailsActivity.newIntent(this, it))
         }
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        requestCharacters()
 
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+            requestCharacters()
+        }
+    }
+
+    private fun requestCharacters() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = retrofit.create(RickAndMortyApiService::class.java).getCharacters()
             if (response.isSuccessful) {
