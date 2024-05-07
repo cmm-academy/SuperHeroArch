@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.viewmodel)
     implementation(libs.glide)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
