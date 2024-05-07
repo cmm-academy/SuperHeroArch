@@ -10,7 +10,8 @@ data class Character(
     val species: String,
     val gender: String,
     val origin: Location,
-    val location: Location
+    val location: Location,
+    val episode: List<String>
 ) : Serializable
 
 data class Location(

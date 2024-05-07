@@ -113,4 +113,60 @@
         app:layout_constraintTop_toBottomOf="@id/detailsSpeciesTextView"
         tools:text="Earth (Replacement Dimension)" />
 
+    <TextView
+        android:id="@+id/detailsFirstEpisodeLabel"
+        style="@style/TextAppearance.Material3.BodyLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/first_episode"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detailsLocationTextView" />
+
+    <TextView
+        android:id="@+id/detailsFirstEpisodeTextView"
+        style="@style/TextAppearance.Material3.BodyLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toEndOf="@id/detailsFirstEpisodeLabel"
+        app:layout_constraintTop_toBottomOf="@id/detailsLocationTextView"
+        tools:text="Pilot" />
+
+    <TextView
+        android:id="@+id/detailsAirDateLabel"
+        style="@style/TextAppearance.Material3.BodyLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/air_date"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detailsFirstEpisodeTextView" />
+
+    <TextView
+        android:id="@+id/detailsAirDateTextView"
+        style="@style/TextAppearance.Material3.BodyLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toEndOf="@id/detailsAirDateLabel"
+        app:layout_constraintTop_toBottomOf="@id/detailsFirstEpisodeLabel"
+        tools:text="December 2, 2013" />
+
+    <ProgressBar
+        android:id="@+id/detailsProgressBar"
+        android:indeterminate="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
