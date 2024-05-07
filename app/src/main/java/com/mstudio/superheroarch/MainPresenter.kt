@@ -1,12 +1,13 @@
 package com.mstudio.superheroarch
 
-import kotlinx.coroutines.CoroutineScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainPresenter(private val view: MainViewTranslator) {
+class MainPresenter(private val view: MainViewTranslator) : ViewModel() {
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
@@ -15,30 +16,31 @@ class MainPresenter(private val view: MainViewTranslator) {
     private var selectedChipId = R.id.chipAll
 
     fun onViewCreated() {
-        requestCharacters()
+        retrieveChars()
     }
 
     fun onRefreshClicked() {
-        requestCharacters()
+        retrieveChars()
     }
 
-    private fun requestCharacters() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = retrofit.create(RickAndMortyApiService::class.java).getCharacters()
-            if (response.isSuccessful) {
-                val characterListResponse = response.body()
-                characterListResponse?.results?.let {
+    private fun retrieveChars() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = retrofit.create(RickAndMortyApiService::class.java).getCharacters()
+                if (response.isSuccessful) {
                     characterList.clear()
-                    characterList.addAll(it)
+                    characterList.addAll(response.body()?.results ?: emptyList())
+                    filterAndShowChars(selectedChipId)
+                } else {
+                    view.showErrorMessage(response.errorBody().toString())
                 }
-                filterAndShowChars(selectedChipId)
-            } else {
-                view.showErrorMessage("Error: ${response.code()}")
+            } catch (e: Exception) {
+                view.showErrorMessage(e.message ?: "Unknown error")
             }
         }
     }
 
-    fun filterAndShowChars(checkedChipId: Int) {
+    private fun filterAndShowChars(checkedChipId: Int) {
         when (checkedChipId) {
             R.id.chipAll -> view.showCharacters(characterList)
             R.id.chipAlive -> view.showCharacters(characterList.filter { it.status.equals(ALIVE_STATUS, true) })
