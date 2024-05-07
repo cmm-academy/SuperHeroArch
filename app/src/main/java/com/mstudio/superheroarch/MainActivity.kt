@@ -46,9 +46,7 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
     }
 
     override fun showCharacters(characterList: List<Character>) {
-        runOnUiThread {
-            adapter.setCharacters(characterList)
-        }
+        adapter.setCharacters(characterList)
     }
 
     override fun showErrorMessage(error: String) {

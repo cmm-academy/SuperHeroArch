@@ -16,7 +16,7 @@ class CharacterDetailsActivity : AppCompatActivity(), CharacterDetailsViewTransl
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_character_details)
         val character: Character? = if (android.os.Build.VERSION.SDK_INT >= 33) {
-            intent.getParcelableExtra("character", Character::class.java)
+            intent.getSerializableExtra("character", Character::class.java)
         } else {
             @Suppress("DEPRECATION")
             intent.getSerializableExtra("character") as Character
@@ -38,10 +38,8 @@ class CharacterDetailsActivity : AppCompatActivity(), CharacterDetailsViewTransl
     }
 
     override fun showEpisodeDetails(episode: Episode) {
-        runOnUiThread {
-            findViewById<TextView>(R.id.detailsFirstEpisodeTextView).text = getString(R.string.episode_placeholder, episode.episode, episode.name)
-            findViewById<TextView>(R.id.detailsAirDateTextView).text = episode.air_date
-        }
+        findViewById<TextView>(R.id.detailsFirstEpisodeTextView).text = getString(R.string.episode_placeholder, episode.episode, episode.name)
+        findViewById<TextView>(R.id.detailsAirDateTextView).text = episode.air_date
     }
 
     override fun showErrorMessage(error: String) {
