@@ -38,8 +38,8 @@ class CharacterDetailsActivity : AppCompatActivity(), CharacterDetailsViewTransl
     }
 
     override fun showEpisodeDetails(episode: Episode) {
-        findViewById<TextView>(R.id.detailsFirstEpisodeTextView).text = getString(R.string.episode_placeholder, episode.episode, episode.name)
-        findViewById<TextView>(R.id.detailsAirDateTextView).text = episode.air_date
+        findViewById<TextView>(R.id.detailsFirstEpisodeTextView).text = getString(R.string.episode_placeholder, episode.episodeNumber, episode.name)
+        findViewById<TextView>(R.id.detailsAirDateTextView).text = episode.releaseDate
     }
 
     override fun showErrorMessage(error: String) {
