@@ -2,7 +2,9 @@ package com.mstudio.superheroarch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -20,20 +22,21 @@ class CharacterDetailsViewModel(val viewTranslator: CharacterDetailsViewTranslat
         character?.let {
             val firstEpisode = it.episode.first()
             val episodeNumber = firstEpisode.substringAfterLast("/").toInt()
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 val response = retrofit.create(RickAndMortyDetailsApiService::class.java).getEpisodeDetails(episodeNumber)
-                if (response.isSuccessful) {
-                    val episode = response.body()
-                    if (episode != null) {
-                        viewTranslator.showEpisodeDetails(episode)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val episode = response.body()
+                        if (episode != null) {
+                            viewTranslator.showEpisodeDetails(episode)
+                        } else {
+                            viewTranslator.showErrorMessage("Episode not found")
+                        }
                     } else {
-                        viewTranslator.showErrorMessage("Episode not found")
+                        viewTranslator.showErrorMessage(response.errorBody().toString())
                     }
-                } else {
-                    viewTranslator.showErrorMessage(response.errorBody().toString())
+                    viewTranslator.hideLoader()
                 }
-                viewTranslator.hideLoader()
-
             }
         }
     }

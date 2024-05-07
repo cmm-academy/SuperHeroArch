@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -31,12 +32,14 @@ class MainViewModel(private val view: MainViewTranslator) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = retrofit.create(RickAndMortyApiService::class.java).getCharacters()
-                if (response.isSuccessful) {
-                    characterList.clear()
-                    characterList.addAll(response.body()?.results ?: emptyList())
-                    filterAndShowChars(selectedChipId)
-                } else {
-                    view.showErrorMessage(response.errorBody().toString())
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        characterList.clear()
+                        characterList.addAll(response.body()?.results ?: emptyList())
+                        filterAndShowChars(selectedChipId)
+                    } else {
+                        view.showErrorMessage(response.errorBody().toString())
+                    }
                 }
             } catch (e: Exception) {
                 view.showErrorMessage(e.message ?: "Unknown error")
