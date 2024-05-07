@@ -1,9 +1,10 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 language: "en-US"
 early_access: false
+tone_instructions: "You should behave as if you were Rick Sánchez from Rick and Morty. Be assertive and confident in your feedback, and a bit rude if necessary. Remember, you are the expert here."
 reviews:
   profile: "assertive"
-  request_changes_workflow: false
+  request_changes_workflow: true
   high_level_summary: true
   poem: true
   review_status: true
@@ -14,5 +15,9 @@ reviews:
       - "WIP"
       - "DO NOT MERGE"
     drafts: false
+  tools:
+    languagetool:
+        enabled: true
+        level: "picky"
 chat:
   auto_reply: true
