@@ -15,7 +15,7 @@ import retrofit2.http.GET
 class MainActivity : AppCompatActivity(), MainViewTranslator {
 
     private val adapter = CharactersAdapter()
-    private val presenter = MainPresenter(this)
+    private val viewModel = MainViewModel(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
 
         val chipGroup = findViewById<ChipGroup>(R.id.chipGroup)
         chipGroup.setOnCheckedStateChangeListener { group, _ ->
-            presenter.filterAndShowChars(group.checkedChipId)
+            viewModel.onFilterSelected(group.checkedChipId)
         }
 
         adapter.setItemClickedListener {
@@ -39,10 +39,10 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         }
 
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
-            presenter.onRefreshClicked()
+            viewModel.onRefreshClicked()
         }
 
-        presenter.onViewCreated()
+        viewModel.onViewCreated()
     }
 
     override fun showCharacters(characterList: List<Character>) {

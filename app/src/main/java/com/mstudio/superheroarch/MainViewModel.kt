@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainPresenter(private val view: MainViewTranslator) : ViewModel() {
+class MainViewModel(private val view: MainViewTranslator) : ViewModel() {
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
@@ -21,6 +21,10 @@ class MainPresenter(private val view: MainViewTranslator) : ViewModel() {
 
     fun onRefreshClicked() {
         retrieveChars()
+    }
+
+    fun onFilterSelected(checkedChipId: Int) {
+        filterAndShowChars(checkedChipId)
     }
 
     private fun retrieveChars() {
