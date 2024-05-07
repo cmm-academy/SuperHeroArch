@@ -5,17 +5,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
 
-class CharacterDetailsViewModel(val viewTranslator: CharacterDetailsViewTranslator) : ViewModel() {
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+class CharacterDetailsViewModel(private val viewTranslator: CharacterDetailsViewTranslator) : ViewModel() {
+    private val repository = RickAndMortyRepository()
 
     fun onCharacterRetrieved(character: Character?) {
         viewTranslator.showLoader()
@@ -23,7 +15,7 @@ class CharacterDetailsViewModel(val viewTranslator: CharacterDetailsViewTranslat
             val firstEpisode = it.episode.first()
             val episodeNumber = firstEpisode.substringAfterLast("/").toInt()
             viewModelScope.launch(Dispatchers.IO) {
-                val response = retrofit.create(RickAndMortyDetailsApiService::class.java).getEpisodeDetails(episodeNumber)
+                val response = repository.getEpisodeDetails(episodeNumber)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
                         val episode = response.body()
@@ -40,10 +32,6 @@ class CharacterDetailsViewModel(val viewTranslator: CharacterDetailsViewTranslat
             }
         }
     }
-
-    companion object {
-        private const val BASE_URL = "https://rickandmortyapi.com/api/"
-    }
 }
 
 interface CharacterDetailsViewTranslator {
@@ -52,10 +40,4 @@ interface CharacterDetailsViewTranslator {
     fun showLoader()
     fun hideLoader()
 
-}
-
-
-interface RickAndMortyDetailsApiService {
-    @GET("episode/{id}")
-    suspend fun getEpisodeDetails(@Path("id") id: Int): Response<Episode>
 }
