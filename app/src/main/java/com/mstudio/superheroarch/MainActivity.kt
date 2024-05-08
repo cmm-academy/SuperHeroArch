@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import retrofit2.Response
-import retrofit2.http.GET
 
 class MainActivity : AppCompatActivity(), MainViewTranslator {
 
@@ -52,9 +50,4 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
     override fun showErrorMessage(error: String) {
         Snackbar.make(findViewById(R.id.main), error, Snackbar.LENGTH_SHORT).show()
     }
-}
-
-interface RickAndMortyApiService {
-    @GET("character")
-    suspend fun getCharacters(): Response<ApiResponseWrapper>
 }

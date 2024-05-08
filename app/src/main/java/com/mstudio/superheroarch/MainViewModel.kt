@@ -5,14 +5,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainViewModel(private val view: MainViewTranslator) : ViewModel() {
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+
+    private val repository = RickAndMortyRepository()
     private val characterList = mutableListOf<Character>()
     private var selectedChipId = R.id.chipAll
 
@@ -31,7 +27,7 @@ class MainViewModel(private val view: MainViewTranslator) : ViewModel() {
     private fun retrieveChars() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val response = retrofit.create(RickAndMortyApiService::class.java).getCharacters()
+                val response = repository.getCharacters()
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
                         characterList.clear()
@@ -58,7 +54,6 @@ class MainViewModel(private val view: MainViewTranslator) : ViewModel() {
     }
 
     companion object {
-        private const val BASE_URL = "https://rickandmortyapi.com/api/"
         private const val ALIVE_STATUS = "Alive"
         private const val DEAD_STATUS = "Dead"
         private const val UNKNOWN_STATUS = "Unknown"
