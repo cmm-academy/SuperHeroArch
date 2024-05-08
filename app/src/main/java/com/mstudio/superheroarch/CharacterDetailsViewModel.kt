@@ -15,18 +15,23 @@ class CharacterDetailsViewModel(private val viewTranslator: CharacterDetailsView
             val firstEpisode = it.episode.first()
             val episodeNumber = firstEpisode.substringAfterLast("/").toInt()
             viewModelScope.launch(Dispatchers.IO) {
-                val response = repository.getEpisodeDetails(episodeNumber)
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val episode = response.body()
-                        if (episode != null) {
-                            viewTranslator.showEpisodeDetails(episode)
+                try {
+                    val response = repository.getEpisodeDetails(episodeNumber)
+                    withContext(Dispatchers.Main) {
+                        if (response.isSuccessful) {
+                            val episode = response.body()
+                            if (episode != null) {
+                                viewTranslator.showEpisodeDetails(episode)
+                            } else {
+                                viewTranslator.showErrorMessage("Episode not found")
+                            }
                         } else {
-                            viewTranslator.showErrorMessage("Episode not found")
+                            viewTranslator.showErrorMessage(response.errorBody().toString())
                         }
-                    } else {
-                        viewTranslator.showErrorMessage(response.errorBody().toString())
+                        viewTranslator.hideLoader()
                     }
+                } catch (e: Exception) {
+                    viewTranslator.showErrorMessage(e.message ?: "Unknown error")
                     viewTranslator.hideLoader()
                 }
             }

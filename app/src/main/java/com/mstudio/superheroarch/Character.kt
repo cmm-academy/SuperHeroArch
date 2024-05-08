@@ -17,3 +17,17 @@ data class Character(
 data class Location(
     val name: String
 ) : Serializable
+
+fun Character.toCharacterLocalEntity() = CharacterLocalEntity(
+    id = id,
+    name = name,
+    status = status,
+    image = image,
+    species = species,
+    gender = gender,
+    origin = origin.name,
+    location = location.name,
+    episode = episode.joinToString(", ")
+)
+
+fun List<Character>.toCharacterLocalEntityList() = map { it.toCharacterLocalEntity() }
