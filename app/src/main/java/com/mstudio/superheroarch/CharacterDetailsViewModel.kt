@@ -31,12 +31,12 @@ class CharacterDetailsViewModel(private val viewTranslator: CharacterDetailsView
     }
 
     private fun getRating(seasonAndEpisode: String) {
-        val regex = Regex("S(\\d+)E(\\d+)")
-        val matchResult = regex.find(seasonAndEpisode)
-        val season = matchResult?.groups?.get(1)?.value?.toInt()
-        val episode = matchResult?.groups?.get(2)?.value?.toInt()
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                val regex = Regex("S(\\d+)E(\\d+)")
+                val matchResult = regex.find(seasonAndEpisode)
+                val season = matchResult?.groups?.get(1)?.value?.toInt()
+                val episode = matchResult?.groups?.get(2)?.value?.toInt()
                 val episodeRating = tmdbRepository.getEpisodeDetails(season!!, episode!!)
                 withContext(Dispatchers.Main) {
                     viewTranslator.showEpisodeDetails(episodeRating)
