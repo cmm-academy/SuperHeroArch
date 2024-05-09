@@ -42,6 +42,13 @@ class CharacterDetailsActivity : AppCompatActivity(), CharacterDetailsViewTransl
         findViewById<TextView>(R.id.detailsAirDateTextView).text = episode.releaseDate
     }
 
+    override fun showEpisodeDetails(episode: TMDBEpisodeData) {
+        findViewById<TextView>(R.id.detailsRatingTextView).text = episode.rating.toString()
+        Glide.with(this)
+            .load(episode.imagePath)
+            .into(findViewById(R.id.detailsHeaderImage))
+    }
+
     override fun showErrorMessage(error: String) {
         Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_SHORT).show()
     }

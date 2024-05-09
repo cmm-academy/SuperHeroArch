@@ -13,14 +13,26 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/detailsHeaderImage"
+        android:contentDescription="@string/details_header_image"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <ImageView
         android:id="@+id/detailsImageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:contentDescription="@string/character_image"
+        tools:src="@mipmap/ic_launcher_round"
+        app:layout_constraintTop_toBottomOf="@id/detailsHeaderImage"
+        app:layout_constraintBottom_toBottomOf="@id/detailsHeaderImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.5" />
 
     <TextView
@@ -114,6 +126,17 @@
         tools:text="Earth (Replacement Dimension)" />
 
     <TextView
+        android:id="@+id/detailsFirstAppearanceLabel"
+        style="@style/TextAppearance.Material3.HeadlineMedium"
+        app:layout_constraintTop_toBottomOf="@id/detailsLocationLabelTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/first_appearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
         android:id="@+id/detailsFirstEpisodeLabel"
         style="@style/TextAppearance.Material3.BodyLarge"
         android:layout_width="wrap_content"
@@ -123,7 +146,7 @@
         android:text="@string/first_episode"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detailsLocationTextView" />
+        app:layout_constraintTop_toBottomOf="@id/detailsFirstAppearanceLabel" />
 
     <TextView
         android:id="@+id/detailsFirstEpisodeTextView"
@@ -133,7 +156,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toEndOf="@id/detailsFirstEpisodeLabel"
-        app:layout_constraintTop_toBottomOf="@id/detailsLocationTextView"
+        app:layout_constraintTop_toBottomOf="@id/detailsFirstAppearanceLabel"
         tools:text="Pilot" />
 
     <TextView
@@ -158,6 +181,28 @@
         app:layout_constraintStart_toEndOf="@id/detailsAirDateLabel"
         app:layout_constraintTop_toBottomOf="@id/detailsFirstEpisodeLabel"
         tools:text="December 2, 2013" />
+
+    <TextView
+        android:id="@+id/detailsRatingLabel"
+        android:text="@string/rating"
+        android:textStyle="bold"
+        style="@style/TextAppearance.Material3.BodyLarge"
+        app:layout_constraintTop_toBottomOf="@id/detailsAirDateLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/detailsRatingTextView"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/detailsRatingLabel"
+        app:layout_constraintBottom_toBottomOf="@id/detailsRatingLabel"
+        app:layout_constraintStart_toEndOf="@id/detailsRatingLabel"
+        android:layout_marginStart="16dp"
+        tools:text="8.3"
+        android:layout_height="wrap_content"/>
 
     <ProgressBar
         android:id="@+id/detailsProgressBar"
