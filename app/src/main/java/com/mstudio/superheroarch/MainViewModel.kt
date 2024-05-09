@@ -17,40 +17,19 @@ class MainViewModel(private val view: MainViewTranslator) : ViewModel() {
     }
 
     fun onRefreshClicked() {
-        retrieveCharsFromRemote()
+        retrieveChars(true)
     }
 
     fun onFilterSelected(checkedChipId: Int) {
         filterAndShowChars(checkedChipId)
     }
 
-    private fun retrieveChars() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val localChars = repository.getCharactersFromDatabase()
-            if (localChars.isEmpty()) {
-                retrieveCharsFromRemote()
-            } else {
-                withContext(Dispatchers.Main) {
-                    updateChars(localChars.toCharacterList())
-                }
-            }
-        }
-    }
-
-    private fun retrieveCharsFromRemote() {
+    private fun retrieveChars(forceRefresh: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val response = repository.getCharacters()
-                if (response.isSuccessful) {
-                    val retrievedChars = response.body()?.results ?: emptyList()
-                    repository.saveCharacters(retrievedChars.toCharacterLocalEntityList())
-                    withContext(Dispatchers.Main) {
-                        updateChars(retrievedChars)
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        view.showErrorMessage(response.errorBody().toString())
-                    }
+                val characters = repository.getCharacters(forceRefresh)
+                withContext(Dispatchers.Main) {
+                    updateChars(characters)
                 }
             } catch (e: Exception) {
                 view.showErrorMessage(e.message ?: "Unknown error")

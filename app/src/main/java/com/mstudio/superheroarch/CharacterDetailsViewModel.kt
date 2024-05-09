@@ -18,16 +18,7 @@ class CharacterDetailsViewModel(private val viewTranslator: CharacterDetailsView
                 try {
                     val response = repository.getEpisodeDetails(episodeNumber)
                     withContext(Dispatchers.Main) {
-                        if (response.isSuccessful) {
-                            val episode = response.body()
-                            if (episode != null) {
-                                viewTranslator.showEpisodeDetails(episode)
-                            } else {
-                                viewTranslator.showErrorMessage("Episode not found")
-                            }
-                        } else {
-                            viewTranslator.showErrorMessage(response.errorBody().toString())
-                        }
+                        viewTranslator.showEpisodeDetails(response)
                         viewTranslator.hideLoader()
                     }
                 } catch (e: Exception) {
@@ -44,5 +35,4 @@ interface CharacterDetailsViewTranslator {
     fun showErrorMessage(error: String)
     fun showLoader()
     fun hideLoader()
-
 }
