@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -33,6 +34,9 @@ android {
 }
 
 dependencies {
+    ksp(libs.room.compiler)
+    implementation(libs.room)
+    implementation(libs.room.ktx)
     implementation(libs.viewmodel)
     implementation(libs.glide)
     implementation(libs.retrofit)

@@ -17,7 +17,7 @@ class MainViewModel(private val view: MainViewTranslator) : ViewModel() {
     }
 
     fun onRefreshClicked() {
-        retrieveChars()
+        retrieveCharsFromRemote()
     }
 
     fun onFilterSelected(checkedChipId: Int) {
@@ -26,14 +26,29 @@ class MainViewModel(private val view: MainViewTranslator) : ViewModel() {
 
     private fun retrieveChars() {
         viewModelScope.launch(Dispatchers.IO) {
+            val localChars = repository.getCharactersFromDatabase()
+            if (localChars.isEmpty()) {
+                retrieveCharsFromRemote()
+            } else {
+                withContext(Dispatchers.Main) {
+                    updateChars(localChars.toCharacterList())
+                }
+            }
+        }
+    }
+
+    private fun retrieveCharsFromRemote() {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = repository.getCharacters()
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        characterList.clear()
-                        characterList.addAll(response.body()?.results ?: emptyList())
-                        filterAndShowChars(selectedChipId)
-                    } else {
+                if (response.isSuccessful) {
+                    val retrievedChars = response.body()?.results ?: emptyList()
+                    repository.saveCharacters(retrievedChars.toCharacterLocalEntityList())
+                    withContext(Dispatchers.Main) {
+                        updateChars(retrievedChars)
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
                         view.showErrorMessage(response.errorBody().toString())
                     }
                 }
@@ -41,6 +56,12 @@ class MainViewModel(private val view: MainViewTranslator) : ViewModel() {
                 view.showErrorMessage(e.message ?: "Unknown error")
             }
         }
+    }
+
+    private fun updateChars(localChars: List<Character>) {
+        characterList.clear()
+        characterList.addAll(localChars)
+        filterAndShowChars(selectedChipId)
     }
 
     private fun filterAndShowChars(checkedChipId: Int) {
