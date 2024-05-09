@@ -24,7 +24,7 @@ android {
         val properties = Properties()
         properties.load(keystoreFile.inputStream())
 
-        buildConfigField("String", "TMDB_API_KEY", "obfuscateKey(\"${properties.getProperty("tmdb_api_key")}\")")
+        buildConfigField("String", "TMDB_API_KEY", "\"${properties.getProperty("tmdb_api_key")}\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
