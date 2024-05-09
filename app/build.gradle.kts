@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -8,13 +10,21 @@ android {
     namespace = "com.mstudio.superheroarch"
     compileSdk = 34
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.mstudio.superheroarch"
         minSdk = 29
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        val keystoreFile = rootProject.file("local.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
 
+        buildConfigField("String", "TMDB_API_KEY", "\"${properties.getProperty("tmdb_api_key")}\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
