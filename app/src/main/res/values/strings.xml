@@ -15,4 +15,7 @@
     <string name="first_episode">First episode:</string>
     <string name="air_date">Air date:</string>
     <string name="episode_placeholder">%1$s - %2$s</string>
+    <string name="rating">Episode rating:</string>
+    <string name="first_appearance">First appearance data</string>
+    <string name="details_header_image">Details header image</string>
 </resources>

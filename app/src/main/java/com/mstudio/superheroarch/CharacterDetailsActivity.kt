@@ -16,10 +16,10 @@ class CharacterDetailsActivity : AppCompatActivity(), CharacterDetailsViewTransl
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_character_details)
         val character: Character? = if (android.os.Build.VERSION.SDK_INT >= 33) {
-            intent.getSerializableExtra("character", Character::class.java)
+            intent.getSerializableExtra(CHARACTER_INTENT_KEY, Character::class.java)
         } else {
             @Suppress("DEPRECATION")
-            intent.getSerializableExtra("character") as Character
+            intent.getSerializableExtra(CHARACTER_INTENT_KEY) as Character
         }
 
         character?.let {
@@ -42,6 +42,13 @@ class CharacterDetailsActivity : AppCompatActivity(), CharacterDetailsViewTransl
         findViewById<TextView>(R.id.detailsAirDateTextView).text = episode.releaseDate
     }
 
+    override fun showEpisodeDetails(episode: TMDBEpisodeData) {
+        findViewById<TextView>(R.id.detailsRatingTextView).text = episode.rating.toString()
+        Glide.with(this)
+            .load(episode.imagePath)
+            .into(findViewById(R.id.detailsHeaderImage))
+    }
+
     override fun showErrorMessage(error: String) {
         Snackbar.make(findViewById(android.R.id.content), error, Snackbar.LENGTH_SHORT).show()
     }
@@ -55,9 +62,10 @@ class CharacterDetailsActivity : AppCompatActivity(), CharacterDetailsViewTransl
     }
 
     companion object {
+        const val CHARACTER_INTENT_KEY = "character"
         fun newIntent(mainActivity: MainActivity, character: Character): Intent {
             return Intent(mainActivity, CharacterDetailsActivity::class.java).run {
-                putExtra("character", character)
+                putExtra(CHARACTER_INTENT_KEY, character)
             }
         }
     }
