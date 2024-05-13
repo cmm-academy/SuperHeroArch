@@ -22,31 +22,28 @@ class CharacterDetailsActivity : AppCompatActivity(), CharacterDetailsViewTransl
             intent.getSerializableExtra(CHARACTER_INTENT_KEY) as Character
         }
 
-        character?.let {
-            findViewById<TextView>(R.id.detailsNameTextView).text = it.name
-            findViewById<TextView>(R.id.detailsSpeciesTextView).text = it.species
-            findViewById<TextView>(R.id.detailsGenderTextView).text = it.gender
-            findViewById<TextView>(R.id.detailsOriginTextView).text = it.origin.name
-            findViewById<TextView>(R.id.detailsLocationTextView).text = it.location.name
-            Glide.with(this)
-                .load(it.image)
+        viewModel.onCreate(character)
+    }
+
+    override fun showCharacterInformation(fullCharacterInformation: FullCharacterEntity) {
+        with(fullCharacterInformation) {
+            findViewById<TextView>(R.id.detailsNameTextView).text = name
+            findViewById<TextView>(R.id.detailsSpeciesTextView).text = species
+            findViewById<TextView>(R.id.detailsGenderTextView).text = gender
+            findViewById<TextView>(R.id.detailsOriginTextView).text = origin
+            findViewById<TextView>(R.id.detailsLocationTextView).text = location
+            findViewById<TextView>(R.id.detailsFirstEpisodeTextView).text = getString(R.string.episode_placeholder, firstEpisode.episodeNumber, firstEpisode.name)
+            findViewById<TextView>(R.id.detailsAirDateTextView).text = firstEpisode.releaseDate
+            findViewById<TextView>(R.id.detailsRatingTextView).text = firstEpisode.rating.toString()
+            val glideInstance = Glide.with(this@CharacterDetailsActivity)
+            glideInstance
+                .load(firstEpisode.imagePath)
+                .into(findViewById(R.id.detailsHeaderImage))
+            glideInstance
+                .load(image)
                 .circleCrop()
                 .into(findViewById(R.id.detailsImageView))
         }
-
-        viewModel.onCharacterRetrieved(character)
-    }
-
-    override fun showEpisodeDetails(episode: Episode) {
-        findViewById<TextView>(R.id.detailsFirstEpisodeTextView).text = getString(R.string.episode_placeholder, episode.episodeNumber, episode.name)
-        findViewById<TextView>(R.id.detailsAirDateTextView).text = episode.releaseDate
-    }
-
-    override fun showEpisodeDetails(episode: TMDBEpisodeData) {
-        findViewById<TextView>(R.id.detailsRatingTextView).text = episode.rating.toString()
-        Glide.with(this)
-            .load(episode.imagePath)
-            .into(findViewById(R.id.detailsHeaderImage))
     }
 
     override fun showErrorMessage(error: String) {

@@ -13,7 +13,7 @@ data class CharacterLocalEntity(
     val gender: String,
     val origin: String,
     val location: String,
-    val episode: String
+    val episodes: String
 )
 
 fun CharacterLocalEntity.toCharacter() = Character(
@@ -25,7 +25,7 @@ fun CharacterLocalEntity.toCharacter() = Character(
     gender = gender,
     origin = Location(name = origin),
     location = Location(name = location),
-    episode = episode.split(", ")
+    episodes = episodes.split(", ")
 )
 
 fun List<CharacterLocalEntity>.toCharacterList() = map { it.toCharacter() }
