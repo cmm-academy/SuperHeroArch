@@ -5,7 +5,7 @@ class GetCharacterDetailsUseCase {
     private val repository = RickAndMortyRepository()
     private val tmdbRepository = TMDBRepository()
 
-    suspend fun getCharacterDetails(character: Character): CharacterUIEntity? {
+    suspend fun getCharacterDetails(character: Character): FullCharacterEntity? {
         try {
             val episodeNumber = character.episodes.first().substringAfterLast("/").toInt()
             val firstEpisodeDetails = repository.getEpisodeDetails(episodeNumber)
