@@ -31,3 +31,21 @@ fun Character.toCharacterLocalEntity() = CharacterLocalEntity(
 )
 
 fun List<Character>.toCharacterLocalEntityList() = map { it.toCharacterLocalEntity() }
+
+fun Character.toCharacterUIEntity(episode: Episode, tmdbEpisodeData: TMDBEpisodeData) = CharacterUIEntity(
+    id = id,
+    name = name,
+    status = status,
+    image = image,
+    species = species,
+    gender = gender,
+    origin = origin.name,
+    location = location.name,
+    firstEpisode = EpisodeUIEntity(
+        name = episode.name,
+        releaseDate = episode.releaseDate,
+        episodeNumber = episode.episodeNumber,
+        rating = tmdbEpisodeData.rating,
+        imagePath = tmdbEpisodeData.imagePath
+    )
+)

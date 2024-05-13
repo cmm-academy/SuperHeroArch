@@ -1,6 +1,6 @@
 package com.mstudio.superheroarch
 
-data class FullCharacterEntity(
+data class CharacterUIEntity(
     val id: Int,
     val name: String,
     val status: String,

@@ -33,7 +33,7 @@ class CharacterDetailsViewModel(private val viewTranslator: CharacterDetailsView
 }
 
 interface CharacterDetailsViewTranslator {
-    fun showCharacterInformation(fullCharacterInformation: FullCharacterEntity)
+    fun showCharacterInformation(fullCharacterInformation: CharacterUIEntity)
     fun showErrorMessage(error: String)
     fun showLoader()
     fun hideLoader()

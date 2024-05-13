@@ -25,7 +25,7 @@ class CharacterDetailsActivity : AppCompatActivity(), CharacterDetailsViewTransl
         viewModel.onCreate(character)
     }
 
-    override fun showCharacterInformation(fullCharacterInformation: FullCharacterEntity) {
+    override fun showCharacterInformation(fullCharacterInformation: CharacterUIEntity) {
         with(fullCharacterInformation) {
             findViewById<TextView>(R.id.detailsNameTextView).text = name
             findViewById<TextView>(R.id.detailsSpeciesTextView).text = species
