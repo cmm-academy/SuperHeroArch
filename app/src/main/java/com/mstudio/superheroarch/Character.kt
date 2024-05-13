@@ -41,7 +41,7 @@ fun Character.toCharacterUIEntity(episode: Episode, tmdbEpisodeData: TMDBEpisode
     gender = gender,
     origin = origin.name,
     location = location.name,
-    firstEpisode = EpisodeUIEntity(
+    firstEpisode = FullEpisodeEntity(
         name = episode.name,
         releaseDate = episode.releaseDate,
         episodeNumber = episode.episodeNumber,

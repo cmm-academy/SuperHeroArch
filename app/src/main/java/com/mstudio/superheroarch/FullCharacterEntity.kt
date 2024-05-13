@@ -9,10 +9,10 @@ data class FullCharacterEntity(
     val gender: String,
     val origin: String,
     val location: String,
-    val firstEpisode: EpisodeUIEntity
+    val firstEpisode: FullEpisodeEntity
 )
 
-data class EpisodeUIEntity(
+data class FullEpisodeEntity(
     val name: String,
     val releaseDate: String,
     val episodeNumber: String,
