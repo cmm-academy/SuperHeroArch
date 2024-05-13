@@ -11,7 +11,7 @@ data class Character(
     val gender: String,
     val origin: Location,
     val location: Location,
-    val episode: List<String>
+    val episodes: List<String>
 ) : Serializable
 
 data class Location(
@@ -27,7 +27,7 @@ fun Character.toCharacterLocalEntity() = CharacterLocalEntity(
     gender = gender,
     origin = origin.name,
     location = location.name,
-    episode = episode.joinToString(", ")
+    episode = episodes.joinToString(", ")
 )
 
 fun List<Character>.toCharacterLocalEntityList() = map { it.toCharacterLocalEntity() }

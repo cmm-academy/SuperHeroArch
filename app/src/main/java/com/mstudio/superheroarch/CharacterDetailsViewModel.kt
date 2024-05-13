@@ -7,21 +7,22 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CharacterDetailsViewModel(private val viewTranslator: CharacterDetailsViewTranslator) : ViewModel() {
-    private val repository = RickAndMortyRepository()
-    private val tmdbRepository = TMDBRepository()
+    private val getCharactersDetailsUseCase = GetCharacterDetailsUseCase()
 
-    fun onCharacterRetrieved(character: Character?) {
+    fun onCreate(character: Character?) {
         viewTranslator.showLoader()
         character?.let {
-            val firstEpisode = it.episode.first()
-            val episodeNumber = firstEpisode.substringAfterLast("/").toInt()
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    val response = repository.getEpisodeDetails(episodeNumber)
+                    val fullCharacterInformation = getCharactersDetailsUseCase.getCharacterDetails(it)
                     withContext(Dispatchers.Main) {
-                        viewTranslator.showEpisodeDetails(response)
+                        fullCharacterInformation?.let {
+                            viewTranslator.showCharacterInformation(fullCharacterInformation)
+                            viewTranslator.hideLoader()
+                        } ?: run {
+                            viewTranslator.showErrorMessage("Character details not found")
+                        }
                     }
-                    getRating(response.episodeNumber)
                 } catch (e: Exception) {
                     viewTranslator.showErrorMessage(e.message ?: "Unknown error")
                     viewTranslator.hideLoader()
@@ -29,30 +30,10 @@ class CharacterDetailsViewModel(private val viewTranslator: CharacterDetailsView
             }
         }
     }
-
-    private fun getRating(seasonAndEpisode: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val regex = Regex("S(\\d+)E(\\d+)")
-                val matchResult = regex.find(seasonAndEpisode)
-                val season = matchResult?.groups?.get(1)?.value?.toInt()
-                val episode = matchResult?.groups?.get(2)?.value?.toInt()
-                val episodeRating = tmdbRepository.getEpisodeDetails(season!!, episode!!)
-                withContext(Dispatchers.Main) {
-                    viewTranslator.showEpisodeDetails(episodeRating)
-                    viewTranslator.hideLoader()
-                }
-            } catch (e: Exception) {
-                viewTranslator.showErrorMessage(e.message ?: "Unknown error")
-                viewTranslator.hideLoader()
-            }
-        }
-    }
 }
 
 interface CharacterDetailsViewTranslator {
-    fun showEpisodeDetails(episode: Episode)
-    fun showEpisodeDetails(episode: TMDBEpisodeData)
+    fun showCharacterInformation(fullCharacterInformation: FullCharacterEntity)
     fun showErrorMessage(error: String)
     fun showLoader()
     fun hideLoader()
