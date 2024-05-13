@@ -27,7 +27,7 @@ fun Character.toCharacterLocalEntity() = CharacterLocalEntity(
     gender = gender,
     origin = origin.name,
     location = location.name,
-    episode = episodes.joinToString(", ")
+    episodes = episodes.joinToString(", ")
 )
 
 fun List<Character>.toCharacterLocalEntityList() = map { it.toCharacterLocalEntity() }

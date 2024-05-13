@@ -13,7 +13,10 @@ class GetCharacterDetailsUseCase {
             val matchResult = regex.find(firstEpisodeDetails.episodeNumber)
             val season = matchResult?.groups?.get(1)?.value?.toInt()
             val episode = matchResult?.groups?.get(2)?.value?.toInt()
-            val episodeRating = tmdbRepository.getEpisodeDetails(season!!, episode!!)
+            if (season == null || episode == null) {
+                return null
+            }
+            val episodeRating = tmdbRepository.getEpisodeDetails(season, episode)
             return character.toCharacterUIEntity(firstEpisodeDetails, episodeRating)
         } catch (e: Exception) {
             return null
