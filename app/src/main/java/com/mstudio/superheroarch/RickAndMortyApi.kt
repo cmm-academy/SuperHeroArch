@@ -16,10 +16,14 @@ interface RickAndMortyApi {
 
 object RickAndMortyApiFactory {
     fun create(): RickAndMortyApi {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(RickAndMortyApi::class.java)
+        return try {
+            Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build().create(RickAndMortyApi::class.java)
+        } catch (e: Exception) {
+            throw RuntimeException("Failed to create RickAndMortyApi", e)
+        }
     }
     private const val BASE_URL = "https://rickandmortyapi.com/api/"
 }

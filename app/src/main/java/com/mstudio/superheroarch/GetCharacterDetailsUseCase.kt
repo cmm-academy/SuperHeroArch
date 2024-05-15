@@ -19,7 +19,6 @@ class GetCharacterDetailsUseCase(
             val episodeRating = tmdbRepository.getEpisodeDetails(season, episode)
             return character.toFullCharacterEntity(firstEpisodeDetails, episodeRating)
         } catch (e: Exception) {
-            println(e.message)
             return null
         }
     }
