@@ -1,18 +1,15 @@
 package com.mstudio.superheroarch
 
+import android.content.Context
 import androidx.room.Room
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-class RickAndMortyRepository {
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+class RickAndMortyRepository(
+    private val rickAndMortyApi: RickAndMortyApi,
+    context: Context = RickAndMortyApplication.instance
+) {
 
     private val database = Room.databaseBuilder(
-        RickAndMortyApplication.instance,
+        context,
         RickAndMortyDatabase::class.java,
         "rick_and_morty_database"
     ).build()
@@ -20,7 +17,7 @@ class RickAndMortyRepository {
     suspend fun getCharacters(forceRefresh: Boolean): List<Character> {
         val localCharacters = getCharactersFromDatabase()
         if (localCharacters.isEmpty() || forceRefresh) {
-            val remoteResponse = retrofit.create(RickAndMortyApi::class.java).getCharacters()
+            val remoteResponse = rickAndMortyApi.getCharacters()
             if (remoteResponse.isSuccessful) {
                 val remoteCharacters = remoteResponse.body()?.results ?: emptyList()
                 saveCharacters(remoteCharacters.toCharacterLocalEntityList())
@@ -33,8 +30,8 @@ class RickAndMortyRepository {
         }
     }
 
-    suspend fun getEpisodeDetails(id: Int) : Episode {
-        val response = retrofit.create(RickAndMortyApi::class.java).getEpisodeDetails(id)
+    suspend fun getEpisodeDetails(id: Int): Episode {
+        val response = rickAndMortyApi.getEpisodeDetails(id)
         if (response.isSuccessful) {
             val episode = response.body()
             if (episode != null) {
@@ -52,8 +49,4 @@ class RickAndMortyRepository {
     }
 
     private suspend fun getCharactersFromDatabase() = database.characterDao().getAll()
-
-    companion object {
-        private const val BASE_URL = "https://rickandmortyapi.com/api/"
-    }
 }

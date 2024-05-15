@@ -1,9 +1,9 @@
 package com.mstudio.superheroarch
 
-class GetCharacterDetailsUseCase {
-
-    private val repository = RickAndMortyRepository()
-    private val tmdbRepository = TMDBRepository()
+class GetCharacterDetailsUseCase(
+    private val repository: RickAndMortyRepository = RickAndMortyRepository(RickAndMortyApiFactory.create()),
+    private val tmdbRepository: TMDBRepository = TMDBRepository()
+) {
 
     suspend fun getCharacterDetails(character: Character): FullCharacterEntity? {
         try {
@@ -17,8 +17,9 @@ class GetCharacterDetailsUseCase {
                 return null
             }
             val episodeRating = tmdbRepository.getEpisodeDetails(season, episode)
-            return character.toCharacterUIEntity(firstEpisodeDetails, episodeRating)
+            return character.toFullCharacterEntity(firstEpisodeDetails, episodeRating)
         } catch (e: Exception) {
+            println(e.message)
             return null
         }
     }
