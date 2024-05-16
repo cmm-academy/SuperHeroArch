@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlinx.kover)
 }
 
 android {
@@ -40,6 +41,26 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    koverReport {
+        androidReports("release") {
+            filters {
+            }
+
+            xml {
+                setReportFile(layout.buildDirectory.file("kover-report/result.xml"))
+            }
+            verify {
+                rule("Coverage must be more than 60%") {
+                    isEnabled = true
+                    bound {
+                        minValue = 60
+                    }
+                }
+            }
+        }
+
     }
 }
 
