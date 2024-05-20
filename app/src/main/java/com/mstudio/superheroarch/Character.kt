@@ -32,7 +32,7 @@ fun Character.toCharacterLocalEntity() = CharacterLocalEntity(
 
 fun List<Character>.toCharacterLocalEntityList() = map { it.toCharacterLocalEntity() }
 
-fun Character.toCharacterUIEntity(episode: Episode, tmdbEpisodeData: TMDBEpisodeData) = FullCharacterEntity(
+fun Character.toFullCharacterEntity(episode: Episode, tmdbEpisodeData: TMDBEpisodeData) = FullCharacterEntity(
     id = id,
     name = name,
     status = status,

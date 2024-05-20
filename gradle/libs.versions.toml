@@ -11,14 +11,20 @@ activity = "1.9.0"
 constraintlayout = "2.1.4"
 retrofit = "2.11.0"
 glide = "4.13.2"
-viewmodel = "2.7.0"
+viewmodel = "2.8.0"
 room = "2.6.1"
 ksp = "1.9.23-1.0.20"
+mockito = "5.12.0"
+mockito-kotlin = "5.3.1"
+coroutines = "1.7.3"
+androidxTestCoreVersion = "1.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+roboletric = { group = "org.robolectric", name = "robolectric", version = "4.11.1" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCoreVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -31,6 +37,9 @@ viewmodel = {module = 'androidx.lifecycle:lifecycle-viewmodel-ktx', version.ref 
 room = {module = 'androidx.room:room-runtime', version.ref = "room" }
 room-compiler = {module = 'androidx.room:room-compiler', version.ref = "room" }
 room-ktx = {module = 'androidx.room:room-ktx', version.ref = "room" }
+mockito = {module = 'org.mockito:mockito-core', version.ref = "mockito"}
+mockito-kotlin = {module = 'org.mockito.kotlin:mockito-kotlin', version.ref = "mockito-kotlin"}
+coroutines-test = {module = 'org.jetbrains.kotlinx:kotlinx-coroutines-test', version.ref = "coroutines"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
