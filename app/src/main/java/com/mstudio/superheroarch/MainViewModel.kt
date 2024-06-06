@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel(private val view: MainViewTranslator) : ViewModel() {
 
-    private val repository = RickAndMortyRepository()
+    private val repository = RickAndMortyRepository(RickAndMortyApiFactory.create())
     private val characterList = mutableListOf<Character>()
     private var selectedChipId = R.id.chipAll
 
