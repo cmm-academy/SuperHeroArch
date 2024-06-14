@@ -18,10 +18,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val button = findViewById<Button>(R.id.myfirstbutton)
+        val button = findViewById<Button>(R.id.button_to_change_text)
+        val titleToChange = findViewById<TextView>(R.id.title_to_change)
         button.setOnClickListener {
-            val textChangedByButton = findViewById<TextView>(R.id.title_changedbybutton)
-            textChangedByButton.text = "The button was clicked!"
+            titleToChange.text = getResources().getString(R.string.title_after_tap)
         }
     }
 }
