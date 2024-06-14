@@ -1,7 +1,6 @@
 package com.mstudio.superheroarch
 
 import android.os.Bundle
-import android.os.Handler
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -20,17 +19,12 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         
-        val mainButton : Button = findViewById(R.id.main_button)
+        val mainButton = findViewById<Button>(R.id.main_button)
         val mainText = findViewById<TextView>(R.id.title)
 
         mainButton.setOnClickListener{
-            val handler = Handler()
-            val runnable = Runnable {
-                mainText.text = getString(R.string.main_title)
-            }
-            mainText.setText(getString(R.string.main_text_clicked))
-            handler.postDelayed(runnable, 3000)
+            mainText.text = getString(R.string.main_text_clicked)
         }
-
     }
+
 }
