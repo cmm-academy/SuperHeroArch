@@ -1,6 +1,8 @@
 package com.mstudio.superheroarch
 
 import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -15,6 +17,11 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+        val button = findViewById<Button>(R.id.button_to_change_text)
+        val titleToChange = findViewById<TextView>(R.id.title_to_change)
+        button.setOnClickListener {
+            titleToChange.text = getString(R.string.title_after_tap)
         }
     }
 }
