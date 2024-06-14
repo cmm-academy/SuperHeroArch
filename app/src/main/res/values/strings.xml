@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SuperHeroArch</string>
+    <string name="first_button">Tap here!</string>
+    <string name="title_changedbybutton">Hello World</string>
 </resources>
