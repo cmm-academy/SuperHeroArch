@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.button_to_change_text)
         val titleToChange = findViewById<TextView>(R.id.title_to_change)
         button.setOnClickListener {
-            titleToChange.text = getResources().getString(R.string.title_after_tap)
+            titleToChange.text = getString(R.string.title_after_tap)
         }
     }
 }
