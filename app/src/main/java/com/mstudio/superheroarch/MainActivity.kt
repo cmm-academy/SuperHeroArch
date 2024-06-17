@@ -17,7 +17,7 @@ import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
-    var resultFromRemote = ""
+    lateinit var titleToChange: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +29,8 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         val button = findViewById<Button>(R.id.button_to_change_text)
-        val titleToChange = findViewById<TextView>(R.id.title_to_change)
-        getDataFromRemote()
         button.setOnClickListener {
-            titleToChange.text = resultFromRemote
+            getDataFromRemote()
         }
     }
 
@@ -42,7 +40,11 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<CharactersResponse> {
             override fun onResponse(call: Call<CharactersResponse>, response: Response<CharactersResponse>) {
                 if (response.isSuccessful) {
-                    resultFromRemote = response.body()?.info.toString()
+                    if (response.body() != null) {
+                        titleToChange = findViewById(R.id.title_to_change)
+                        titleToChange.text = response.body()?.toString()
+                        Log.d("Successful response", response.body().toString())
+                    }
                     Log.d("Successful response", response.body().toString())
                 } else {
                     Log.d("Not successful response", response.code().toString())
