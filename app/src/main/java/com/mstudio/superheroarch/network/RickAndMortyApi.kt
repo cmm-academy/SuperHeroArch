@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 
 interface RickAndMortyApi {
-    @GET("/api/character")
+    @GET("character")
     fun doGetCharacters(): Call<CharactersResponse>
 }
