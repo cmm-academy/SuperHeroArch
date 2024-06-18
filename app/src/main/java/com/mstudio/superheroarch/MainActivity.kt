@@ -1,7 +1,6 @@
 package com.mstudio.superheroarch
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,8 +19,8 @@ import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var characterNameTitle: TextView
-    lateinit var characterStatusTitle: TextView
+    var characterNameTitle: TextView? = null
+    var characterStatusTitle: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,26 +43,21 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<CharactersResponse> {
             override fun onResponse(call: Call<CharactersResponse>, response: Response<CharactersResponse>) {
                 if (response.isSuccessful) {
-                    val results = response.body()?.results
-                    if (results?.isNotEmpty() == true) {
-                        val character = results[0]
-
+                    val firstCharacter = response.body()?.results?.firstOrNull()
+                    firstCharacter?.let {
                         characterNameTitle = findViewById(R.id.character_name)
-                        val characterNameData = getString(R.string.character_name) + character.name
-                        characterNameTitle.text = characterNameData
+                        val characterNameData = getString(R.string.character_name) + it.name
+                        characterNameTitle?.text = characterNameData
 
                         characterStatusTitle = findViewById(R.id.character_status)
-                        val characterStatusData = getString(R.string.character_status) + character.status
-                        characterStatusTitle.text = characterStatusData
+                        val characterStatusData = getString(R.string.character_status) + it.status
+                        characterStatusTitle?.text = characterStatusData
 
-                        Picasso.get().load(character.image).into(findViewById<ImageView>(R.id.character_image));
-                        Log.d("Successful response", response.body().toString())
-                    } else {
-                        Snackbar.make(findViewById(R.id.main), "No characters info", Snackbar.LENGTH_SHORT).show()
-                    }
+                        Picasso.get().load(it.image).into(findViewById<ImageView>(R.id.character_image));
+                    } ?: Snackbar.make(findViewById(R.id.main), "No characters info", Snackbar.LENGTH_SHORT).show()
+
                 } else {
-                    Snackbar.make(findViewById(R.id.main), "No backend response", Snackbar.LENGTH_SHORT).show()
-
+                    Snackbar.make(findViewById(R.id.main), "No successful response" + response.code(), Snackbar.LENGTH_SHORT).show()
                 }
             }
 
