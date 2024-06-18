@@ -32,6 +32,9 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         val button = findViewById<Button>(R.id.button_to_change_text)
+        characterNameTitle = findViewById(R.id.character_name)
+        characterStatusTitle = findViewById(R.id.character_status)
+
         button.setOnClickListener {
             getDataFromRemote()
         }
@@ -45,24 +48,22 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val firstCharacter = response.body()?.results?.firstOrNull()
                     firstCharacter?.let {
-                        characterNameTitle = findViewById(R.id.character_name)
                         val characterNameData = getString(R.string.character_name) + it.name
                         characterNameTitle?.text = characterNameData
 
-                        characterStatusTitle = findViewById(R.id.character_status)
                         val characterStatusData = getString(R.string.character_status) + it.status
                         characterStatusTitle?.text = characterStatusData
 
                         Picasso.get().load(it.image).into(findViewById<ImageView>(R.id.character_image));
-                    } ?: Snackbar.make(findViewById(R.id.main), "No characters info", Snackbar.LENGTH_SHORT).show()
+                    } ?: Snackbar.make(findViewById(R.id.main), getString(R.string.error_message_no_character_info), Snackbar.LENGTH_SHORT).show()
 
                 } else {
-                    Snackbar.make(findViewById(R.id.main), "No successful response" + response.code(), Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(findViewById(R.id.main), getString(R.string.error_message_api_error) + response.code(), Snackbar.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<CharactersResponse>, t: Throwable) {
-                Snackbar.make(findViewById(R.id.main), "Some failure", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(findViewById(R.id.main), getString(R.string.error_message_general_failure), Snackbar.LENGTH_SHORT).show()
             }
 
         })
