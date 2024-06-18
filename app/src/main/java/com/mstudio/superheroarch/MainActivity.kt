@@ -48,17 +48,13 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val firstCharacter = response.body()?.results?.firstOrNull()
                     firstCharacter?.let {
-                        val characterNameData = getString(R.string.character_name) + it.name
-                        characterNameTitle?.text = characterNameData
-
-                        val characterStatusData = getString(R.string.character_status) + it.status
-                        characterStatusTitle?.text = characterStatusData
-
+                        characterNameTitle?.text = getString(R.string.character_name, it.name)
+                        characterStatusTitle?.text = getString(R.string.character_status, it.status)
                         Picasso.get().load(it.image).into(findViewById<ImageView>(R.id.character_image));
                     } ?: Snackbar.make(findViewById(R.id.main), getString(R.string.error_message_no_character_info), Snackbar.LENGTH_SHORT).show()
 
                 } else {
-                    Snackbar.make(findViewById(R.id.main), getString(R.string.error_message_api_error) + response.code(), Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(findViewById(R.id.main), getString(R.string.error_message_api_error, response.code().toString()), Snackbar.LENGTH_SHORT).show()
                 }
             }
 
