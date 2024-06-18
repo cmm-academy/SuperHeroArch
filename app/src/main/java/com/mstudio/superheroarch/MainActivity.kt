@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -41,7 +42,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         val apiRick = retrofit.create(ApiRick::class.java)
-        val titleTextView = findViewById<TextView>(R.id.title)
+        val name = findViewById<TextView>(R.id.character_name)
+        val status = findViewById<TextView>(R.id.character_status)
         val button = findViewById<Button>(R.id.main_button)
         val context = this
         val imageView = findViewById<ImageView>(R.id.character_image)
@@ -60,14 +62,17 @@ class MainActivity : AppCompatActivity() {
                         withContext(Dispatchers.Main) {
                             if (bitmap != null) {
                                 imageView.setImageBitmap(bitmap)
-                                titleTextView.text = "Name: ${firstCharacter.name}\nStatus: ${firstCharacter.status}"
+                                name.text = "Name: ${firstCharacter.name}"
+                                status.text = "Status ${firstCharacter.status}"
                             } else {
                                 Snackbar.make(findViewById(R.id.main), context.getString(R.string.no_character_found), Snackbar.LENGTH_LONG).show()
                             }
                         }
                     } else {
                         withContext(Dispatchers.Main) {
-                            titleTextView.text = context.getString(R.string.no_character_found)
+                            name.text  = context.getString(R.string.no_character_found)
+                            status.text  = context.getString(R.string.no_character_found)
+
                         }
                     }
                 } else {
