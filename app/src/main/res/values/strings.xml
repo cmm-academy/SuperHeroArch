@@ -3,4 +3,5 @@
     <string name="main_button">Click me</string>
     <string name="main_title">Title</string>
     <string name="main_text_clicked">Clicked!</string>
+    <string name="failed_fetch_data">Failed to fetch data</string>
 </resources>

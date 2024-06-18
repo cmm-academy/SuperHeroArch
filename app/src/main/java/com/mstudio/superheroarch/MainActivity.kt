@@ -17,6 +17,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 class MainActivity : AppCompatActivity() {
+
+    val retrofit = Retrofit.Builder()
+        .baseUrl("https://rickandmortyapi.com/api/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,14 +33,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://rickandmortyapi.com/api/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
         val apiRick = retrofit.create(ApiRick::class.java)
         val titleTextView = findViewById<TextView>(R.id.title)
         val button = findViewById<Button>(R.id.main_button)
+        val context = this
 
         button.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 } else {
                     runOnUiThread {
-                        Snackbar.make(findViewById(R.id.main), "Failed to fetch data", Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(findViewById(R.id.main),context.getString(R.string.failed_fetch_data), Snackbar.LENGTH_LONG).show()
                     }
                 }
             }
