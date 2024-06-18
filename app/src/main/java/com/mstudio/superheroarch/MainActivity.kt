@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.snackbar.Snackbar
 import com.mstudio.superheroarch.data.CharactersResponse
 import com.mstudio.superheroarch.network.RetrofitInstance
 import com.mstudio.superheroarch.network.RickAndMortyApi
@@ -19,8 +20,8 @@ import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var titleToChange: TextView
-    lateinit var characterImage: ImageView
+    lateinit var characterNameTitle: TextView
+    lateinit var characterStatusTitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,23 +44,31 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<CharactersResponse> {
             override fun onResponse(call: Call<CharactersResponse>, response: Response<CharactersResponse>) {
                 if (response.isSuccessful) {
-                    if (response.body() != null && response.body()?.results?.size!! > 0) {
-                        val characterData = response.body()?.results?.get(0)
-                        titleToChange = findViewById(R.id.title_to_change)
-                        val characterText = getString(R.string.character_name) + characterData!!.name + getString(R.string.character_status) + characterData.status
-                        titleToChange.text = characterText
-                        characterImage = findViewById(R.id.character_image)
-                        Picasso.get().load(characterData.image).into(characterImage);
+                    val results = response.body()?.results
+                    if (results?.isNotEmpty() == true) {
+                        val character = results[0]
+
+                        characterNameTitle = findViewById(R.id.character_name)
+                        val characterNameData = getString(R.string.character_name) + character.name
+                        characterNameTitle.text = characterNameData
+
+                        characterStatusTitle = findViewById(R.id.character_status)
+                        val characterStatusData = getString(R.string.character_status) + character.status
+                        characterStatusTitle.text = characterStatusData
+
+                        Picasso.get().load(character.image).into(findViewById<ImageView>(R.id.character_image));
                         Log.d("Successful response", response.body().toString())
+                    } else {
+                        Snackbar.make(findViewById(R.id.main), "No characters info", Snackbar.LENGTH_SHORT).show()
                     }
-                    Log.d("Successful response", response.body().toString())
                 } else {
-                    Log.d("Not successful response", response.code().toString())
+                    Snackbar.make(findViewById(R.id.main), "No backend response", Snackbar.LENGTH_SHORT).show()
+
                 }
             }
 
             override fun onFailure(call: Call<CharactersResponse>, t: Throwable) {
-                Log.d("Big Fail", t.toString())
+                Snackbar.make(findViewById(R.id.main), "Some failure", Snackbar.LENGTH_SHORT).show()
             }
 
         })

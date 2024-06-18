@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">SuperHeroArch</string>
     <string name="first_button">Tap here!</string>
-    <string name="title_before_tap">Hello World</string>
-    <string name="title_after_tap">The button was clicked!</string>
+    <string name="character_name_before_tap">Hello Word</string>
+    <string name="character_status_before_tap">Tap on the button to see things happening</string>
     <string name="character_name">Name:</string>
     <string name="character_status">Status:</string>
 
