@@ -3,6 +3,7 @@ package com.mstudio.superheroarch
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.mstudio.superheroarch.data.CharactersResponse
 import com.mstudio.superheroarch.network.RetrofitInstance
 import com.mstudio.superheroarch.network.RickAndMortyApi
+import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,6 +20,7 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     lateinit var titleToChange: TextView
+    lateinit var characterImage: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +43,13 @@ class MainActivity : AppCompatActivity() {
         call.enqueue(object : Callback<CharactersResponse> {
             override fun onResponse(call: Call<CharactersResponse>, response: Response<CharactersResponse>) {
                 if (response.isSuccessful) {
-                    if (response.body() != null) {
+                    if (response.body() != null && response.body()?.results?.size!! > 0) {
+                        val characterData = response.body()?.results?.get(0)
                         titleToChange = findViewById(R.id.title_to_change)
-                        titleToChange.text = response.body()?.toString()
+                        val characterText = getString(R.string.character_name) + characterData!!.name + getString(R.string.character_status) + characterData.status
+                        titleToChange.text = characterText
+                        characterImage = findViewById(R.id.character_image)
+                        Picasso.get().load(characterData.image).into(characterImage);
                         Log.d("Successful response", response.body().toString())
                     }
                     Log.d("Successful response", response.body().toString())

@@ -3,4 +3,7 @@
     <string name="first_button">Tap here!</string>
     <string name="title_before_tap">Hello World</string>
     <string name="title_after_tap">The button was clicked!</string>
+    <string name="character_name">Name:</string>
+    <string name="character_status">Status:</string>
+
 </resources>
