@@ -6,4 +6,6 @@
     <string name="main_text_clicked">Clicked!</string>
     <string name="failed_fetch_data">Failed to fetch data</string>
     <string name="no_character_found">Failed to found character</string>
+    <string name="name">Name: </string>
+    <string name="status">Status: </string>
 </resources>

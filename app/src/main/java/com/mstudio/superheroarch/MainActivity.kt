@@ -3,6 +3,7 @@ package com.mstudio.superheroarch
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.w3c.dom.Text
+import com.squareup.picasso.Picasso
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -46,7 +48,14 @@ class MainActivity : AppCompatActivity() {
         val status = findViewById<TextView>(R.id.character_status)
         val button = findViewById<Button>(R.id.main_button)
         val context = this
+        val displayMetrics = resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
         val imageView = findViewById<ImageView>(R.id.character_image)
+        val desiredSize = (screenWidth * 0.2).toInt()
+        val layout=imageView.layoutParams
+        layout.width = desiredSize
+        layout.height = desiredSize
+        imageView.layoutParams = layout
 
         button.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
@@ -55,47 +64,42 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val characterResponse = response.body()
                     val firstCharacter = characterResponse?.results?.firstOrNull()
-
-                    if (firstCharacter != null) {
-                        val imageUrl = firstCharacter.image
-                        val bitmap = loadBitmapFromUrl(imageUrl)
+                    firstCharacter?.let { character ->
                         withContext(Dispatchers.Main) {
-                            if (bitmap != null) {
-                                imageView.setImageBitmap(bitmap)
-                                name.text = "Name: ${firstCharacter.name}"
-                                status.text = "Status ${firstCharacter.status}"
-                            } else {
-                                Snackbar.make(findViewById(R.id.main), context.getString(R.string.no_character_found), Snackbar.LENGTH_LONG).show()
+                            name.text = character.name?.let {
+                                context.getString(R.string.name) + " $it"
+                            } ?: run {
+                                "Name: Unknown"
+                            }
+
+                            character.status?.takeIf { it.isNotEmpty() }?.let {
+                                status.visibility = View.VISIBLE
+                                status.text = context.getString(R.string.status) + " $it"
+                            } ?: run {
+                                status.visibility = View.GONE
+                            }
+
+                            val imageUrl = character.image
+                            character.image?.takeIf { it.isNotEmpty() }?.let { imageUrl ->
+                                Picasso.get().load(imageUrl)
+                                    .resize(desiredSize, desiredSize)
+                                    .centerCrop()
+                                    .into(imageView)
+                            } ?: run {
+                                imageView.setImageResource(R.drawable.image_not_found)
                             }
                         }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            name.text  = context.getString(R.string.no_character_found)
-                            status.text  = context.getString(R.string.no_character_found)
-
-                        }
+                    } ?: run {
+                        name.text = context.getString(R.string.no_character_found)
+                        status.visibility = View.GONE
+                        imageView.setImageDrawable(null)
                     }
                 } else {
-                    withContext(Dispatchers.Main) {
-                        Snackbar.make(findViewById(R.id.main), context.getString(R.string.failed_fetch_data), Snackbar.LENGTH_LONG).show()
-                    }
+                    withContext(Dispatchers.Main) {Snackbar.make(findViewById(R.id.main), context.getString(R.string.failed_fetch_data), Snackbar.LENGTH_LONG).show() }
                 }
             }
         }
     }
-    private fun loadBitmapFromUrl(url: String): Bitmap? {
-        return try {
-            val connection = URL(url).openConnection() as HttpURLConnection
-            connection.doInput = true
-            connection.connect()
-            val input: InputStream = connection.inputStream
-            BitmapFactory.decodeStream(input)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
-}
 
 data class Character(
     val name: String,
@@ -111,3 +115,5 @@ interface ApiRick {
     @GET("character")
     suspend fun getCharacter(): Response<CharacterResponse>
 }
+}
+
