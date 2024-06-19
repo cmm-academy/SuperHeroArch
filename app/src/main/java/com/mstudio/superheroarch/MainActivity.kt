@@ -60,13 +60,12 @@ class MainActivity : AppCompatActivity() {
                             val imageUrl = character.image
                             Picasso.get().load(imageUrl).into(imageView)
                         }
-                    } ?: run {
-                        name.text = context.getString(R.string.no_character_found)
-                        status.visibility = View.GONE
-                        imageView.setImageResource(R.drawable.image_not_found)
                     }
                 } else {
                     withContext(Dispatchers.Main) {Snackbar.make(findViewById(R.id.main), context.getString(R.string.failed_fetch_data), Snackbar.LENGTH_LONG).show() }
+                    name.visibility = View.GONE
+                    status.visibility = View.GONE
+                    imageView.visibility = View.GONE
                 }
             }
         }
