@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SuperHeroArch</string>
     <string name="button_text">Pulsa aquí!</string>
+    <string name="new_text">Texto cambiado</string>
 </resources>
