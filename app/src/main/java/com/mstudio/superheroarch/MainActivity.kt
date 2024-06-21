@@ -19,7 +19,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.squareup.picasso.Picasso
-import org.w3c.dom.Text
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -101,7 +100,13 @@ interface ApiRick {
             val character = characters[position]
             holder.name.text = character.name
             holder.status.text = character.status
-            Picasso.get().load(character.image).into(holder.image)
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val bitmap = Picasso.get().load(character.image).get()
+                withContext(Dispatchers.Main) {
+                holder.image.setImageBitmap(bitmap)
+                }
+            }
         }
 
         override fun getItemCount(): Int = characters.size
