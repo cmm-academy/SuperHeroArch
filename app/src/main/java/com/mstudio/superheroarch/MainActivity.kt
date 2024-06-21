@@ -1,7 +1,9 @@
 package com.mstudio.superheroarch
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,6 +11,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,11 +42,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         val apiRick = retrofit.create(ApiRick::class.java)
-        val name = findViewById<TextView>(R.id.character_name)
-        val status = findViewById<TextView>(R.id.character_status)
         val button = findViewById<Button>(R.id.main_button)
-        val context = this
-        val imageView = findViewById<ImageView>(R.id.character_image)
+        val recyclerView = findViewById<RecyclerView>(R.id.characters_recycler)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
 
         button.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
@@ -50,26 +53,18 @@ class MainActivity : AppCompatActivity() {
 
                 if (response.isSuccessful) {
                     val characterResponse = response.body()
-                    val firstCharacter = characterResponse?.results?.firstOrNull()
+                    val characters = characterResponse?.results ?: emptyList()
 
-                    firstCharacter?.let { character ->
-                        withContext(Dispatchers.Main) {
-                            name.text =  context.getString(R.string.name) + " " + character.name
-                            status.text = context.getString(R.string.status) + " " + character.status
-
-                            val imageUrl = character.image
-                            Picasso.get().load(imageUrl).into(imageView)
-                        }
+                    withContext(Dispatchers.Main) {
+                        recyclerView.adapter = CharacterAdapter(characters)
                     }
-                } else {
-                    withContext(Dispatchers.Main) {Snackbar.make(findViewById(R.id.main), context.getString(R.string.failed_fetch_data), Snackbar.LENGTH_LONG).show() }
-                    name.visibility = View.GONE
-                    status.visibility = View.GONE
-                    imageView.visibility = View.GONE
+                }else{
+                    Snackbar.make(recyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
                 }
             }
         }
     }
+}
 
 data class Character(
     val name: String,
@@ -85,5 +80,35 @@ interface ApiRick {
     @GET("character")
     suspend fun getCharacter(): Response<CharacterResponse>
 }
-}
+
+    class CharacterAdapter(private val characters: List<Character>) :
+        RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
+
+        class CharacterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val name: TextView = view.findViewById(R.id.character_name)
+            val status: TextView = view.findViewById(R.id.character_status)
+            val image: ImageView = view.findViewById(R.id.character_image)
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_view, parent, false)
+            return CharacterViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
+            val character = characters[position]
+            holder.name.text = character.name
+            holder.status.text = character.status
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val bitmap = Picasso.get().load(character.image).get()
+                withContext(Dispatchers.Main) {
+                holder.image.setImageBitmap(bitmap)
+                }
+            }
+        }
+
+        override fun getItemCount(): Int = characters.size
+    }
 
