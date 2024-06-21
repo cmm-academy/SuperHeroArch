@@ -59,6 +59,8 @@ class MainActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         recyclerView.adapter = CharacterAdapter(characters)
                     }
+                }else{
+                    Snackbar.make(recyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
                 }
             }
         }
