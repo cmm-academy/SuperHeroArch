@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getDataFromRemote() {
-        var listOfCharacters = emptyList<Character>()
+        val listOfCharacters = mutableListOf<Character>()
         val apiService = RetrofitInstance.getInstance().create(RickAndMortyApi::class.java)
         val call = apiService.doGetCharacters()
         call.enqueue(object : Callback<CharactersResponse> {
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?.results?.let {
                         for (character in response.body()?.results ?: emptyList()) {
-                            listOfCharacters = listOfCharacters + character
+                            listOfCharacters.add(character)
                         }
                         characterListAdapter.updateData(listOfCharacters)
                         updateButton.visibility = View.GONE
