@@ -1,6 +1,7 @@
 package com.mstudio.superheroarch
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -44,15 +45,13 @@ class MainActivity : AppCompatActivity() {
                     val characters = characterResponse?.results ?: emptyList()
 
                     withContext(Dispatchers.Main) {
+                        button.visibility = View.GONE
                         adapter.updateCharacters(characters)
                     }
-                }else{
+                } else {
                     Snackbar.make(recyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
                 }
             }
         }
-    }private fun setupRecyclerView(){
-        val adapter = CharacterAdapter(emptyList())
-        recyclerView.adapter = adapter
     }
 }
