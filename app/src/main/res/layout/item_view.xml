@@ -4,9 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="8dp"
-    android:background="@color/secondary"
     app:cardCornerRadius="16dp">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,30 +13,31 @@
         >
         <ImageView
             android:id="@+id/character_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginEnd="16dp"
             android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="1:1"
             />
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/character_details"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            android:padding="8dp">
             <TextView
                 android:id="@+id/character_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Character Name"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
             <TextView
                 android:id="@+id/character_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 tools:text="Status"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="14sp" />

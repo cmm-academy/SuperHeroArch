@@ -27,13 +27,12 @@ class CharacterAdapter(private var characters: List<Character>) :
         holder.name.text = character.name
         holder.status.text = character.status
         Picasso.get().load(character.image).into(holder.image)
-
     }
 
     override fun getItemCount(): Int = characters.size
 
     fun updateCharacters(newCharacters: List<Character>){
         characters = newCharacters
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, characters.size)
     }
 }
