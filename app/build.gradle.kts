@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.picasso)
 
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)

@@ -2,7 +2,7 @@ package com.mstudio.superheroarch.data
 
 data class CharactersResponse(
     val info: Info,
-    val results: List<Result>
+    val results: List<Result>?
 )
 
 data class Result(
