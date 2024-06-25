@@ -12,9 +12,15 @@ class CharacterAdapter(private var characters: List<Character>) :
     RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
     class CharacterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val name: TextView = view.findViewById(R.id.character_name)
-        val status: TextView = view.findViewById(R.id.character_status)
-        val image: ImageView = view.findViewById(R.id.character_image)
+        val name: TextView
+        val status: TextView
+        val image: ImageView
+
+        init {
+            name = view.findViewById(R.id.character_name)
+            status = view.findViewById(R. id.character_status)
+            image = view.findViewById(R.id.character_image)
+        }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view = LayoutInflater.from(parent.context)
