@@ -23,8 +23,8 @@ class CharacterAdapter(private var characters: List<Character>) :
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_view, parent, false)
+        val inflater = LayoutInflater.from(parent.context)
+        val view = inflater.inflate(R.layout.item_view, parent, false)
         return CharacterViewHolder(view)
     }
 
