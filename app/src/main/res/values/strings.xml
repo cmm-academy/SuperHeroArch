@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">SuperHeroArch</string>
-    <string name="main_button">Obtener Personajes</string>
+    <string name="main_button">Get Characters</string>
     <string name="character_name">Character Name</string>
     <string name="character_status">Character Status</string>
-    <string name="main_text_clicked">Clicked!</string>
     <string name="failed_fetch_data">Failed to fetch data</string>
     <string name="no_character_found">Failed to find character</string>
     <string name="name">Name: </string>
