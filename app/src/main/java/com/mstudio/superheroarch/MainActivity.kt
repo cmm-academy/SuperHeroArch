@@ -22,7 +22,6 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
     lateinit var characterListAdapter: CharacterListAdapter
     lateinit var updateButton: Button
-    var dataFromNetwork = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        updateButton = findViewById(R.id.button_to_change_text)
+        updateButton = findViewById(R.id.refresh_button)
 
         val characterListRecyclerView: RecyclerView = findViewById(R.id.character_list)
         characterListRecyclerView.layoutManager = LinearLayoutManager(this)
