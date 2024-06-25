@@ -31,16 +31,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Character Name"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                style="@style/CharacterNameStyle" />
             <TextView
                 android:id="@+id/character_status"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:text="Status"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="14sp" />
+                style="@style/CharacterStatusStyle" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
