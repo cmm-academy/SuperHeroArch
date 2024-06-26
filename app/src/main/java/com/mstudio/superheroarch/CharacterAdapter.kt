@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso
 
 class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
-    private var characters: List<Character> = emptyList()
+    private var characters: MutableList<Character> = mutableListOf()
 
     class CharacterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.character_name)
@@ -27,13 +27,15 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
         val character = characters[position]
         holder.name.text = character.name
         holder.status.text = character.status
-        Picasso.get().load(character.image).placeholder(R.drawable.placeholder).error(R.drawable.error).into(holder.image)
+        Picasso.get().load(character.image).placeholder(R.drawable.placeholder)
+            .error(R.drawable.error).into(holder.image)
     }
 
     override fun getItemCount(): Int = characters.size
 
-    fun updateCharacters(newCharacters: List<Character>){
-        characters = newCharacters
+    fun updateCharacters(newCharacters: List<Character>) {
+        characters.clear()
+        characters.addAll(newCharacters)
         notifyItemRangeChanged(0, characters.size)
     }
 }

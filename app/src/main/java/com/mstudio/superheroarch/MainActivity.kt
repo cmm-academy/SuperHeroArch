@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var characterRecyclerView: RecyclerView
     private lateinit var apiRick: ApiRick
     private lateinit var adapter: CharacterAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,10 +31,10 @@ class MainActivity : AppCompatActivity() {
 
         apiRick = retrofit.create(ApiRick::class.java)
         val button = findViewById<Button>(R.id.main_button)
-        recyclerView = findViewById<RecyclerView>(R.id.characters_recycler)
+        characterRecyclerView = findViewById<RecyclerView>(R.id.characters_recycler)
 
         adapter = CharacterAdapter()
-        recyclerView.adapter = adapter
+        characterRecyclerView.adapter = adapter
 
         button.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
@@ -45,11 +45,15 @@ class MainActivity : AppCompatActivity() {
                     val characters = characterResponse?.results ?: emptyList()
 
                     withContext(Dispatchers.Main) {
-                        button.visibility = View.GONE
+                        if (characters.isNotEmpty()){
+                            button.visibility = View.GONE
+                        }else{
+                            Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
+                        }
                         adapter.updateCharacters(characters)
                     }
                 } else {
-                    Snackbar.make(recyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
                 }
             }
         }
