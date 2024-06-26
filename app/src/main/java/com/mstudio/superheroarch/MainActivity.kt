@@ -19,7 +19,7 @@ import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var characterListAdapter: CharacterListAdapter
+    val characterListAdapter = CharacterListAdapter()
     lateinit var updateButton: Button
 
 
@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
 
         val characterListRecyclerView: RecyclerView = findViewById(R.id.character_list)
         characterListRecyclerView.layoutManager = LinearLayoutManager(this)
-        characterListAdapter = CharacterListAdapter()
         characterListRecyclerView.adapter = characterListAdapter
 
         getDataFromRemote()
