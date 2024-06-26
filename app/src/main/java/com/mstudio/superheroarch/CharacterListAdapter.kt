@@ -38,6 +38,6 @@ class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.Character
     fun updateData(newItems: List<Character>) {
         characterList.clear()
         characterList.addAll(newItems)
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, characterList.size)
     }
 }
