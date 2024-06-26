@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mstudio.superheroarch.data.Character
 import com.squareup.picasso.Picasso
 
-class CharacterListAdapter(private val characterList: MutableList<Character>) : RecyclerView.Adapter<CharacterListAdapter.CharacterViewHolder>() {
+class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.CharacterViewHolder>() {
+
+    private val characterList: MutableList<Character> = mutableListOf()
+
     class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val characterNameTextView: TextView = itemView.findViewById(R.id.character_name)
         val characterStatusTextView: TextView = itemView.findViewById(R.id.character_status)

@@ -10,7 +10,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.mstudio.superheroarch.data.Character
 import com.mstudio.superheroarch.data.CharactersResponse
 import com.mstudio.superheroarch.network.RetrofitInstance
 import com.mstudio.superheroarch.network.RickAndMortyApi
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         val characterListRecyclerView: RecyclerView = findViewById(R.id.character_list)
         characterListRecyclerView.layoutManager = LinearLayoutManager(this)
-        characterListAdapter = CharacterListAdapter(mutableListOf())
+        characterListAdapter = CharacterListAdapter()
         characterListRecyclerView.adapter = characterListAdapter
 
         getDataFromRemote()
@@ -48,17 +47,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getDataFromRemote() {
-        val listOfCharacters = mutableListOf<Character>()
         val apiService = RetrofitInstance.getInstance().create(RickAndMortyApi::class.java)
         val call = apiService.doGetCharacters()
         call.enqueue(object : Callback<CharactersResponse> {
             override fun onResponse(call: Call<CharactersResponse>, response: Response<CharactersResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.results?.let {
-                        for (character in response.body()?.results ?: emptyList()) {
-                            listOfCharacters.add(character)
-                        }
-                        characterListAdapter.updateData(listOfCharacters)
+                        characterListAdapter.updateData(it)
                         updateButton.visibility = View.GONE
 
                     } ?: Snackbar.make(findViewById(R.id.main), getString(R.string.error_message_no_character_info), Snackbar.LENGTH_SHORT).show()
