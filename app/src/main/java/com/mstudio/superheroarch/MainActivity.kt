@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.main_button)
         recyclerView = findViewById<RecyclerView>(R.id.characters_recycler)
 
-        adapter = CharacterAdapter(emptyList())
+        adapter = CharacterAdapter()
         recyclerView.adapter = adapter
 
         button.setOnClickListener {
