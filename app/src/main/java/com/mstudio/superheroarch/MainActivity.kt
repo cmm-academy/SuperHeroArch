@@ -53,7 +53,9 @@ class MainActivity : AppCompatActivity() {
                         adapter.updateCharacters(characters)
                     }
                 } else {
-                    Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
+                    withContext(Dispatchers.Main){
+                        Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
+                    }
                 }
             }
         }
