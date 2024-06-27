@@ -17,14 +17,15 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
-    private val apiRick: ApiRick by lazy { retrofit.create(ApiRick::class.java) }
-    private val adapter: CharacterAdapter by lazy { CharacterAdapter() }
+    private val adapter = CharacterAdapter()
+    private lateinit var apiRick: ApiRick
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        apiRick = retrofit.create(ApiRick::class.java)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
