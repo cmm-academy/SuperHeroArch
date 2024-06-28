@@ -7,6 +7,10 @@ android {
     namespace = "com.mstudio.superheroarch"
     compileSdk = 34
 
+    viewBinding{
+        enable = true
+    }
+
     defaultConfig {
         applicationId = "com.mstudio.superheroarch"
         minSdk = 29

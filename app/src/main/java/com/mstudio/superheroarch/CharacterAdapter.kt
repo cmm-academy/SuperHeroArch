@@ -10,25 +10,42 @@ import com.squareup.picasso.Picasso
 
 class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
-    private var characters: MutableList<Character> = mutableListOf()
+    private lateinit var mListener: onItemClickListener
+    interface onItemClickListener{
+        fun onItemClick(position: Int)
+    }
+    fun setOnItemClickListener(listener: onItemClickListener){
+        mListener = listener
+    }
 
-    class CharacterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+     var characters: MutableList<Character> = mutableListOf()
+
+    class CharacterViewHolder(view: View, listener: onItemClickListener) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.character_name)
         val status: TextView = view.findViewById(R.id.character_status)
         val image: ImageView = view.findViewById(R.id.character_image)
+
+        init {
+            itemView.setOnClickListener{
+                listener.onItemClick(adapterPosition)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_view, parent, false)
-        return CharacterViewHolder(view)
+        return CharacterViewHolder(view, mListener)
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val character = characters[position]
         holder.name.text = character.name
         holder.status.text = character.status
-        Picasso.get().load(character.image).placeholder(R.drawable.placeholder)
-            .error(R.drawable.error).into(holder.image)
+        Picasso.get().load(character.image).placeholder(R.drawable.placeholder).error(R.drawable.error).into(holder.image)
+
+        holder.itemView.setOnClickListener{
+            mListener.onItemClick(position)
+        }
     }
 
     override fun getItemCount(): Int = characters.size

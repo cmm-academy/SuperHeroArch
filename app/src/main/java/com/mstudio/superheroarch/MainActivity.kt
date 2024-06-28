@@ -1,5 +1,6 @@
 package com.mstudio.superheroarch
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -20,12 +21,22 @@ class MainActivity : AppCompatActivity() {
     private val adapter = CharacterAdapter()
     private lateinit var apiRick: ApiRick
 
+    companion object {
+        const val EXTRA_NAME = "com.mstudio.superheroarch.MainActivity.EXTRA_NAME"
+        const val EXTRA_STATUS = "com.mstudio.superheroarch.MainActivity.EXTRA_STATUS"
+        const val EXTRA_IMAGE = "com.mstudio.superheroarch.MainActivity.EXTRA_IMAGE"
+        const val EXTRA_LOCATION = "com.mstudio.superheroarch.MainActivity.EXTRA_LOCATION"
+        const val EXTRA_ORIGIN= "com.mstudio.superheroarch.MainActivity.EXTRA_ORIGIN"
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
         apiRick = retrofit.create(ApiRick::class.java)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -36,6 +47,19 @@ class MainActivity : AppCompatActivity() {
         val characterRecyclerView = findViewById<RecyclerView>(R.id.characters_recycler)
 
         characterRecyclerView.adapter = adapter
+
+        adapter.setOnItemClickListener(object : CharacterAdapter.onItemClickListener {
+            override fun onItemClick(position: Int) {
+                val character = adapter.characters[position]
+                val intent = Intent(this@MainActivity, DetailsActivity::class.java)
+                intent.putExtra(EXTRA_NAME, character.name)
+                intent.putExtra(EXTRA_STATUS, character.status)
+                intent.putExtra(EXTRA_IMAGE, character.image)
+                intent.putExtra(EXTRA_LOCATION, character.location.name)
+                intent.putExtra(EXTRA_ORIGIN, character.origin.name)
+                startActivity(intent)
+            }
+        })
 
         button.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
