@@ -7,8 +7,6 @@ android {
     namespace = "com.mstudio.superheroarch"
     compileSdk = 34
 
-
-
     defaultConfig {
         applicationId = "com.mstudio.superheroarch"
         minSdk = 29

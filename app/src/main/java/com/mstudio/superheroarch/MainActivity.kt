@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         characterRecyclerView.adapter = adapter
 
-        adapter.setOnItemClickListener(object : CharacterAdapter.onItemClickListener {
+        adapter.setOnItemClickListener(object : CharacterAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 val character = adapter.characters[position]
                 val intent = Intent(this@MainActivity, DetailsActivity::class.java)

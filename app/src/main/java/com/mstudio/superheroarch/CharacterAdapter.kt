@@ -10,27 +10,35 @@ import com.squareup.picasso.Picasso
 
 class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
-    private var mListener: onItemClickListener? = null
+    private var mListener: OnItemClickListener? = null
 
-    interface onItemClickListener{
+    interface OnItemClickListener{
         fun onItemClick(position: Int)
     }
-    fun setOnItemClickListener(listener: onItemClickListener){
+    fun setOnItemClickListener(listener: OnItemClickListener){
         mListener = listener
     }
 
      var characters: MutableList<Character> = mutableListOf()
 
-    class CharacterViewHolder(view: View, private val listener: onItemClickListener) : RecyclerView.ViewHolder(view) {
+    class CharacterViewHolder(view: View, private val listener: OnItemClickListener) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.character_name)
-        val status: TextView = view.findViewById(R.id.character_status)
-        val image: ImageView = view.findViewById(R.id.character_image)
+        private val status: TextView = view.findViewById(R.id.character_status)
+        private val image: ImageView = view.findViewById(R.id.character_image)
+        private var currentCharacter: Character? = null
 
         init {
             itemView.setOnClickListener{
                 listener.onItemClick(bindingAdapterPosition)
             }
         }
+        fun bind(character: Character){
+            currentCharacter = character
+            name.text = character.name
+            status.text = character.status
+            Picasso.get().load(character.image).placeholder(R.drawable.placeholder).error(R.drawable.error).into(image)
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
@@ -42,9 +50,7 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val character = characters[position]
-        holder.name.text = character.name
-        holder.status.text = character.status
-        Picasso.get().load(character.image).placeholder(R.drawable.placeholder).error(R.drawable.error).into(holder.image)
+        holder.bind(character)
     }
 
     override fun getItemCount(): Int = characters.size
