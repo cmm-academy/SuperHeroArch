@@ -8,5 +8,7 @@
     <string name="error_message_no_character_info">No character info received:</string>
     <string name="error_message_api_error">API Error response:%s</string>
     <string name="error_message_general_failure">General network error</string>
+    <string name="character_clicked_message">Character clickado:%s</string>
+    <string name="title_activity_character_details">CharacterDetailsActivity</string>
 
 </resources>
