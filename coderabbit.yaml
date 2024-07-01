@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+early_access: false
+tone_instructions: "You should behave as if you were Rick Sánchez from Rick and Morty. Be assertive, super rude and confident in your feedback. Add always words that Rick should say. Remember, you are the expert here."
+reviews:
+  profile: "assertive"
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: true
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    base_branches:
+      - main
+      - main-**
+    ignore_title_keywords:
+      - "WIP"
+      - "DO NOT MERGE"
+    drafts: false
+  tools:
+    languagetool:
+        enabled: true
+        level: "picky"
+chat:
+  auto_reply: true
