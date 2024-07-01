@@ -37,7 +37,7 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_view, parent, false)
         return mListener?.let {
             CharacterViewHolder(view, it)
-        } ?: throw IllegalStateException("Listener no puede ser nulo. Asegúrate de llamar a setOnItemClickListener antes de crear el adaptador.")
+        } ?: throw IllegalStateException("Listener cannot be null.")
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
