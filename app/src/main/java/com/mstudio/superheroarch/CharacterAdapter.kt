@@ -10,7 +10,8 @@ import com.squareup.picasso.Picasso
 
 class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
-    private lateinit var mListener: onItemClickListener
+    private var mListener: onItemClickListener? = null
+
     interface onItemClickListener{
         fun onItemClick(position: Int)
     }
@@ -20,21 +21,23 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
 
      var characters: MutableList<Character> = mutableListOf()
 
-    class CharacterViewHolder(view: View, listener: onItemClickListener) : RecyclerView.ViewHolder(view) {
+    class CharacterViewHolder(view: View, private val listener: onItemClickListener) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.character_name)
         val status: TextView = view.findViewById(R.id.character_status)
         val image: ImageView = view.findViewById(R.id.character_image)
 
         init {
             itemView.setOnClickListener{
-                listener.onItemClick(adapterPosition)
+                listener.onItemClick(bindingAdapterPosition)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_view, parent, false)
-        return CharacterViewHolder(view, mListener)
+        return mListener?.let {
+            CharacterViewHolder(view, it)
+        } ?: throw IllegalStateException("Listener no puede ser nulo. Asegúrate de llamar a setOnItemClickListener antes de crear el adaptador.")
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
@@ -42,10 +45,6 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
         holder.name.text = character.name
         holder.status.text = character.status
         Picasso.get().load(character.image).placeholder(R.drawable.placeholder).error(R.drawable.error).into(holder.image)
-
-        holder.itemView.setOnClickListener{
-            mListener.onItemClick(position)
-        }
     }
 
     override fun getItemCount(): Int = characters.size

@@ -7,9 +7,7 @@ android {
     namespace = "com.mstudio.superheroarch"
     compileSdk = 34
 
-    viewBinding{
-        enable = true
-    }
+
 
     defaultConfig {
         applicationId = "com.mstudio.superheroarch"
@@ -46,6 +44,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.picasso)
+    implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

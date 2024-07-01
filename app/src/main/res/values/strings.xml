@@ -9,5 +9,4 @@
     <string name="status">Status: </string>
     <string name="origin">Origin</string>
     <string name="location">Location</string>
-    <string name="back">\u2190</string>
 </resources>

@@ -22,12 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var apiRick: ApiRick
 
     companion object {
-        const val EXTRA_NAME = "com.mstudio.superheroarch.MainActivity.EXTRA_NAME"
-        const val EXTRA_STATUS = "com.mstudio.superheroarch.MainActivity.EXTRA_STATUS"
-        const val EXTRA_IMAGE = "com.mstudio.superheroarch.MainActivity.EXTRA_IMAGE"
-        const val EXTRA_LOCATION = "com.mstudio.superheroarch.MainActivity.EXTRA_LOCATION"
-        const val EXTRA_ORIGIN= "com.mstudio.superheroarch.MainActivity.EXTRA_ORIGIN"
-
+        const val EXTRA_CHARACTER = "com.mstudio.superheroarch.MainActivity.EXTRA_CHARACTER"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,11 +47,7 @@ class MainActivity : AppCompatActivity() {
             override fun onItemClick(position: Int) {
                 val character = adapter.characters[position]
                 val intent = Intent(this@MainActivity, DetailsActivity::class.java)
-                intent.putExtra(EXTRA_NAME, character.name)
-                intent.putExtra(EXTRA_STATUS, character.status)
-                intent.putExtra(EXTRA_IMAGE, character.image)
-                intent.putExtra(EXTRA_LOCATION, character.location.name)
-                intent.putExtra(EXTRA_ORIGIN, character.origin.name)
+                intent.putExtra(EXTRA_CHARACTER, character)
                 startActivity(intent)
             }
         })

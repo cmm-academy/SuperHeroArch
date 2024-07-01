@@ -13,6 +13,8 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.details_screen)
 
+        val character = intent.getSerializableExtra(MainActivity.EXTRA_CHARACTER) as? Character
+
         val characterNameTextView: TextView = findViewById(R.id.character_name)
         val characterStatusTextView: TextView = findViewById(R.id.character_status)
         val backButton: ImageButton = findViewById(R.id.back)
@@ -24,13 +26,12 @@ class DetailsActivity : AppCompatActivity() {
             finish()
         }
 
-        val characterImage = intent.getStringExtra(MainActivity.EXTRA_IMAGE)
-        characterNameTextView.text = intent.getStringExtra(MainActivity.EXTRA_NAME)
-        characterStatusTextView.text = intent.getStringExtra(MainActivity.EXTRA_STATUS)
-        characterLocationTextView.text = intent.getStringExtra(MainActivity.EXTRA_LOCATION)
-        characterOriginTextView.text = intent.getStringExtra(MainActivity.EXTRA_ORIGIN)
-
-        Picasso.get().load(characterImage).placeholder(R.drawable.placeholder).error(R.drawable.error).into(characterImageView)
-
+        character?.let {
+            characterNameTextView.text = it.name
+            characterStatusTextView.text = it.status
+            characterLocationTextView.text = it.location.name
+            characterOriginTextView.text = it.origin.name
+            Picasso.get().load(it.image).placeholder(R.drawable.placeholder).error(R.drawable.error).into(characterImageView)
+        }
     }
 }
