@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity() {
                         characterListAdapter.updateData(it)
                         characterListAdapter.setItemClickedListener { character ->
                             onItemClick(character)
-                            Snackbar.make(findViewById(R.id.main), getString(R.string.character_clicked_message, character.name), Snackbar.LENGTH_SHORT).show()
                         }
                         updateButton.visibility = View.GONE
 
@@ -77,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
     fun onItemClick(character: Character) {
         val intent = Intent(this, CharacterDetailsActivity::class.java).apply {
-            putExtra("CHARACTER_NAME", character.name)
+            putExtra("CHARACTER", character)
         }
         startActivity(intent)
     }

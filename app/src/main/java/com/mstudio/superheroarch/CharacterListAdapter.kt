@@ -40,7 +40,6 @@ class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.Character
 
         holder.bind(character)
         holder.itemView.setOnClickListener { listener?.invoke(character) }
-
     }
 
     fun updateData(newItems: List<Character>) {
