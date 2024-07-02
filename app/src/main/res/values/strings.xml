@@ -11,8 +11,10 @@
     <string name="title_activity_character_details">CharacterDetailsActivity</string>
     <string name="character_details_title">Character info</string>
     <string name="character_details_name">Name of the character</string>
-    <string name="character_details_status">Status of the character</string>
-    <string name="character_details_species">Species of the character</string>
+    <string name="character_details_status">Status:%s</string>
+    <string name="character_details_species">Species:%s</string>
     <string name="character_details_origin">First seen in:%s</string>
+    <string name="character_details_origin_unknown">Unknown</string>
     <string name="character_details_location">Last known location:%s</string>
+    <string name="character_details_location_unknown">Unknown</string>
 </resources>

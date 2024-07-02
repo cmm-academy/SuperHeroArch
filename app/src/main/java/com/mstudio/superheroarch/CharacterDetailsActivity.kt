@@ -31,12 +31,14 @@ class CharacterDetailsActivity : AppCompatActivity() {
         val characterOrigin: TextView = findViewById(R.id.character_details_origin)
         val characterImage: ImageView = findViewById(R.id.character_details_image)
 
-        characterName.text = character?.name
-        characterStatus.text = character?.status
-        characterSpecies.text = character?.species
-        characterLocation.text = character?.location?.name ?: "Unknown"
-        characterOrigin.text = character?.origin?.name ?: "Unknown"
-        Picasso.get().load(character?.image).into(characterImage)
-
+        character.let {
+            characterName.text = it?.name
+            characterStatus.text = getString(R.string.character_details_status, it?.status)
+            characterSpecies.text = getString(R.string.character_details_species, it?.species)
+            characterSpecies.text = getString(R.string.character_details_species, it?.species)
+            characterLocation.text = getString(R.string.character_details_location, it?.location?.name ?: getString(R.string.character_details_location_unknown))
+            characterOrigin.text = getString(R.string.character_details_origin, it?.origin?.name ?: getString(R.string.character_details_origin_unknown))
+            Picasso.get().load(it?.image).into(characterImage)
+        }
     }
 }

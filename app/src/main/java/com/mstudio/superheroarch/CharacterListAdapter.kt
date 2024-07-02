@@ -27,7 +27,7 @@ class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.Character
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.character_details, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.character_list_item, parent, false)
         return CharacterViewHolder(view)
     }
 

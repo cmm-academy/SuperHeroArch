@@ -5,94 +5,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CharacterDetailsActivity">
+    android:padding="16dp">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="4dp"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ImageView
+        android:id="@+id/character_details_image"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:contentDescription="@string/character_details_name"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="4dp">
+    <TextView
+        android:id="@+id/character_details_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/character_details_image"
+        tools:text="Character Name" />
 
-            <ImageView
-                android:id="@+id/character_details_image"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginEnd="16dp"
-                android:scaleType="fitCenter"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/character_details_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/character_details_name"
+        tools:text="Status: Alive" />
 
-            <TextView
-                android:id="@+id/character_details_name"
-                style="@style/TextAppearance.MaterialComponents.Headline4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@string/character_details_name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/character_details_image"
-                tools:text="Nombre de personaje" />
+    <TextView
+        android:id="@+id/character_details_species"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/character_details_status"
+        tools:text="Species: Human" />
 
-            <TextView
-                android:id="@+id/character_details_status"
-                style="@style/TextAppearance.MaterialComponents.Body1"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/character_details_status"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/character_details_name"
-                tools:text="Status" />
+    <TextView
+        android:id="@+id/character_details_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/character_details_species"
+        tools:text="Location: Earth" />
 
-            <TextView
-                android:id="@+id/character_details_species"
-                style="@style/TextAppearance.MaterialComponents.Body1"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/character_details_species"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/character_details_status"
-                tools:text="Species" />
-
-            <TextView
-                android:id="@+id/character_details_origin"
-                style="@style/TextAppearance.MaterialComponents.Body1"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/character_details_origin"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/character_details_species"
-                tools:text="Origin" />
-
-            <TextView
-                android:id="@+id/character_details_location"
-                style="@style/TextAppearance.MaterialComponents.Body1"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/character_details_location"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/character_details_origin"
-                tools:text="Location" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
+    <TextView
+        android:id="@+id/character_details_origin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/character_details_location"
+        tools:text="Origin: Unknown" />
 </androidx.constraintlayout.widget.ConstraintLayout>
