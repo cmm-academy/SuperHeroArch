@@ -16,18 +16,12 @@ data class Character(
     val name: String,
     val status: String,
     val species: String,
-    val origin: Origin,
-    val location: Location
+    val origin: Ubication,
+    val location: Ubication
 ) : Parcelable
 
 @Parcelize
-data class Origin(
-    val name: String,
-    val url: String
-) : Parcelable
-
-@Parcelize
-data class Location(
+data class Ubication(
     val name: String,
     val url: String
 ) : Parcelable
