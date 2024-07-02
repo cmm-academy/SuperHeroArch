@@ -5,4 +5,5 @@
     <string name="error_api">Thanks for tapping! Now you can continue tapping, but it seems there is a problem with the endpoint!</string>
     <string name="empty_array">There are no available characters!</string>
     <string name="one_character_text">Character displayed!</string>
+    <string name="image_description">First character image</string>
 </resources>
