@@ -2,7 +2,6 @@ package com.mstudio.superheroarch
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -32,13 +31,17 @@ class MainActivity : AppCompatActivity() {
 
         apiRick = retrofit.create(ApiRick::class.java)
 
+        val allButton = findViewById<Button>(R.id.all)
+        val aliveButton = findViewById<Button>(R.id.alive)
+        val deadButton = findViewById<Button>(R.id.dead)
+        val unknownButton = findViewById<Button>(R.id.unknown)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        val button = findViewById<Button>(R.id.main_button)
         val characterRecyclerView = findViewById<RecyclerView>(R.id.characters_recycler)
 
         characterRecyclerView.adapter = adapter
@@ -52,28 +55,33 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        button.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                val response = apiRick.getCharacter()
+        allButton.setOnClickListener {filterCharacters(null)}
+        aliveButton.setOnClickListener {filterCharacters("Alive")}
+        deadButton.setOnClickListener {filterCharacters("Dead")}
+        unknownButton.setOnClickListener {filterCharacters("unknown")}
 
-                if (response.isSuccessful) {
-                    val characterResponse = response.body()
-                    val characters = characterResponse?.results ?: emptyList()
+        CoroutineScope(Dispatchers.IO).launch{
+            val response = apiRick.getCharacter()
 
-                    withContext(Dispatchers.Main) {
-                        if (characters.isNotEmpty()){
-                            button.visibility = View.GONE
-                        }else{
-                            Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
-                        }
-                        adapter.updateCharacters(characters)
-                    }
-                } else {
-                    withContext(Dispatchers.Main){
+            if (response.isSuccessful) {
+                val characterResponse = response.body()
+                val allCharacters = characterResponse?.results ?: emptyList()
+
+                withContext(Dispatchers.Main) {
+                    if (allCharacters.isEmpty()) {
                         Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
                     }
+                    adapter.updateCharacters(allCharacters)
+                }
+            } else{
+                withContext(Dispatchers.Main){
+                    Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
                 }
             }
         }
+    }
+
+    private fun filterCharacters(status: String?) {
+        adapter.filterCharactersByStatus(status)
     }
 }

@@ -1,5 +1,6 @@
 package com.mstudio.superheroarch
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,8 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
         mListener = listener
     }
 
-     var characters: MutableList<Character> = mutableListOf()
+    private var allCharacters: List<Character> = mutableListOf()
+    var characters: MutableList<Character> = mutableListOf()
 
     class CharacterViewHolder(view: View, private val listener: OnItemClickListener) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.character_name)
@@ -38,11 +40,10 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
             status.text = character.status
             Picasso.get().load(character.image).placeholder(R.drawable.placeholder).error(R.drawable.error).into(image)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_view, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.caracter_view_holder, parent, false)
         return mListener?.let {
             CharacterViewHolder(view, it)
         } ?: throw IllegalStateException("Listener cannot be null.")
@@ -55,9 +56,19 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
 
     override fun getItemCount(): Int = characters.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateCharacters(newCharacters: List<Character>) {
+        allCharacters = newCharacters
         characters.clear()
         characters.addAll(newCharacters)
-        notifyItemRangeChanged(0, characters.size)
+        notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun filterCharactersByStatus(status: String?){
+        characters = status?.let {
+            allCharacters.filter { it.status.equals(status, ignoreCase = true) }.toMutableList()
+        } ?: allCharacters.toMutableList()
+        notifyDataSetChanged()
     }
 }
