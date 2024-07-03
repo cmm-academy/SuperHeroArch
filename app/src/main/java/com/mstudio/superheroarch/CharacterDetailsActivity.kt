@@ -22,6 +22,12 @@ class CharacterDetailsActivity : AppCompatActivity() {
             insets
         }
 
+        val actionBar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(actionBar)
+        actionBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
         val character = intent.getParcelableExtra<Character>("CHARACTER")
 
         val characterName: TextView = findViewById(R.id.character_details_name)
