@@ -21,8 +21,6 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     val characterListAdapter = CharacterListAdapter()
-    lateinit var updateButton: Button
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +33,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         val characterListRecyclerView: RecyclerView = findViewById(R.id.character_list)
+        val filterStatusAll = findViewById<Button>(R.id.button_filter_all)
+        val filterStatusAlive = findViewById<Button>(R.id.button_filter_alive)
+        val filterStatusDead = findViewById<Button>(R.id.button_filter_dead)
+        val filterStatusUnknown = findViewById<Button>(R.id.button_filter_unknown)
+
         characterListRecyclerView.layoutManager = LinearLayoutManager(this)
         characterListRecyclerView.adapter = characterListAdapter
 
         getDataFromRemote()
+
+        setOnFilterClickListener(filterStatusAll, getString(R.string.all_status_filter))
+        setOnFilterClickListener(filterStatusAlive, getString(R.string.alive_status_filter))
+        setOnFilterClickListener(filterStatusDead, getString(R.string.dead_status_filter))
+        setOnFilterClickListener(filterStatusUnknown, getString(R.string.unknown_status_filter))
     }
 
     private fun getDataFromRemote() {
@@ -49,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?.results?.let {
                         characterListAdapter.updateData(it)
+                        characterListAdapter.storeOriginalData(it)
                         characterListAdapter.setItemClickedListener { character ->
                             onItemClick(character)
                         }
@@ -61,10 +70,8 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<CharactersResponse>, t: Throwable) {
                 Snackbar.make(findViewById(R.id.main), getString(R.string.error_message_general_failure), Snackbar.LENGTH_SHORT).show()
             }
-
         })
     }
-
 
     fun onItemClick(character: Character) {
         val intent = Intent(this, CharacterDetailsActivity::class.java).apply {
@@ -73,4 +80,9 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun setOnFilterClickListener(filterButton: Button, status: String) {
+        filterButton.setOnClickListener {
+            characterListAdapter.filterByStatus(status)
+        }
+    }
 }
