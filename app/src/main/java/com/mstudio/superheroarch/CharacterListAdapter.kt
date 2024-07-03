@@ -12,15 +12,22 @@ import com.squareup.picasso.Picasso
 class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.CharacterViewHolder>() {
 
     private val characterList: MutableList<Character> = mutableListOf()
+    private var listener: ((Character) -> Unit)? = null
 
     class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val characterNameTextView: TextView = itemView.findViewById(R.id.character_name)
-        val characterStatusTextView: TextView = itemView.findViewById(R.id.character_status)
-        val characterImageView: ImageView = itemView.findViewById(R.id.character_image)
+        private val characterNameTextView: TextView = itemView.findViewById(R.id.character_name)
+        private val characterStatusTextView: TextView = itemView.findViewById(R.id.character_status)
+        private val characterImageView: ImageView = itemView.findViewById(R.id.character_image)
+
+        fun bind(character: Character) {
+            characterNameTextView.text = character.name
+            characterStatusTextView.text = character.status
+            Picasso.get().load(character.image).into(characterImageView)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.character_details, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.character_list_item, parent, false)
         return CharacterViewHolder(view)
     }
 
@@ -30,14 +37,18 @@ class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.Character
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val character = characterList[position]
-        holder.characterNameTextView.text = character.name
-        holder.characterStatusTextView.text = character.status
-        Picasso.get().load(character.image).into(holder.characterImageView);
+
+        holder.bind(character)
+        holder.itemView.setOnClickListener { listener?.invoke(character) }
     }
 
     fun updateData(newItems: List<Character>) {
         characterList.clear()
         characterList.addAll(newItems)
         notifyItemRangeChanged(0, characterList.size)
+    }
+
+    fun setItemClickedListener(listener: (Character) -> Unit) {
+        this.listener = listener
     }
 }

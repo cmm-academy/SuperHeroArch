@@ -1,5 +1,6 @@
 package com.mstudio.superheroarch
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -10,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.mstudio.superheroarch.data.Character
 import com.mstudio.superheroarch.data.CharactersResponse
 import com.mstudio.superheroarch.network.RetrofitInstance
 import com.mstudio.superheroarch.network.RickAndMortyApi
@@ -53,6 +55,9 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?.results?.let {
                         characterListAdapter.updateData(it)
+                        characterListAdapter.setItemClickedListener { character ->
+                            onItemClick(character)
+                        }
                         updateButton.visibility = View.GONE
 
                     } ?: Snackbar.make(findViewById(R.id.main), getString(R.string.error_message_no_character_info), Snackbar.LENGTH_SHORT).show()
@@ -66,6 +71,14 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+
+    fun onItemClick(character: Character) {
+        val intent = Intent(this, CharacterDetailsActivity::class.java).apply {
+            putExtra("CHARACTER", character)
+        }
+        startActivity(intent)
     }
 
 }
