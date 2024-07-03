@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.appbar.MaterialToolbar
 import com.mstudio.superheroarch.data.Character
 import com.squareup.picasso.Picasso
 
@@ -22,8 +23,7 @@ class CharacterDetailsActivity : AppCompatActivity() {
             insets
         }
 
-        val actionBar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(actionBar)
+        val actionBar: MaterialToolbar = findViewById(R.id.topAppBar)
         actionBar.setNavigationOnClickListener {
             onBackPressed()
         }
