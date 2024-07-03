@@ -17,4 +17,8 @@
     <string name="character_details_origin_unknown">Unknown</string>
     <string name="character_details_location">Last known location:%s</string>
     <string name="character_details_location_unknown">Unknown</string>
+    <string name="dead_status_filter">Dead</string>
+    <string name="unknown_status_filter">Unknown</string>
+    <string name="alive_status_filter">Alive</string>
+    <string name="all_status_filter">All</string>
 </resources>
