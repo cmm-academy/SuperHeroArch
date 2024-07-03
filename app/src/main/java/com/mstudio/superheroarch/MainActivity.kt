@@ -2,7 +2,6 @@ package com.mstudio.superheroarch
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -34,17 +33,12 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        updateButton = findViewById(R.id.refresh_button)
 
         val characterListRecyclerView: RecyclerView = findViewById(R.id.character_list)
         characterListRecyclerView.layoutManager = LinearLayoutManager(this)
         characterListRecyclerView.adapter = characterListAdapter
 
         getDataFromRemote()
-
-        updateButton.setOnClickListener {
-            getDataFromRemote()
-        }
     }
 
     private fun getDataFromRemote() {
@@ -58,8 +52,6 @@ class MainActivity : AppCompatActivity() {
                         characterListAdapter.setItemClickedListener { character ->
                             onItemClick(character)
                         }
-                        updateButton.visibility = View.GONE
-
                     } ?: Snackbar.make(findViewById(R.id.main), getString(R.string.error_message_no_character_info), Snackbar.LENGTH_SHORT).show()
                 } else {
                     Snackbar.make(findViewById(R.id.main), getString(R.string.error_message_api_error, response.code().toString()), Snackbar.LENGTH_SHORT).show()
