@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
 
     private val adapter = CharacterAdapter()
     private lateinit var apiRick: ApiRick
-    private var allCharacters: List<Character> = emptyList() // Lista para mantener todos los personajes
 
     companion object {
         const val EXTRA_CHARACTER = "com.mstudio.superheroarch.MainActivity.EXTRA_CHARACTER"
@@ -66,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
             if (response.isSuccessful) {
                 val characterResponse = response.body()
-                allCharacters = characterResponse?.results ?: emptyList()
+                val allCharacters = characterResponse?.results ?: emptyList()
 
                 withContext(Dispatchers.Main) {
                     if (allCharacters.isEmpty()) {

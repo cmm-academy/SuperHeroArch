@@ -43,7 +43,7 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_view, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.caracter_view_holder, parent, false)
         return mListener?.let {
             CharacterViewHolder(view, it)
         } ?: throw IllegalStateException("Listener cannot be null.")
@@ -66,11 +66,9 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
 
     @SuppressLint("NotifyDataSetChanged")
     fun filterCharactersByStatus(status: String?){
-        characters = if (status.isNullOrEmpty()){
-            allCharacters.toMutableList()
-        } else{
+        characters = status?.let {
             allCharacters.filter { it.status.equals(status, ignoreCase = true) }.toMutableList()
-        }
+        } ?: allCharacters.toMutableList()
         notifyDataSetChanged()
     }
 }
