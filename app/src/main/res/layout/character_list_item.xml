@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:background="@color/anthracite_gray"
     app:cardCornerRadius="4dp"
-    app:cardElevation="4dp"
-    android:layout_margin="4dp">
+    app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/clarito_gray"
         android:padding="16dp">
 
         <ImageView
@@ -27,11 +28,11 @@
             android:id="@+id/character_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="@string/character_name_before_tap"
-            android:textColor="@android:color/black"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginStart="10dp"
+            android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/character_image"
@@ -41,10 +42,10 @@
             android:id="@+id/character_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/character_status_before_tap"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"
             android:layout_marginStart="10dp"
+            android:text="@string/character_status_before_tap"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

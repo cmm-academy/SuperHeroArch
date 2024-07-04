@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.appbar.MaterialToolbar
 import com.mstudio.superheroarch.data.Character
 import com.squareup.picasso.Picasso
 
@@ -20,6 +21,11 @@ class CharacterDetailsActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        val actionBar: MaterialToolbar = findViewById(R.id.topAppBar)
+        actionBar.setNavigationOnClickListener {
+            onBackPressed()
         }
 
         val character = intent.getParcelableExtra<Character>("CHARACTER")

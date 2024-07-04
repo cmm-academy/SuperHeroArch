@@ -6,4 +6,7 @@
     </style>
 
     <style name="Theme.SuperHeroArch" parent="Base.Theme.SuperHeroArch" />
+    <style name="ToolbarThemeOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
 </resources>

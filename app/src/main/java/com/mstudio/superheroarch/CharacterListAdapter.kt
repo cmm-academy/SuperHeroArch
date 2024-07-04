@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso
 class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.CharacterViewHolder>() {
 
     private val characterList: MutableList<Character> = mutableListOf()
+    private var filteredList = emptyList<Character>()
     private var listener: ((Character) -> Unit)? = null
 
     class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -45,10 +46,23 @@ class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.Character
     fun updateData(newItems: List<Character>) {
         characterList.clear()
         characterList.addAll(newItems)
-        notifyItemRangeChanged(0, characterList.size)
+        notifyDataSetChanged()
     }
 
     fun setItemClickedListener(listener: (Character) -> Unit) {
         this.listener = listener
+    }
+
+    fun filterByStatus(status: String) {
+        val filteredCharacterList = if (status == Status.ALL) {
+            filteredList
+        } else {
+            filteredList.filter { it.status.equals(status, ignoreCase = true) }
+        }
+        updateData(filteredCharacterList)
+    }
+
+    fun storeOriginalData(it: List<Character>) {
+        filteredList = it
     }
 }
