@@ -4,21 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.mstudio.superheroarch.ApiService.retrofit
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
     private val adapter = CharacterAdapter()
-    private lateinit var apiRick: ApiRick
+    private val viewModel: MainViewModel by viewModels()
 
     companion object {
         const val EXTRA_CHARACTER = "com.mstudio.superheroarch.MainActivity.EXTRA_CHARACTER"
@@ -28,8 +25,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-
-        apiRick = retrofit.create(ApiRick::class.java)
 
         val allButton = findViewById<Button>(R.id.all)
         val aliveButton = findViewById<Button>(R.id.alive)
@@ -43,7 +38,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         val characterRecyclerView = findViewById<RecyclerView>(R.id.characters_recycler)
-
         characterRecyclerView.adapter = adapter
 
         adapter.setOnItemClickListener(object : CharacterAdapter.OnItemClickListener {
@@ -55,33 +49,19 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        allButton.setOnClickListener {filterCharacters(null)}
-        aliveButton.setOnClickListener {filterCharacters("Alive")}
-        deadButton.setOnClickListener {filterCharacters("Dead")}
-        unknownButton.setOnClickListener {filterCharacters("unknown")}
+        allButton.setOnClickListener { viewModel.filterCharactersByStatus(null) }
+        aliveButton.setOnClickListener { viewModel.filterCharactersByStatus("Alive") }
+        deadButton.setOnClickListener { viewModel.filterCharactersByStatus("Dead") }
+        unknownButton.setOnClickListener { viewModel.filterCharactersByStatus("unknown") }
 
-        CoroutineScope(Dispatchers.IO).launch{
-            val response = apiRick.getCharacter()
-
-            if (response.isSuccessful) {
-                val characterResponse = response.body()
-                val allCharacters = characterResponse?.results ?: emptyList()
-
-                withContext(Dispatchers.Main) {
-                    if (allCharacters.isEmpty()) {
-                        Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
-                    }
-                    adapter.updateCharacters(allCharacters)
-                }
-            } else{
-                withContext(Dispatchers.Main){
-                    Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
-                }
+        viewModel.characters.observe(this, Observer { characters ->
+            if (characters.isEmpty()) {
+                Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
             }
-        }
-    }
+        })
 
-    private fun filterCharacters(status: String?) {
-        adapter.filterCharactersByStatus(status)
+        viewModel.filteredCharacters.observe(this, Observer { filteredCharacters ->
+            adapter.updateCharacters(filteredCharacters)
+        })
     }
 }
