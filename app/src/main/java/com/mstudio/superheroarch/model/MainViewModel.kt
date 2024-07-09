@@ -1,10 +1,10 @@
 package com.mstudio.superheroarch
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -12,11 +12,14 @@ class MainViewModel : ViewModel() {
 
     private val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
 
-    private val _characters = MutableLiveData<List<Character>>()
-    val characters: LiveData<List<Character>> get() = _characters
+    private val _characters = MutableStateFlow<List<Character>>(emptyList())
+    val characters: StateFlow<List<Character>> get() = _characters
 
-    private val _filteredCharacters = MutableLiveData<List<Character>>()
-    val filteredCharacters: LiveData<List<Character>> get() = _filteredCharacters
+    private val _filteredCharacters = MutableStateFlow<List<Character>>(emptyList())
+    val filteredCharacters: StateFlow<List<Character>> get() = _filteredCharacters
+
+    private val _showSnackbarEvent = MutableStateFlow(false)
+    val showSnackbarEvent: StateFlow<Boolean> get() = _showSnackbarEvent
 
     init {
         fetchCharacters()
@@ -32,19 +35,28 @@ class MainViewModel : ViewModel() {
                 withContext(Dispatchers.Main) {
                     _characters.value = allCharacters
                     _filteredCharacters.value = allCharacters
+
+                    if (allCharacters.isEmpty()) {
+                        _showSnackbarEvent.value = true
+                    }
                 }
             } else {
                 withContext(Dispatchers.Main) {
                     _characters.value = emptyList()
                     _filteredCharacters.value = emptyList()
+                    _showSnackbarEvent.value = true
                 }
             }
         }
     }
 
-    fun filterCharactersByStatus(status: String?) {
+    fun onStatusClicked(status: String?) {
         _filteredCharacters.value = status?.let {
-            _characters.value?.filter { it.status.equals(status, ignoreCase = true) }
+            _characters.value.filter { it.status.equals(status, ignoreCase = true) }
         } ?: _characters.value
+    }
+
+    fun onSnackbarShown() {
+        _showSnackbarEvent.value = false
     }
 }

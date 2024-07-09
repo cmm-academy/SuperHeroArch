@@ -1,6 +1,5 @@
 package com.mstudio.superheroarch
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,32 +8,25 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
-class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
+class CharacterAdapter(private val onItemClick: (Character) -> Unit) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
-    private var mListener: OnItemClickListener? = null
+    var characters: List<Character> = mutableListOf()
 
-    interface OnItemClickListener{
-        fun onItemClick(position: Int)
-    }
-    fun setOnItemClickListener(listener: OnItemClickListener){
-        mListener = listener
-    }
-
-    private var allCharacters: List<Character> = mutableListOf()
-    var characters: MutableList<Character> = mutableListOf()
-
-    class CharacterViewHolder(view: View, private val listener: OnItemClickListener) : RecyclerView.ViewHolder(view) {
-        val name: TextView = view.findViewById(R.id.character_name)
+    class CharacterViewHolder(view: View, private val onItemClick: (Character) -> Unit) : RecyclerView.ViewHolder(view) {
+        private val name: TextView = view.findViewById(R.id.character_name)
         private val status: TextView = view.findViewById(R.id.character_status)
         private val image: ImageView = view.findViewById(R.id.character_image)
         private var currentCharacter: Character? = null
 
         init {
-            itemView.setOnClickListener{
-                listener.onItemClick(bindingAdapterPosition)
+            itemView.setOnClickListener {
+                currentCharacter?.let {
+                    onItemClick(it)
+                }
             }
         }
-        fun bind(character: Character){
+
+        fun bind(character: Character) {
             currentCharacter = character
             name.text = character.name
             status.text = character.status
@@ -44,31 +36,12 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.caracter_view_holder, parent, false)
-        return mListener?.let {
-            CharacterViewHolder(view, it)
-        } ?: throw IllegalStateException("Listener cannot be null.")
+        return CharacterViewHolder(view, onItemClick)
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        val character = characters[position]
-        holder.bind(character)
+        holder.bind(characters[position])
     }
 
     override fun getItemCount(): Int = characters.size
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateCharacters(newCharacters: List<Character>) {
-        allCharacters = newCharacters
-        characters.clear()
-        characters.addAll(newCharacters)
-        notifyDataSetChanged()
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun filterCharactersByStatus(status: String?){
-        characters = status?.let {
-            allCharacters.filter { it.status.equals(status, ignoreCase = true) }.toMutableList()
-        } ?: allCharacters.toMutableList()
-        notifyDataSetChanged()
-    }
 }
