@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.mstudio.superheroarch.model.MainViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -32,11 +33,7 @@ class MainActivity : AppCompatActivity() {
         val unknownButton = findViewById<Button>(R.id.unknown)
         val characterRecyclerView = findViewById<RecyclerView>(R.id.characters_recycler)
 
-        val adapter = CharacterAdapter { character ->
-            val intent = Intent(this, DetailsActivity::class.java)
-            intent.putExtra(EXTRA_CHARACTER, character)
-            startActivity(intent)
-        }
+        val adapter = CharacterAdapter(viewModel)
         characterRecyclerView.adapter = adapter
 
         allButton.setOnClickListener { viewModel.onStatusClicked(null) }
@@ -56,6 +53,16 @@ class MainActivity : AppCompatActivity() {
                 if (showSnackbar) {
                     Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
                     viewModel.onSnackbarShown()
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.selectedCharacter.collect { character ->
+                character?.let {
+                    val intent = Intent(this@MainActivity, DetailsActivity::class.java)
+                    intent.putExtra(EXTRA_CHARACTER, it)
+                    startActivity(intent)
                 }
             }
         }
