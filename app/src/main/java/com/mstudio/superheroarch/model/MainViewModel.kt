@@ -15,17 +15,20 @@ class MainViewModel : ViewModel() {
 
     private val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
 
-    private val _characters = MutableStateFlow<List<Character>>(emptyList())
-    val characters: StateFlow<List<Character>> get() = _characters
+    data class ViewState(
+        val characters: List<Character> = emptyList(),
+        val filteredCharacters: List<Character> = emptyList()
+    )
 
-    private val _selectedCharacter = MutableStateFlow<Character?>(null)
-    val selectedCharacter: StateFlow<Character?> get() = _selectedCharacter
+    private val _viewState = MutableStateFlow(ViewState())
+    val viewState: StateFlow<ViewState> get() = _viewState
 
-    private val _filteredCharactersStatus = MutableStateFlow<List<Character>>(emptyList())
-    val filteredCharacters: StateFlow<List<Character>> get() = _filteredCharactersStatus
+    private val _event = MutableStateFlow<Event?>(null)
+    val event: StateFlow<Event?> get() = _event
 
-    private val _showSnackbarEvent = MutableStateFlow(false)
-    val showSnackbarEvent: StateFlow<Boolean> get() = _showSnackbarEvent
+    sealed class Event {
+        object ShowSnackbar : Event()
+    }
 
     init {
         fetchCharacters()
@@ -33,43 +36,42 @@ class MainViewModel : ViewModel() {
 
     private fun fetchCharacters() {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = apiRick.getCharacter()
-                if (response.isSuccessful) {
-                    val characterResponse = response.body()
-                    val allCharacters = characterResponse?.results ?: emptyList()
+            val response = apiRick.getCharacter()
+            if (response.isSuccessful) {
+                val characterResponse = response.body()
+                val allCharacters = characterResponse?.results ?: emptyList()
 
-                    withContext(Dispatchers.Main) {
-                        _characters.value = allCharacters
-                        _filteredCharactersStatus.value = allCharacters
-                        if (allCharacters.isEmpty()) {
-                            _showSnackbarEvent.value = true
-                        }
-                    }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        _showSnackbarEvent.value = true
+                withContext(Dispatchers.Main) {
+                    _viewState.value = _viewState.value.copy(
+                        characters = allCharacters,
+                        filteredCharacters = allCharacters
+                    )
+
+                    if (allCharacters.isEmpty()) {
+                        _event.value = Event.ShowSnackbar
                     }
                 }
-            } catch (e: Exception) {
+            } else {
                 withContext(Dispatchers.Main) {
-                    _showSnackbarEvent.value = true
+                    _viewState.value = _viewState.value.copy(
+                        characters = emptyList(),
+                        filteredCharacters = emptyList()
+                    )
+                    _event.value = Event.ShowSnackbar
                 }
             }
         }
     }
 
     fun onStatusClicked(status: String?) {
-        _filteredCharactersStatus.value = status?.let {
-            _characters.value.filter { it.status.equals(status, ignoreCase = true) }
-        } ?: _characters.value
+        val filtered = status?.let {
+            _viewState.value.characters.filter { it.status.equals(status, ignoreCase = true) }
+        } ?: _viewState.value.characters
+
+        _viewState.value = _viewState.value.copy(filteredCharacters = filtered)
     }
 
     fun onSnackbarShown() {
-        _showSnackbarEvent.value = false
-    }
-
-    fun onCharacterClicked(character: Character) {
-        _selectedCharacter.value = character
+        _event.value = null
     }
 }

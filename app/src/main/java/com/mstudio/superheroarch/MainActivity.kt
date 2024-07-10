@@ -32,40 +32,36 @@ class MainActivity : AppCompatActivity() {
         val deadButton = findViewById<Button>(R.id.dead)
         val unknownButton = findViewById<Button>(R.id.unknown)
         val characterRecyclerView = findViewById<RecyclerView>(R.id.characters_recycler)
-
-        val adapter = CharacterAdapter(viewModel)
+        val adapter = CharacterAdapter(this) { character ->
+            val intent = Intent(this, DetailsActivity::class.java)
+            intent.putExtra(EXTRA_CHARACTER, character)
+            startActivity(intent)
+        }
         characterRecyclerView.adapter = adapter
 
-        allButton.setOnClickListener { viewModel.onStatusClicked(null) }
-        aliveButton.setOnClickListener { viewModel.onStatusClicked("Alive") }
-        deadButton.setOnClickListener { viewModel.onStatusClicked("Dead") }
-        unknownButton.setOnClickListener { viewModel.onStatusClicked("unknown") }
-
         lifecycleScope.launch {
-            viewModel.filteredCharacters.collect { filteredCharacters ->
-                adapter.characters = filteredCharacters
+            viewModel.viewState.collect { viewState ->
+                adapter.characters = viewState.filteredCharacters
                 adapter.notifyDataSetChanged()
             }
         }
 
         lifecycleScope.launch {
-            viewModel.showSnackbarEvent.collect { showSnackbar ->
-                if (showSnackbar) {
-                    Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
-                    viewModel.onSnackbarShown()
+            viewModel.event.collect { event ->
+                when (event) {
+                    is MainViewModel.Event.ShowSnackbar -> {
+                        Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
+                        viewModel.onSnackbarShown()
+                    }
+                    null -> {}
                 }
             }
         }
 
-        lifecycleScope.launch {
-            viewModel.selectedCharacter.collect { character ->
-                character?.let {
-                    val intent = Intent(this@MainActivity, DetailsActivity::class.java)
-                    intent.putExtra(EXTRA_CHARACTER, it)
-                    startActivity(intent)
-                }
-            }
-        }
+        allButton.setOnClickListener { viewModel.onStatusClicked(null) }
+        aliveButton.setOnClickListener { viewModel.onStatusClicked("Alive") }
+        deadButton.setOnClickListener { viewModel.onStatusClicked("Dead") }
+        unknownButton.setOnClickListener { viewModel.onStatusClicked("unknown") }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
