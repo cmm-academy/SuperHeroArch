@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 class MainActivity : AppCompatActivity(), ViewTranslator {
 
     private val adapter = CharacterAdapter()
-    private lateinit var viewModel: MainViewModel
+    private var viewModel: MainViewModel? = null
 
     companion object {
         const val EXTRA_CHARACTER = "com.mstudio.superheroarch.MainActivity.EXTRA_CHARACTER"
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
         setContentView(R.layout.activity_main)
 
         viewModel = MainViewModel(this)
-        viewModel.onCreate()
+        viewModel?.onCreate()
 
         val allButton = findViewById<Button>(R.id.all)
         val aliveButton = findViewById<Button>(R.id.alive)
@@ -39,26 +39,25 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
         }
 
         val characterRecyclerView = findViewById<RecyclerView>(R.id.characters_recycler)
-
         characterRecyclerView.adapter = adapter
 
         adapter.setOnItemClickListener(object : CharacterAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                viewModel.onCharacterClicked(position)
+                viewModel?.onCharacterClicked(position)
             }
         })
 
         allButton.setOnClickListener {
-            viewModel.onFilterClicked(null)
+            viewModel?.onFilterClicked(null)
         }
         aliveButton.setOnClickListener {
-            viewModel.onFilterClicked("Alive")
+            viewModel?.onFilterClicked("Alive")
         }
         deadButton.setOnClickListener {
-            viewModel.onFilterClicked("Dead")
+            viewModel?.onFilterClicked("Dead")
         }
         unknownButton.setOnClickListener {
-            viewModel.onFilterClicked("unknown")
+            viewModel?.onFilterClicked("unknown")
         }
     }
 

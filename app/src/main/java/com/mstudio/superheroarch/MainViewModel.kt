@@ -9,12 +9,11 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel(private val view: ViewTranslator) : ViewModel() {
 
-    private lateinit var apiRick: ApiRick
+    private val apiRick: ApiRick = retrofit.create(ApiRick::class.java)
     private var allCharacters: List<Character> = mutableListOf()
     private var filteredCharacters: List<Character> = mutableListOf()
 
     fun onCreate() {
-        apiRick = retrofit.create(ApiRick::class.java)
         fetchCharacters()
     }
 
