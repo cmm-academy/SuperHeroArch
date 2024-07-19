@@ -12,30 +12,28 @@ import com.squareup.picasso.Picasso
 class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
     private var mListener: OnItemClickListener? = null
+    private var characters: List<Character> = emptyList()
 
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun onItemClick(position: Int)
     }
-    fun setOnItemClickListener(listener: OnItemClickListener){
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         mListener = listener
     }
 
-    private var allCharacters: List<Character> = mutableListOf()
-    var characters: MutableList<Character> = mutableListOf()
-
-    class CharacterViewHolder(view: View, private val listener: OnItemClickListener) : RecyclerView.ViewHolder(view) {
+    class CharacterViewHolder(view: View, private val listener: OnItemClickListener?) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.character_name)
         private val status: TextView = view.findViewById(R.id.character_status)
         private val image: ImageView = view.findViewById(R.id.character_image)
-        private var currentCharacter: Character? = null
 
         init {
-            itemView.setOnClickListener{
-                listener.onItemClick(bindingAdapterPosition)
+            itemView.setOnClickListener {
+                listener?.onItemClick(bindingAdapterPosition)
             }
         }
-        fun bind(character: Character){
-            currentCharacter = character
+
+        fun bind(character: Character) {
             name.text = character.name
             status.text = character.status
             Picasso.get().load(character.image).placeholder(R.drawable.placeholder).error(R.drawable.error).into(image)
@@ -44,9 +42,7 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.caracter_view_holder, parent, false)
-        return mListener?.let {
-            CharacterViewHolder(view, it)
-        } ?: throw IllegalStateException("Listener cannot be null.")
+        return CharacterViewHolder(view, mListener)
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
@@ -58,17 +54,7 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateCharacters(newCharacters: List<Character>) {
-        allCharacters = newCharacters
-        characters.clear()
-        characters.addAll(newCharacters)
-        notifyDataSetChanged()
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun filterCharactersByStatus(status: String?){
-        characters = status?.let {
-            allCharacters.filter { it.status.equals(status, ignoreCase = true) }.toMutableList()
-        } ?: allCharacters.toMutableList()
+        characters = newCharacters
         notifyDataSetChanged()
     }
 }

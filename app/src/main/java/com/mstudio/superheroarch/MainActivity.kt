@@ -9,16 +9,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.mstudio.superheroarch.ApiService.retrofit
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ViewTranslator {
 
     private val adapter = CharacterAdapter()
-    private lateinit var apiRick: ApiRick
+    private lateinit var viewModel: MainViewModel
 
     companion object {
         const val EXTRA_CHARACTER = "com.mstudio.superheroarch.MainActivity.EXTRA_CHARACTER"
@@ -29,7 +24,8 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        apiRick = retrofit.create(ApiRick::class.java)
+        viewModel = MainViewModel(this)
+        viewModel.onCreate()
 
         val allButton = findViewById<Button>(R.id.all)
         val aliveButton = findViewById<Button>(R.id.alive)
@@ -48,40 +44,36 @@ class MainActivity : AppCompatActivity() {
 
         adapter.setOnItemClickListener(object : CharacterAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                val character = adapter.characters[position]
-                val intent = Intent(this@MainActivity, DetailsActivity::class.java)
-                intent.putExtra(EXTRA_CHARACTER, character)
-                startActivity(intent)
+                viewModel.onCharacterClicked(position)
             }
         })
 
-        allButton.setOnClickListener {filterCharacters(null)}
-        aliveButton.setOnClickListener {filterCharacters("Alive")}
-        deadButton.setOnClickListener {filterCharacters("Dead")}
-        unknownButton.setOnClickListener {filterCharacters("unknown")}
-
-        CoroutineScope(Dispatchers.IO).launch{
-            val response = apiRick.getCharacter()
-
-            if (response.isSuccessful) {
-                val characterResponse = response.body()
-                val allCharacters = characterResponse?.results ?: emptyList()
-
-                withContext(Dispatchers.Main) {
-                    if (allCharacters.isEmpty()) {
-                        Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
-                    }
-                    adapter.updateCharacters(allCharacters)
-                }
-            } else{
-                withContext(Dispatchers.Main){
-                    Snackbar.make(characterRecyclerView, R.string.failed_fetch_data, Snackbar.LENGTH_LONG).show()
-                }
-            }
+        allButton.setOnClickListener {
+            viewModel.onFilterClicked(null)
+        }
+        aliveButton.setOnClickListener {
+            viewModel.onFilterClicked("Alive")
+        }
+        deadButton.setOnClickListener {
+            viewModel.onFilterClicked("Dead")
+        }
+        unknownButton.setOnClickListener {
+            viewModel.onFilterClicked("unknown")
         }
     }
 
-    private fun filterCharacters(status: String?) {
-        adapter.filterCharactersByStatus(status)
+    override fun showEmptyError() {
+        Snackbar.make(findViewById(R.id.main), "No characters available", Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun showCharacters(characters: List<Character>) {
+        adapter.updateCharacters(characters)
+    }
+
+    override fun navigateToDetails(character: Character) {
+        val intent = Intent(this, DetailsActivity::class.java).apply {
+            putExtra(EXTRA_CHARACTER, character)
+        }
+        startActivity(intent)
     }
 }
