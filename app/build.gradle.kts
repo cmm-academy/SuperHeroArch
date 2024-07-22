@@ -6,6 +6,10 @@ plugins {
 android {
     namespace = "com.mstudio.superheroarch"
     compileSdk = 34
+    
+    buildFeatures {
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId = "com.mstudio.superheroarch"
