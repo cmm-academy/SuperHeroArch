@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 class MainActivity : AppCompatActivity(), ViewTranslator {
 
     private val adapter = CharacterAdapter()
-    private var viewModel: MainViewModel? = null
+    private var viewModel: MainViewModel? = MainViewModel(this)
 
     companion object {
         const val EXTRA_CHARACTER = "com.mstudio.superheroarch.MainActivity.EXTRA_CHARACTER"
@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        viewModel = MainViewModel(this)
         viewModel?.onCreate()
 
         val allButton = findViewById<Button>(R.id.all)
