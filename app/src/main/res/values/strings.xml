@@ -3,4 +3,5 @@
     <string name="main_button_title">Button</string>
     <string name="main_title_not_pressed">Button not pressed</string>
     <string name="main_title_pressed">Button pressed</string>
+    <string name="main_title_error_body">There is an error. Try later</string>
 </resources>
