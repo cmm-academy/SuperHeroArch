@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 class MainActivity : AppCompatActivity(), ViewTranslator {
 
     private val adapter = CharacterAdapter()
-    private var viewModel: MainViewModel? = MainViewModel(this)
+    private var viewModel: MainViewModel = MainViewModel(this)
 
     companion object {
         const val EXTRA_CHARACTER = "com.mstudio.superheroarch.MainActivity.EXTRA_CHARACTER"
