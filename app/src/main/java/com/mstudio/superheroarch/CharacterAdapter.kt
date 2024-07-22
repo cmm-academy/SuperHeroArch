@@ -55,8 +55,6 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
     @SuppressLint("NotifyDataSetChanged")
     fun updateCharacters(newCharacters: List<Character>) {
         characters = newCharacters
-        characters = emptyList()
-        characters = newCharacters
         notifyDataSetChanged()
     }
 }
