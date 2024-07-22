@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        viewModel?.onCreate()
+        viewModel.onCreate()
 
         val allButton = findViewById<Button>(R.id.all)
         val aliveButton = findViewById<Button>(R.id.alive)
@@ -47,16 +47,16 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
         })
 
         allButton.setOnClickListener {
-            viewModel?.onFilterClicked(null)
+            viewModel.onFilterClicked(null)
         }
         aliveButton.setOnClickListener {
-            viewModel?.onFilterClicked("Alive")
+            viewModel.onFilterClicked("Alive")
         }
         deadButton.setOnClickListener {
-            viewModel?.onFilterClicked("Dead")
+            viewModel.onFilterClicked("Dead")
         }
         unknownButton.setOnClickListener {
-            viewModel?.onFilterClicked("unknown")
+            viewModel.onFilterClicked("unknown")
         }
     }
 
