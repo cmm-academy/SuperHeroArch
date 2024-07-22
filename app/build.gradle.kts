@@ -6,6 +6,10 @@ plugins {
 android {
     namespace = "com.mstudio.superheroarch"
     compileSdk = 34
+    
+    buildFeatures {
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId = "com.mstudio.superheroarch"
@@ -39,6 +43,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.koin.android)
+    implementation(libs.koin.core)
+    implementation(libs.koin.android.compat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
