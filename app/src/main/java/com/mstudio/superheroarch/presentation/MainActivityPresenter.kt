@@ -8,16 +8,15 @@ class MainActivityPresenter(
 ) {
 
     fun onCreate() {
-        view.setUpViewModel(setUpViewModel())
+        view.setUpMainActvityViewModel(setUpViewModel())
     }
 
     fun onMainButtonClicked() {
-        view.changeMainTitle(changeMainTitle())
+        view.setUpMainActvityViewModel(changeMainTitle())
     }
 
 }
 
 interface MainActivityViewContract {
-    fun setUpViewModel(viewModel: MainActivityViewModel)
-    fun changeMainTitle(newTitle: String)
+    fun setUpMainActvityViewModel(mainActivityViewModel: MainActivityViewModel)
 }

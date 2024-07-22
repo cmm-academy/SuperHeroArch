@@ -20,8 +20,8 @@ object MainActivityViewModelHelper : KoinComponent {
         )
     }
 
-    fun changeMainTitle(): String {
+    fun changeMainTitle(): MainActivityViewModel {
         val context by inject<Context>()
-        return context.resources.getString(R.string.main_title_pressed)
+        return setUpViewModel().copy(title = context.resources.getString(R.string.main_title_pressed))
     }
 }

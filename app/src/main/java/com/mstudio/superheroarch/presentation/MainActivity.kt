@@ -21,20 +21,16 @@ class MainActivity : AppCompatActivity(), MainActivityViewContract, KoinComponen
         }
     }
 
-    private fun setUpView(viewModel: MainActivityViewModel) {
+    private fun setUpViewContent(mainActivityViewModel: MainActivityViewModel) {
         with(binding) {
-            with(viewModel) {
+            with(mainActivityViewModel) {
                 mainButton.text = buttonTitle
                 mainTitle.text = title
             }
         }
     }
 
-    override fun setUpViewModel(viewModel: MainActivityViewModel) {
-        setUpView(viewModel)
-    }
-
-    override fun changeMainTitle(newTitle: String) {
-        binding.mainTitle.text = newTitle
+    override fun setUpMainActvityViewModel(mainActivityViewModel: MainActivityViewModel) {
+        setUpViewContent(mainActivityViewModel)
     }
 }
