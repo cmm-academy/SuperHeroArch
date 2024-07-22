@@ -1,22 +1,31 @@
 package com.mstudio.superheroarch.presentation
 
-import com.mstudio.superheroarch.presentation.MainActivityViewModelHelper.changeMainTitle
 import com.mstudio.superheroarch.presentation.MainActivityViewModelHelper.setUpViewModel
+import com.mstudio.superheroarch.presentation.MainActivityViewModelHelper.updateTitle
 
 class MainActivityPresenter(
     private val view: MainActivityViewContract
 ) {
 
+    private var baseViewModel: MainActivityContentViewModel? = null
+
     fun onCreate() {
-        view.setUpMainActvityViewModel(setUpViewModel())
+        baseViewModel = setUpViewModel()
+        baseViewModel?.let {
+            view.setUpMainActvityViewModel(it)
+        }
     }
 
     fun onMainButtonClicked() {
-        view.setUpMainActvityViewModel(changeMainTitle())
+        val newTitle = baseViewModel?.copy(title = updateTitle())?.title
+        newTitle?.let {
+            view.updateTitle(it)
+        }
     }
 
 }
 
 interface MainActivityViewContract {
-    fun setUpMainActvityViewModel(mainActivityViewModel: MainActivityViewModel)
+    fun setUpMainActvityViewModel(mainActivityViewModel: MainActivityContentViewModel)
+    fun updateTitle(newTitle: String)
 }

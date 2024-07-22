@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), MainActivityViewContract, KoinComponen
         }
     }
 
-    private fun setUpViewContent(mainActivityViewModel: MainActivityViewModel) {
+    override fun setUpMainActvityViewModel(mainActivityViewModel: MainActivityContentViewModel) {
         with(binding) {
             with(mainActivityViewModel) {
                 mainButton.text = buttonTitle
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), MainActivityViewContract, KoinComponen
         }
     }
 
-    override fun setUpMainActvityViewModel(mainActivityViewModel: MainActivityViewModel) {
-        setUpViewContent(mainActivityViewModel)
+    override fun updateTitle(newTitle: String) {
+        binding.mainTitle.text = newTitle
     }
 }

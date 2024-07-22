@@ -5,23 +5,23 @@ import com.mstudio.superheroarch.R
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-data class MainActivityViewModel(
+data class MainActivityContentViewModel(
     val buttonTitle: String,
     val title: String
 )
 
 object MainActivityViewModelHelper : KoinComponent {
 
-    fun setUpViewModel(): MainActivityViewModel {
+    fun setUpViewModel(): MainActivityContentViewModel {
         val context by inject<Context>()
-        return MainActivityViewModel(
+        return MainActivityContentViewModel(
             buttonTitle = context.resources.getString(R.string.main_button_title),
             title = context.resources.getString(R.string.main_title_not_pressed)
         )
     }
 
-    fun changeMainTitle(): MainActivityViewModel {
+    fun updateTitle(): String {
         val context by inject<Context>()
-        return setUpViewModel().copy(title = context.resources.getString(R.string.main_title_pressed))
+        return context.resources.getString(R.string.main_title_pressed)
     }
 }
