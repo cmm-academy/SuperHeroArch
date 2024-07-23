@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+    implementation(libs.coil)
+    implementation(libs.serialization)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
