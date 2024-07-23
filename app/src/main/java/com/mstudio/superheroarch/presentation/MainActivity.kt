@@ -2,6 +2,7 @@ package com.mstudio.superheroarch.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import coil.load
 import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.databinding.MainActivityBinding
 import com.mstudio.superheroarch.remotedatasource.api.RetrofitInstance
@@ -19,8 +20,8 @@ class MainActivity : AppCompatActivity() {
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         with(binding) {
-            mainButton.text = resources.getText(R.string.main_button_title)
-            mainTitle.text = resources.getText(R.string.main_title_not_pressed)
+            mainButton.text = resources.getString(R.string.main_button_title)
+            nameTitle.text = resources.getString(R.string.main_title_not_pressed)
             mainButton.setOnClickListener {
                 getCharacters()
             }
@@ -33,9 +34,16 @@ class MainActivity : AppCompatActivity() {
             val result = apiService.getCharacters()
             withContext(Dispatchers.Main) {
                 if (result.isSuccessful) {
-                    binding.mainTitle.text = result.body()?.toString()
+                    val firstCharacter = result.body()?.characters?.first()
+                    firstCharacter?.let {
+                        binding.nameTitle.text = resources.getString(R.string.character_name, it.name)
+                        binding.statusTitle.text = resources.getString(R.string.character_status, it.status)
+                        binding.characterImage.load(it.image)
+                    } ?: {
+                        binding.nameTitle.text = resources.getString(R.string.main_title_empty_body)
+                    }
                 } else {
-                    binding.mainTitle.text = resources.getText(R.string.main_title_error_body)
+                    binding.nameTitle.text = resources.getString(R.string.main_title_error_body)
                 }
             }
         }
