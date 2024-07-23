@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
 
     companion object {
         const val EXTRA_CHARACTER = "com.mstudio.superheroarch.MainActivity.EXTRA_CHARACTER"
+        const val EXTRA_EPISODE = "com.mstudio.superheroarch.MainActivity.EXTRA_EPISODE"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,9 +69,10 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
         adapter.updateCharacters(characters)
     }
 
-    override fun navigateToDetails(character: Character) {
+    override fun navigateToDetails(character: Character, episode: Episode?) {
         val intent = Intent(this, DetailsActivity::class.java).apply {
             putExtra(EXTRA_CHARACTER, character)
+            putExtra(EXTRA_EPISODE, episode)
         }
         startActivity(intent)
     }

@@ -43,7 +43,29 @@ class MainViewModel(private val view: ViewTranslator) : ViewModel() {
 
     fun onCharacterClicked(position: Int) {
         val character = filteredCharacters[position]
-        view.navigateToDetails(character)
+        fetchFirstEpisode(character)
+    }
+    private fun fetchFirstEpisode(character: Character) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val firstEpisodeUrl = character.episode.firstOrNull()
+            if (firstEpisodeUrl != null) {
+                val response = apiRick.getEpisode(firstEpisodeUrl)
+                if (response.isSuccessful) {
+                    val episode = response.body()
+                    withContext(Dispatchers.Main) {
+                        view.navigateToDetails(character, episode)
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        view.showEmptyError()
+                    }
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    view.navigateToDetails(character, null)
+                }
+            }
+        }
     }
 
     fun onFilterClicked(status: String?) {
@@ -59,5 +81,5 @@ class MainViewModel(private val view: ViewTranslator) : ViewModel() {
 interface ViewTranslator {
     fun showEmptyError()
     fun showCharacters(characters: List<Character>)
-    fun navigateToDetails(character: Character)
+    fun navigateToDetails(character: Character, episode: Episode?)
 }
