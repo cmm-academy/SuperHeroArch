@@ -4,7 +4,7 @@
     <string name="main_title_not_pressed">Button not pressed</string>
     <string name="main_title_pressed">Button pressed</string>
     <string name="main_title_error_body">There is an error. Try later</string>
-    <string name="main_title_empty_body">There character is gone</string>
+    <string name="main_title_empty_body">The character is gone</string>
     <string name="character_name">Name: %s</string>
     <string name="character_status">Status: %s</string>
 </resources>
