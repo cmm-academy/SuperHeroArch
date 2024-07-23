@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
 
         adapter.setOnItemClickListener(object : CharacterAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                viewModel?.onCharacterClicked(position)
+                viewModel.onCharacterClicked(position)
             }
         })
 
@@ -62,7 +62,8 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
     }
 
     override fun showEmptyError() {
-        Snackbar.make(findViewById(R.id.main), "No characters available", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(findViewById(R.id.main), "No characters available", Snackbar.LENGTH_LONG)
+            .show()
     }
 
     override fun showCharacters(characters: List<Character>) {

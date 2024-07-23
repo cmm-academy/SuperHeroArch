@@ -45,6 +45,7 @@ class MainViewModel(private val view: ViewTranslator) : ViewModel() {
         val character = filteredCharacters[position]
         fetchFirstEpisode(character)
     }
+
     private fun fetchFirstEpisode(character: Character) {
         CoroutineScope(Dispatchers.IO).launch {
             val firstEpisodeUrl = character.episode.firstOrNull()

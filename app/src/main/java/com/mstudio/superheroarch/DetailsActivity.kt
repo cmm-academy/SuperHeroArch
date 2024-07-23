@@ -33,7 +33,8 @@ class DetailsActivity : AppCompatActivity() {
             characterStatusTextView.text = it.status
             characterLocationTextView.text = it.location.name
             characterOriginTextView.text = it.origin.name
-            Picasso.get().load(it.image).placeholder(R.drawable.placeholder).error(R.drawable.error).into(characterImageView)
+            Picasso.get().load(it.image).placeholder(R.drawable.placeholder).error(R.drawable.error)
+                .into(characterImageView)
         }
 
         episode?.let {

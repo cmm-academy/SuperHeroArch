@@ -22,7 +22,8 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
         mListener = listener
     }
 
-    class CharacterViewHolder(view: View, private val listener: OnItemClickListener?) : RecyclerView.ViewHolder(view) {
+    class CharacterViewHolder(view: View, private val listener: OnItemClickListener?) :
+        RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.character_name)
         private val status: TextView = view.findViewById(R.id.character_status)
         private val image: ImageView = view.findViewById(R.id.character_image)
@@ -36,12 +37,14 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
         fun bind(character: Character) {
             name.text = character.name
             status.text = character.status
-            Picasso.get().load(character.image).placeholder(R.drawable.placeholder).error(R.drawable.error).into(image)
+            Picasso.get().load(character.image).placeholder(R.drawable.placeholder)
+                .error(R.drawable.error).into(image)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.caracter_view_holder, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.caracter_view_holder, parent, false)
         return CharacterViewHolder(view, mListener)
     }
 
