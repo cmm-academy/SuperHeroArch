@@ -1,21 +1,19 @@
 package com.mstudio.superheroarch.presentation
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.mstudio.superheroarch.databinding.ItemCharacterLayoutBinding
-import com.mstudio.superheroarch.model.CharacterModel
+import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
 
 class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharacterViewHolder>() {
 
-    private var items = listOf<CharacterModel>()
+    private var items = listOf<CharactersRemoteEntity>()
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateItems(dataList: List<CharacterModel>) {
+    fun updateItems(dataList: List<CharactersRemoteEntity>) {
         items = dataList
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, items.size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
@@ -30,7 +28,7 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharacterViewHo
     }
 
     class CharacterViewHolder(private val binding: ItemCharacterLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(character: CharacterModel) {
+        fun bind(character: CharactersRemoteEntity) {
             binding.nameCharacter.text = character.name
             binding.statusCharacter.text = character.status
             binding.imageCharacter.load(character.image)

@@ -7,7 +7,6 @@ import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.databinding.MainActivityBinding
 import com.mstudio.superheroarch.remotedatasource.api.RetrofitInstance
 import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApi
-import com.mstudio.superheroarch.remotedatasource.model.toCharacter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                     result.body()?.characters?.let { characters ->
                         binding.charactersRv.visibility = View.VISIBLE
                         binding.errorBody.visibility = View.GONE
-                        adapter.updateItems(characters.map { it.toCharacter() })
+                        adapter.updateItems(characters)
                     } ?: {
                         binding.charactersRv.visibility = View.GONE
                         binding.errorBody.visibility = View.VISIBLE
