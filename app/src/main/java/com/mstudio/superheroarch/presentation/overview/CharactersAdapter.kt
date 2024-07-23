@@ -1,4 +1,4 @@
-package com.mstudio.superheroarch.presentation
+package com.mstudio.superheroarch.presentation.overview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,9 @@ import coil.load
 import com.mstudio.superheroarch.databinding.ItemCharacterLayoutBinding
 import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
 
-class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharacterViewHolder>() {
+class CharactersAdapter(
+    val listener: (CharactersRemoteEntity) -> Unit
+) : RecyclerView.Adapter<CharactersAdapter.CharacterViewHolder>() {
 
     private var items = listOf<CharactersRemoteEntity>()
 
@@ -27,11 +29,14 @@ class CharactersAdapter : RecyclerView.Adapter<CharactersAdapter.CharacterViewHo
         holder.bind(items[position])
     }
 
-    class CharacterViewHolder(private val binding: ItemCharacterLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CharacterViewHolder(private val binding: ItemCharacterLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(character: CharactersRemoteEntity) {
             binding.nameCharacter.text = character.name
             binding.statusCharacter.text = character.status
             binding.imageCharacter.load(character.image)
+            binding.root.setOnClickListener {
+                listener.invoke(character)
+            }
         }
     }
 }

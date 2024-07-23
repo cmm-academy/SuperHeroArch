@@ -7,4 +7,7 @@
     <string name="main_title_empty_body">The character is gone</string>
     <string name="character_name">Name: %s</string>
     <string name="character_status">Status: %s</string>
+    <string name="character_species">Species: %s</string>
+    <string name="character_origin">Origin: %s</string>
+    <string name="character_location">Location: %s</string>
 </resources>
