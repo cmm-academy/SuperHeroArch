@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">SuperHeroArch</string>
-    <string name="main_button_title">Button</string>
     <string name="main_title_not_pressed">Button not pressed</string>
     <string name="main_title_pressed">Button pressed</string>
     <string name="main_title_error_body">There is an error. Try later</string>
@@ -10,4 +9,8 @@
     <string name="character_species">Species: %s</string>
     <string name="character_origin">Origin: %s</string>
     <string name="character_location">Location: %s</string>
+    <string name="alive_filter_button_title">Alive</string>
+    <string name="dead_filter_button_title">Dead</string>
+    <string name="unknown_filter_button_title">Unknown</string>
+    <string name="all_filter_button_title">All</string>
 </resources>

@@ -25,18 +25,34 @@ class MainActivity : AppCompatActivity() {
     private val adapter = CharactersAdapter {
         goToDetail(it)
     }
+    private var allCharacters = listOf<CharactersRemoteEntity>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         with(binding) {
-            mainButton.text = resources.getString(R.string.main_button_title)
             charactersRv.adapter = adapter
-            mainButton.setOnClickListener {
-                getCharacters()
+            getCharacters()
+            aliveFilterButton.text = resources.getString(R.string.alive_filter_button_title)
+            deadFilterButton.text = resources.getString(R.string.dead_filter_button_title)
+            unknownFilterButton.text = resources.getString(R.string.unknown_filter_button_title)
+            allFilterButton.text = resources.getString(R.string.all_filter_button_title)
+            aliveFilterButton.setOnClickListener {
+                setCharacterFilter(allCharacters, StatusFilters.ALIVE)
             }
 
+            deadFilterButton.setOnClickListener {
+                setCharacterFilter(allCharacters, StatusFilters.DEAD)
+            }
+
+            unknownFilterButton.setOnClickListener {
+                setCharacterFilter(allCharacters, StatusFilters.UNKNOWN)
+            }
+
+            allFilterButton.setOnClickListener {
+                setCharacterFilter(allCharacters, StatusFilters.ALL)
+            }
         }
     }
 
@@ -49,7 +65,8 @@ class MainActivity : AppCompatActivity() {
                     result.body()?.characters?.let { characters ->
                         binding.charactersRv.visibility = View.VISIBLE
                         binding.errorBody.visibility = View.GONE
-                        adapter.updateItems(characters)
+                        allCharacters = characters
+                        adapter.submitList(characters)
                     } ?: {
                         binding.charactersRv.visibility = View.GONE
                         binding.errorBody.visibility = View.VISIBLE
@@ -69,5 +86,13 @@ class MainActivity : AppCompatActivity() {
             putExtra(CHARACTER_DATA_KEY, character)
         }
         startActivity(intent)
+    }
+
+    private fun setCharacterFilter(allCharacters: List<CharactersRemoteEntity>, filter: StatusFilters) {
+        if (filter != StatusFilters.ALL) {
+            adapter.submitList(allCharacters.filter { it.status.equals(filter.status, ignoreCase = true) })
+        } else {
+            adapter.submitList(allCharacters)
+        }
     }
 }

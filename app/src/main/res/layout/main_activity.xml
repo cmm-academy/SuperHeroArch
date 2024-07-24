@@ -6,13 +6,46 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/mainButton"
+        android:id="@+id/aliveFilterButton"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Button" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/deadFilterButton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toEndOf="@+id/aliveFilterButton"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Button" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/unknownFilterButton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toEndOf="@+id/deadFilterButton"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Button" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/allFilterButton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toEndOf="@+id/unknownFilterButton"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Button" />
 
@@ -25,7 +58,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainButton" />
+        app:layout_constraintTop_toBottomOf="@+id/aliveFilterButton" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/charactersRv"
@@ -36,5 +69,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainButton" />
+        app:layout_constraintTop_toBottomOf="@+id/aliveFilterButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
