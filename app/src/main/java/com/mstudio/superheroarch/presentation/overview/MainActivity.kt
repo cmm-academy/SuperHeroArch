@@ -56,10 +56,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCharacters(filter: String = StatusFilters.ALL.status) {
+    private fun getCharacters() {
         val apiService = RetrofitInstance.retrofit().create(RickAndMortyApi::class.java)
         CoroutineScope(Dispatchers.IO).launch {
-            val result = apiService.getCharacters(filter)
+            val result = apiService.getCharacters()
             withContext(Dispatchers.Main) {
                 if (result.isSuccessful) {
                     result.body()?.characters?.let { characters ->
