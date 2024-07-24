@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val adapter = CharactersAdapter {
         goToDetail(it)
     }
+    private var allCharacters = listOf<CharactersRemoteEntity>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,19 +39,19 @@ class MainActivity : AppCompatActivity() {
             unknownFilterButton.text = resources.getString(R.string.unknown_filter_button_title)
             allFilterButton.text = resources.getString(R.string.all_filter_button_title)
             aliveFilterButton.setOnClickListener {
-                getCharacters(StatusFilters.ALIVE.status)
+                adapter.updateItems(allCharacters.filter { it.status.equals(StatusFilters.ALIVE.status, ignoreCase = true) })
             }
 
             deadFilterButton.setOnClickListener {
-                getCharacters(StatusFilters.DEAD.status)
+                adapter.updateItems(allCharacters.filter { it.status.equals(StatusFilters.DEAD.status, ignoreCase = true) })
             }
 
             unknownFilterButton.setOnClickListener {
-                getCharacters(StatusFilters.UNKNOWN.status)
+                adapter.updateItems(allCharacters.filter { it.status.equals(StatusFilters.UNKNOWN.status, ignoreCase = true) })
             }
 
             allFilterButton.setOnClickListener {
-                getCharacters()
+                adapter.updateItems(allCharacters)
             }
         }
     }
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                     result.body()?.characters?.let { characters ->
                         binding.charactersRv.visibility = View.VISIBLE
                         binding.errorBody.visibility = View.GONE
+                        allCharacters = characters
                         adapter.updateItems(characters)
                     } ?: {
                         binding.charactersRv.visibility = View.GONE

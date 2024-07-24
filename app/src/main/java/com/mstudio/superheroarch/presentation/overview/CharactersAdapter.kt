@@ -1,5 +1,6 @@
 package com.mstudio.superheroarch.presentation.overview
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,9 +14,10 @@ class CharactersAdapter(
 
     private var items = listOf<CharactersRemoteEntity>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateItems(dataList: List<CharactersRemoteEntity>) {
         items = dataList
-        notifyItemRangeChanged(0, items.size)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
