@@ -1,12 +1,15 @@
-package com.mstudio.superheroarch.presentation
+package com.mstudio.superheroarch.presentation.overview
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.databinding.MainActivityBinding
+import com.mstudio.superheroarch.presentation.detail.CharacterDetailActivity
 import com.mstudio.superheroarch.remotedatasource.api.RetrofitInstance
 import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApi
+import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,8 +17,15 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        const val CHARACTER_DATA_KEY = "character"
+    }
+
     private lateinit var binding: MainActivityBinding
-    private val adapter = CharactersAdapter()
+    private val adapter = CharactersAdapter {
+        goToDetail(it)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
@@ -52,5 +62,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun goToDetail(character: CharactersRemoteEntity) {
+        val intent = Intent(this, CharacterDetailActivity::class.java).apply {
+            putExtra(CHARACTER_DATA_KEY, character)
+        }
+        startActivity(intent)
     }
 }
