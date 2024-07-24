@@ -39,19 +39,19 @@ class MainActivity : AppCompatActivity() {
             unknownFilterButton.text = resources.getString(R.string.unknown_filter_button_title)
             allFilterButton.text = resources.getString(R.string.all_filter_button_title)
             aliveFilterButton.setOnClickListener {
-                adapter.updateItems(allCharacters.filter { it.status.equals(StatusFilters.ALIVE.status, ignoreCase = true) })
+                setCharacterFilter(allCharacters, StatusFilters.ALIVE)
             }
 
             deadFilterButton.setOnClickListener {
-                adapter.updateItems(allCharacters.filter { it.status.equals(StatusFilters.DEAD.status, ignoreCase = true) })
+                setCharacterFilter(allCharacters, StatusFilters.DEAD)
             }
 
             unknownFilterButton.setOnClickListener {
-                adapter.updateItems(allCharacters.filter { it.status.equals(StatusFilters.UNKNOWN.status, ignoreCase = true) })
+                setCharacterFilter(allCharacters, StatusFilters.UNKNOWN)
             }
 
             allFilterButton.setOnClickListener {
-                adapter.updateItems(allCharacters)
+                setCharacterFilter(allCharacters, StatusFilters.ALL)
             }
         }
     }
@@ -86,5 +86,13 @@ class MainActivity : AppCompatActivity() {
             putExtra(CHARACTER_DATA_KEY, character)
         }
         startActivity(intent)
+    }
+
+    private fun setCharacterFilter(allCharacters: List<CharactersRemoteEntity>, filter: StatusFilters) {
+        if (filter != StatusFilters.ALL) {
+            adapter.updateItems(allCharacters.filter { it.status.equals(filter.status, ignoreCase = true) })
+        } else {
+            adapter.updateItems(allCharacters)
+        }
     }
 }
