@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                         binding.charactersRv.visibility = View.VISIBLE
                         binding.errorBody.visibility = View.GONE
                         allCharacters = characters
-                        adapter.updateItems(characters)
+                        adapter.submitList(characters)
                     } ?: {
                         binding.charactersRv.visibility = View.GONE
                         binding.errorBody.visibility = View.VISIBLE
@@ -90,9 +90,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setCharacterFilter(allCharacters: List<CharactersRemoteEntity>, filter: StatusFilters) {
         if (filter != StatusFilters.ALL) {
-            adapter.updateItems(allCharacters.filter { it.status.equals(filter.status, ignoreCase = true) })
+            adapter.submitList(allCharacters.filter { it.status.equals(filter.status, ignoreCase = true) })
         } else {
-            adapter.updateItems(allCharacters)
+            adapter.submitList(allCharacters)
         }
     }
 }
