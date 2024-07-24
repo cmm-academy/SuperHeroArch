@@ -31,19 +31,34 @@ class MainActivity : AppCompatActivity() {
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         with(binding) {
-            mainButton.text = resources.getString(R.string.main_button_title)
             charactersRv.adapter = adapter
-            mainButton.setOnClickListener {
-                getCharacters()
+            getCharacters()
+            aliveFilterButton.text = resources.getString(R.string.alive_filter_button_title)
+            deadFilterButton.text = resources.getString(R.string.dead_filter_button_title)
+            unknownFilterButton.text = resources.getString(R.string.unknown_filter_button_title)
+            allFilterButton.text = resources.getString(R.string.all_filter_button_title)
+            aliveFilterButton.setOnClickListener {
+                getCharacters(StatusFilters.ALIVE.status)
             }
 
+            deadFilterButton.setOnClickListener {
+                getCharacters(StatusFilters.DEAD.status)
+            }
+
+            unknownFilterButton.setOnClickListener {
+                getCharacters(StatusFilters.UNKNOWN.status)
+            }
+
+            allFilterButton.setOnClickListener {
+                getCharacters()
+            }
         }
     }
 
-    private fun getCharacters() {
+    private fun getCharacters(filter: String = StatusFilters.ALL.status) {
         val apiService = RetrofitInstance.retrofit().create(RickAndMortyApi::class.java)
         CoroutineScope(Dispatchers.IO).launch {
-            val result = apiService.getCharacters()
+            val result = apiService.getCharacters(filter)
             withContext(Dispatchers.Main) {
                 if (result.isSuccessful) {
                     result.body()?.characters?.let { characters ->
