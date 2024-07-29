@@ -56,6 +56,7 @@ class MainViewModel(private val view: ViewTranslator) : ViewModel() {
     }
 }
 
+
 interface ViewTranslator {
     fun showEmptyError()
     fun showCharacters(characters: List<Character>)
