@@ -16,13 +16,13 @@ class CharacterDetailViewModel(
     fun onCharacterReceived(character: CharactersRemoteEntity) {
         val firstEpisode = character.episode.first().split("/").last()
         CoroutineScope(Dispatchers.IO).launch {
-            val response = repository.getSingleEpisode(firstEpisode.toInt())
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        view.showEpisode(it)
-                    }
-                } else {
+            try {
+                val response = repository.getSingleEpisode(firstEpisode.toInt())
+                withContext(Dispatchers.Main) {
+                    view.showEpisode(response)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
                     view.showEpisodeError()
                 }
             }

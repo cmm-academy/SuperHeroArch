@@ -20,17 +20,19 @@ class MainViewModel(
 
     private fun getCharacters() {
         CoroutineScope(Dispatchers.IO).launch {
-            val result = repository.getCharacters()
-            withContext(Dispatchers.Main) {
-                if (result.isSuccessful) {
-                    result.body()?.characters?.let { characters ->
-                        allCharacters = characters
-                        view.showCharacters(characters)
-                    } ?: {
+            try {
+                val result = repository.getCharacters()
+                withContext(Dispatchers.Main) {
+                    val characters = result?.characters ?: emptyList()
+                    allCharacters = characters
+                    if (characters.isNotEmpty()) {
+                        view.showCharacters(result?.characters ?: emptyList())
+                    } else {
                         view.showEmptyCharactersError()
                     }
-
-                } else {
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
                     view.showGenericError()
                 }
             }
