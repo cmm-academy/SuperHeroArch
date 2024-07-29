@@ -18,13 +18,12 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
     private var firstEpisodeTextView: TextView? = null
     private var firstEpisodeDateTextView: TextView? = null
 
-    private var viewModel: DetailsViewModel? = null
+    private var viewModel: DetailsViewModel = DetailsViewModel(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.details_screen)
 
-        viewModel = DetailsViewModel(this)
 
         characterNameTextView = findViewById(R.id.character_name)
         characterStatusTextView = findViewById(R.id.character_status)
@@ -41,7 +40,7 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
 
         val character = intent.getSerializableExtra(MainActivity.EXTRA_CHARACTER) as? Character
         character?.let {
-            viewModel?.fetchCharacterDetails(it)
+            viewModel.fetchCharacterDetails(it)
         }
     }
 
