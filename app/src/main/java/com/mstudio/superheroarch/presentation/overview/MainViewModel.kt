@@ -1,8 +1,7 @@
 package com.mstudio.superheroarch.presentation.overview
 
-import com.mstudio.superheroarch.remotedatasource.api.RetrofitInstance
-import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApi
 import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
+import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,6 +11,7 @@ class MainViewModel(
     private val view: MainViewTranslator
 ) {
 
+    private val repository = RickAndMortyRepository()
     private var allCharacters = listOf<CharactersRemoteEntity>()
 
     fun onCreate() {
@@ -19,9 +19,8 @@ class MainViewModel(
     }
 
     private fun getCharacters() {
-        val apiService = RetrofitInstance.retrofit().create(RickAndMortyApi::class.java)
         CoroutineScope(Dispatchers.IO).launch {
-            val result = apiService.getCharacters()
+            val result = repository.getCharacters()
             withContext(Dispatchers.Main) {
                 if (result.isSuccessful) {
                     result.body()?.characters?.let { characters ->

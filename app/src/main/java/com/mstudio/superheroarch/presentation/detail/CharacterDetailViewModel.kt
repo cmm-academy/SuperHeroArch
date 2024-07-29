@@ -1,9 +1,8 @@
 package com.mstudio.superheroarch.presentation.detail
 
-import com.mstudio.superheroarch.remotedatasource.api.RetrofitInstance
-import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApi
 import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.EpisodeRemoteEntity
+import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,10 +12,11 @@ class CharacterDetailViewModel(
     private val view: CharacterDetailViewTranslator
 ) {
 
+    private val repository = RickAndMortyRepository()
     fun onCharacterReceived(character: CharactersRemoteEntity) {
         val firstEpisode = character.episode.first().split("/").last()
         CoroutineScope(Dispatchers.IO).launch {
-            val response = RetrofitInstance.retrofit().create(RickAndMortyApi::class.java).getSingleEpisode(firstEpisode.toInt())
+            val response = repository.getSingleEpisode(firstEpisode.toInt())
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     response.body()?.let {
