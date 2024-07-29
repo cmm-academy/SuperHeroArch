@@ -1,15 +1,13 @@
 package com.mstudio.superheroarch
 
 import androidx.lifecycle.ViewModel
-import com.mstudio.superheroarch.ApiService.retrofit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel(private val view: ViewTranslator) : ViewModel() {
+class MainViewModel( private val view: ViewTranslator, private val repository: RickAndMortyRepository) : ViewModel() {
 
-    private val apiRick: ApiRick = retrofit.create(ApiRick::class.java)
     private var allCharacters: List<Character> = mutableListOf()
     private var filteredCharacters: List<Character> = mutableListOf()
 
@@ -19,22 +17,17 @@ class MainViewModel(private val view: ViewTranslator) : ViewModel() {
 
     private fun fetchCharacters() {
         CoroutineScope(Dispatchers.IO).launch {
-            val response = apiRick.getCharacter()
-
-            if (response.isSuccessful) {
-                val characterResponse = response.body()
-                allCharacters = characterResponse?.results?.toMutableList() ?: mutableListOf()
-
-                withContext(Dispatchers.Main) {
+            val result = repository.fetchCharacters()
+            withContext(Dispatchers.Main) {
+                result.onSuccess { characters ->
+                    allCharacters = characters
+                    filteredCharacters = characters
                     if (allCharacters.isEmpty()) {
                         view.showEmptyError()
                     } else {
-                        filteredCharacters = allCharacters
                         view.showCharacters(filteredCharacters)
                     }
-                }
-            } else {
-                withContext(Dispatchers.Main) {
+                }.onFailure {
                     view.showEmptyError()
                 }
             }
@@ -55,7 +48,6 @@ class MainViewModel(private val view: ViewTranslator) : ViewModel() {
         view.showCharacters(filteredCharacters)
     }
 }
-
 
 interface ViewTranslator {
     fun showEmptyError()

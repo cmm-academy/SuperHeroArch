@@ -12,8 +12,11 @@ import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity(), ViewTranslator {
 
+    private val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
+    private val repository = RickAndMortyRepository(apiRick)
+    private val viewModel: MainViewModel = MainViewModel(this, repository)
+
     private val adapter = CharacterAdapter()
-    private var viewModel: MainViewModel = MainViewModel(this)
 
     companion object {
         const val EXTRA_CHARACTER = "com.mstudio.superheroarch.MainActivity.EXTRA_CHARACTER"

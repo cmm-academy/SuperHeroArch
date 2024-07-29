@@ -18,12 +18,15 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
     private var firstEpisodeTextView: TextView? = null
     private var firstEpisodeDateTextView: TextView? = null
 
-    private var viewModel: DetailsViewModel = DetailsViewModel(this)
+    private var viewModel: DetailsViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.details_screen)
 
+        val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
+        val repository = RickAndMortyRepository(apiRick)
+        viewModel = DetailsViewModel(this, repository)
 
         characterNameTextView = findViewById(R.id.character_name)
         characterStatusTextView = findViewById(R.id.character_status)
@@ -40,7 +43,7 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
 
         val character = intent.getSerializableExtra(MainActivity.EXTRA_CHARACTER) as? Character
         character?.let {
-            viewModel.fetchCharacterDetails(it)
+            viewModel?.fetchCharacterDetails(it)
         }
     }
 

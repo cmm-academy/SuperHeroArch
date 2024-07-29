@@ -6,9 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DetailsViewModel(private val view: DetailsViewTranslator) : ViewModel() {
-
-    private val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
+class DetailsViewModel(private val view: DetailsViewTranslator, private val repository: RickAndMortyRepository) : ViewModel() {
 
     fun fetchCharacterDetails(character: Character) {
         view.displayCharacterDetails(character)
@@ -19,17 +17,12 @@ class DetailsViewModel(private val view: DetailsViewTranslator) : ViewModel() {
         if (episodeUrl == null) return
 
         CoroutineScope(Dispatchers.IO).launch {
-            val response = apiRick.getEpisode(episodeUrl)
-            if (response.isSuccessful) {
-                val episode = response.body()
-                withContext(Dispatchers.Main) {
-                    episode?.let {
-                        view.displayFirstEpisodeDetails(it)
-                    }
-                }
-            } else {
-                withContext(Dispatchers.Main) {
-                    view.showError("Failed to fetch episode details")
+            val result = repository.fetchEpisodeDetails(episodeUrl)
+            withContext(Dispatchers.Main) {
+                result.onSuccess { episode ->
+                    view.displayFirstEpisodeDetails(episode)
+                }.onFailure {
+                    view.showError("Error fetching episode details")
                 }
             }
         }
