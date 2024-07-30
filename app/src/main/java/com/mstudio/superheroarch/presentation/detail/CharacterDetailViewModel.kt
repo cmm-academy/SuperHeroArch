@@ -1,5 +1,6 @@
 package com.mstudio.superheroarch.presentation.detail
 
+import com.mstudio.superheroarch.presentation.network.NetworkManager
 import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.EpisodeRemoteEntity
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
@@ -13,7 +14,16 @@ class CharacterDetailViewModel(
 ) {
 
     private val repository = RickAndMortyRepository()
+
     fun onCharacterReceived(character: CharactersRemoteEntity) {
+        if (NetworkManager.isInternetConnection()) {
+            getFirstEpisode(character)
+        } else {
+            view.showNoInternetConnection()
+        }
+    }
+
+    private fun getFirstEpisode(character: CharactersRemoteEntity) {
         val firstEpisode = character.episode.first().split("/").last()
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -33,4 +43,5 @@ class CharacterDetailViewModel(
 interface CharacterDetailViewTranslator {
     fun showEpisode(episode: EpisodeRemoteEntity)
     fun showEpisodeError()
+    fun showNoInternetConnection()
 }

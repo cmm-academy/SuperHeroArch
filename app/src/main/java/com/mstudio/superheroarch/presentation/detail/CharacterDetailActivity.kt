@@ -52,4 +52,8 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
         binding.episodeDateDetail.visibility = View.GONE
         Snackbar.make(findViewById(android.R.id.content), resources.getString(R.string.episode_error_message), Snackbar.LENGTH_LONG).show()
     }
+
+    override fun showNoInternetConnection() {
+        Snackbar.make(findViewById(android.R.id.content), resources.getString(R.string.no_internet_message), Snackbar.LENGTH_LONG).show()
+    }
 }
