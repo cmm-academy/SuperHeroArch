@@ -23,10 +23,10 @@ class MainViewModel(
             try {
                 val result = repository.getCharacters()
                 withContext(Dispatchers.Main) {
-                    val characters = result?.characters ?: emptyList()
+                    val characters = result ?: emptyList()
                     allCharacters = characters
                     if (characters.isNotEmpty()) {
-                        view.showCharacters(result?.characters ?: emptyList())
+                        view.showCharacters(characters)
                     } else {
                         view.showEmptyCharactersError()
                     }
