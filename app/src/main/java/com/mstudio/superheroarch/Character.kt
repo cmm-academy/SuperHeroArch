@@ -1,9 +1,14 @@
 package com.mstudio.superheroarch
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import java.io.Serializable
 
+@Entity(tableName = "characters")
+@TypeConverters(StringListConverter::class)
 data class Character(
-    val name: String,
+    @PrimaryKey val name: String,
     val status: String,
     val image: String,
     val origin: Ubication,
@@ -16,9 +21,10 @@ data class Ubication(
     val url: String
 ) : Serializable
 
+@Entity(tableName = "episodes")
 data class Episode(
     val air_date: String,
-    val episode: String,
+    @PrimaryKey val episode: String,
 ) : Serializable
 
 data class CharacterResponse(

@@ -12,10 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity(), ViewTranslator {
 
-    private val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
-    private val repository = RickAndMortyRepository(apiRick)
-    private val viewModel: MainViewModel = MainViewModel(this, repository)
-
+    private lateinit var viewModel: MainViewModel
     private val adapter = CharacterAdapter()
 
     companion object {
@@ -26,6 +23,13 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        val database = AppDatabase.getDatabase(this)
+        val characterDao = database.characterDao()
+        val episodeDao = database.episodeDao()
+        val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
+        val repository = RickAndMortyRepository(apiRick, characterDao, episodeDao)
+        viewModel = MainViewModel(this, repository)
 
         viewModel.onCreate()
 

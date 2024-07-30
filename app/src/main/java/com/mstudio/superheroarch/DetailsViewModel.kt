@@ -10,19 +10,25 @@ class DetailsViewModel(private val view: DetailsViewTranslator, private val repo
 
     fun fetchCharacterDetails(character: Character) {
         view.displayCharacterDetails(character)
-        fetchFirstEpisodeDetails(character.episode.firstOrNull())
+        character.episode.firstOrNull()?.let { episodeUrl ->
+            fetchFirstEpisodeDetails(episodeUrl)
+        }
     }
 
-    private fun fetchFirstEpisodeDetails(episodeUrl: String?) {
-        if (episodeUrl == null) return
-
+    private fun fetchFirstEpisodeDetails(episodeUrl: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val result = repository.fetchEpisodeDetails(episodeUrl)
             withContext(Dispatchers.Main) {
                 result.onSuccess { episode ->
                     view.displayFirstEpisodeDetails(episode)
                 }.onFailure {
-                    view.showError("Error fetching episode details")
+                    val episodeCode = episodeUrl.split("/").last()
+                    val cachedEpisode = repository.getEpisodeFromDb(episodeCode)
+                    if (cachedEpisode != null) {
+                        view.displayFirstEpisodeDetails(cachedEpisode)
+                    } else {
+                        view.showError("Error fetching episode details")
+                    }
                 }
             }
         }
