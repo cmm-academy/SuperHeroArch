@@ -33,5 +33,5 @@ fun CharactersRemoteEntity.toCharacterLocalEntity(): CharacterLocalEntity =
         species = species,
         origin = origin.name,
         location = location.name,
-        episode = episode.joinToString(", ")
+        episode = episode.joinToString()
     )
