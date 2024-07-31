@@ -11,6 +11,7 @@ import com.mstudio.superheroarch.databinding.CharacterDetailActivityBinding
 import com.mstudio.superheroarch.presentation.overview.MainActivity.Companion.CHARACTER_DATA_KEY
 import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.EpisodeRemoteEntity
+import com.mstudio.superheroarch.remotedatasource.model.TheMovieDbEpisodeRemoteEntity
 
 class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslator {
     private lateinit var binding: CharacterDetailActivityBinding
@@ -55,5 +56,16 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
 
     override fun showNoInternetConnection() {
         Snackbar.make(findViewById(android.R.id.content), resources.getString(R.string.no_internet_message), Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun showEpisodeRatingAndImage(theMovieDbEpisodeRemoteEntity: TheMovieDbEpisodeRemoteEntity) {
+        with(binding) {
+            episodeScoreDetail.text = resources.getString(R.string.episode_score_message, theMovieDbEpisodeRemoteEntity.voteAverage.toString())
+            episodeImage.load(theMovieDbEpisodeRemoteEntity.image)
+        }
+    }
+
+    override fun showEpisodeDetailsError() {
+        Snackbar.make(findViewById(android.R.id.content), resources.getString(R.string.episode_details_error_message), Snackbar.LENGTH_LONG).show()
     }
 }

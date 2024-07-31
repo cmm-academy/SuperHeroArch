@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -10,6 +12,7 @@ android {
     
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     defaultConfig {
@@ -20,6 +23,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val keyStoreFile = rootProject.file("local.properties")
+        val properties = Properties()
+        properties.load(keyStoreFile.inputStream())
+
+        val apiKey = properties.getProperty("tmdb_api_key") ?: ""
+        buildConfigField(type = "String", name = "TMDB_API_KEY", value = apiKey)
+
     }
 
     buildTypes {
