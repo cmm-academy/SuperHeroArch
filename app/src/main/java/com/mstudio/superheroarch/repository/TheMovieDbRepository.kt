@@ -17,9 +17,9 @@ class TheMovieDbRepository {
         if (response.isSuccessful) {
             response.body()?.let {
                 return it.copy(image = "$BASE_IMAGE_URL${response.body()?.image}")
-            } ?: throw Exception()
+            } ?: throw Exception(response.errorBody().toString())
         } else {
-            throw Exception()
+            throw Exception(response.errorBody().toString())
         }
     }
 
