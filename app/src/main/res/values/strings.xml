@@ -17,6 +17,5 @@
     <string name="first_episode_air_date">Air on: %s</string>
     <string name="episode_error_message">Couldn\'t find the first episode</string>
     <string name="no_internet_message">No Internet Connection</string>
-    <string name="episode_score_message">Episode Score: %s</string>
     <string name="episode_details_error_message">Sorry, there is a problem retrieving episode details</string>
 </resources>

@@ -43,6 +43,7 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
         with(binding) {
             episodeNumberDetail.visibility = View.VISIBLE
             episodeDateDetail.visibility = View.VISIBLE
+            topDividerFirstEpisode.visibility = View.VISIBLE
             episodeNumberDetail.text = resources.getString(R.string.first_episode_number, episode.episode)
             episodeDateDetail.text = resources.getString(R.string.first_episode_air_date, episode.airDate)
         }
@@ -60,7 +61,9 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
 
     override fun showEpisodeRatingAndImage(theMovieDbEpisodeRemoteEntity: TheMovieDbEpisodeRemoteEntity) {
         with(binding) {
-            episodeScoreDetail.text = resources.getString(R.string.episode_score_message, theMovieDbEpisodeRemoteEntity.voteAverage.toString())
+            bottomDividerFirstEpisode.visibility = View.VISIBLE
+            scoreIcon.visibility = View.VISIBLE
+            episodeScoreDetail.text = theMovieDbEpisodeRemoteEntity.voteAverage.toString()
             episodeImage.load(theMovieDbEpisodeRemoteEntity.image)
         }
     }
