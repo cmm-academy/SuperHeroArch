@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.mstudio.superheroarch.databinding.ItemCharacterLayoutBinding
-import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
+import com.mstudio.superheroarch.presentation.model.CharacterData
 
 class CharactersAdapter(
-    val listener: (CharactersRemoteEntity) -> Unit
-) : ListAdapter<CharactersRemoteEntity, CharactersAdapter.CharacterViewHolder>(DiffCallback()) {
+    val listener: (CharacterData) -> Unit
+) : ListAdapter<CharacterData, CharactersAdapter.CharacterViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val binding = ItemCharacterLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,7 +23,7 @@ class CharactersAdapter(
     }
 
     inner class CharacterViewHolder(private val binding: ItemCharacterLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(character: CharactersRemoteEntity) {
+        fun bind(character: CharacterData) {
             binding.nameCharacter.text = character.name
             binding.statusCharacter.text = character.status
             binding.imageCharacter.load(character.image)
@@ -34,12 +34,12 @@ class CharactersAdapter(
     }
 }
 
-class DiffCallback : DiffUtil.ItemCallback<CharactersRemoteEntity>() {
-    override fun areItemsTheSame(oldItem: CharactersRemoteEntity, newItem: CharactersRemoteEntity): Boolean {
+class DiffCallback : DiffUtil.ItemCallback<CharacterData>() {
+    override fun areItemsTheSame(oldItem: CharacterData, newItem: CharacterData): Boolean {
         return oldItem.name == newItem.name
     }
 
-    override fun areContentsTheSame(oldItem: CharactersRemoteEntity, newItem: CharactersRemoteEntity): Boolean {
+    override fun areContentsTheSame(oldItem: CharacterData, newItem: CharacterData): Boolean {
         return oldItem == newItem
     }
 }

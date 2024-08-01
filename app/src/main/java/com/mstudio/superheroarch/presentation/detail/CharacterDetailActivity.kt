@@ -8,9 +8,10 @@ import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.databinding.CharacterDetailActivityBinding
+import com.mstudio.superheroarch.presentation.model.CharacterData
+import com.mstudio.superheroarch.presentation.model.Episode
+import com.mstudio.superheroarch.presentation.model.TheMovieDbEpisode
 import com.mstudio.superheroarch.presentation.overview.MainActivity.Companion.CHARACTER_DATA_KEY
-import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
-import com.mstudio.superheroarch.remotedatasource.model.EpisodeRemoteEntity
 
 class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslator {
     private lateinit var binding: CharacterDetailActivityBinding
@@ -20,7 +21,7 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
         super.onCreate(savedInstanceState)
         binding = CharacterDetailActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val character = intent.getSerializableExtra(CHARACTER_DATA_KEY) as CharactersRemoteEntity
+        val character = intent.getSerializableExtra(CHARACTER_DATA_KEY) as CharacterData
         viewModel.onCharacterReceived(character)
 
         with(binding) {
@@ -33,15 +34,16 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
             imageDetail.load(character.image)
             statusDetail.text = resources.getString(R.string.character_status, character.status)
             speciesDetail.text = resources.getString(R.string.character_species, character.species)
-            originDetail.text = resources.getString(R.string.character_origin, character.origin.name)
-            locationDetail.text = resources.getString(R.string.character_location, character.location.name)
+            originDetail.text = resources.getString(R.string.character_origin, character.origin)
+            locationDetail.text = resources.getString(R.string.character_location, character.location)
         }
     }
 
-    override fun showEpisode(episode: EpisodeRemoteEntity) {
+    override fun showEpisode(episode: Episode) {
         with(binding) {
             episodeNumberDetail.visibility = View.VISIBLE
             episodeDateDetail.visibility = View.VISIBLE
+            topDividerFirstEpisode.visibility = View.VISIBLE
             episodeNumberDetail.text = resources.getString(R.string.first_episode_number, episode.episode)
             episodeDateDetail.text = resources.getString(R.string.first_episode_air_date, episode.airDate)
         }
@@ -55,5 +57,18 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
 
     override fun showNoInternetConnection() {
         Snackbar.make(findViewById(android.R.id.content), resources.getString(R.string.no_internet_message), Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun showEpisodeRatingAndImage(theMovieDbEpisode: TheMovieDbEpisode) {
+        with(binding) {
+            bottomDividerFirstEpisode.visibility = View.VISIBLE
+            scoreIcon.visibility = View.VISIBLE
+            episodeScoreDetail.text = theMovieDbEpisode.voteAverage.toString()
+            episodeImage.load(theMovieDbEpisode.image)
+        }
+    }
+
+    override fun showEpisodeDetailsError() {
+        Snackbar.make(findViewById(android.R.id.content), resources.getString(R.string.episode_details_error_message), Snackbar.LENGTH_LONG).show()
     }
 }
