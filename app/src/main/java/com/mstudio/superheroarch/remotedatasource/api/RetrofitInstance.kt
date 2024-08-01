@@ -5,11 +5,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
     private const val BASE_URL = "https://rickandmortyapi.com/api/"
-    private const val TMDB_BASE_URL = "https://api.themoviedb.org/3/tv/60625/"
 
-    fun retrofit(isMovieDbApi: Boolean = false): Retrofit {
+    fun retrofit(baseUrl: String = BASE_URL): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(if (isMovieDbApi) TMDB_BASE_URL else BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

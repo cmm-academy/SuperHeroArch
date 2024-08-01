@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.databinding.MainActivityBinding
 import com.mstudio.superheroarch.presentation.detail.CharacterDetailActivity
-import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
+import com.mstudio.superheroarch.presentation.model.CharacterData
 
 class MainActivity : AppCompatActivity(), MainViewTranslator {
 
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         }
     }
 
-    override fun showCharacters(characters: List<CharactersRemoteEntity>) {
+    override fun showCharacters(characters: List<CharacterData>) {
         binding.charactersRv.visibility = View.VISIBLE
         binding.errorBody.visibility = View.GONE
         adapter.submitList(characters)
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         binding.errorBody.text = resources.getString(R.string.main_title_error_body)
     }
 
-    override fun goToDetailScreen(characterSelected: CharactersRemoteEntity) {
+    override fun goToDetailScreen(characterSelected: CharacterData) {
         val intent = Intent(this, CharacterDetailActivity::class.java).apply {
             putExtra(CHARACTER_DATA_KEY, characterSelected)
         }

@@ -1,6 +1,7 @@
 package com.mstudio.superheroarch.presentation.overview
 
-import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
+import com.mstudio.superheroarch.presentation.model.CharacterData
+import com.mstudio.superheroarch.remotedatasource.model.toCharacterData
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +13,7 @@ class MainViewModel(
 ) {
 
     private val repository = RickAndMortyRepository()
-    private var allCharacters = listOf<CharactersRemoteEntity>()
+    private var allCharacters = listOf<CharacterData>()
 
     fun onCreate() {
         getCharacters()
@@ -24,9 +25,9 @@ class MainViewModel(
                 val result = repository.getCharacters()
                 withContext(Dispatchers.Main) {
                     val characters = result ?: emptyList()
-                    allCharacters = characters
+                    allCharacters = characters.map { it.toCharacterData() }
                     if (characters.isNotEmpty()) {
-                        view.showCharacters(characters)
+                        view.showCharacters(allCharacters)
                     } else {
                         view.showEmptyCharactersError()
                     }
@@ -47,14 +48,14 @@ class MainViewModel(
         }
     }
 
-    fun onCharacterClicked(characterSelected: CharactersRemoteEntity) {
+    fun onCharacterClicked(characterSelected: CharacterData) {
         view.goToDetailScreen(characterSelected)
     }
 }
 
 interface MainViewTranslator {
-    fun showCharacters(characters: List<CharactersRemoteEntity>)
+    fun showCharacters(characters: List<CharacterData>)
     fun showEmptyCharactersError()
     fun showGenericError()
-    fun goToDetailScreen(characterSelected: CharactersRemoteEntity)
+    fun goToDetailScreen(characterSelected: CharacterData)
 }

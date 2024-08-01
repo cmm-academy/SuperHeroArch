@@ -1,9 +1,11 @@
 package com.mstudio.superheroarch.presentation.detail
 
+import com.mstudio.superheroarch.presentation.model.CharacterData
+import com.mstudio.superheroarch.presentation.model.Episode
+import com.mstudio.superheroarch.presentation.model.TheMovieDbEpisode
 import com.mstudio.superheroarch.presentation.network.NetworkManager
-import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
-import com.mstudio.superheroarch.remotedatasource.model.EpisodeRemoteEntity
-import com.mstudio.superheroarch.remotedatasource.model.TheMovieDbEpisodeRemoteEntity
+import com.mstudio.superheroarch.remotedatasource.model.toEpisode
+import com.mstudio.superheroarch.remotedatasource.model.toTheMovieDbEpisode
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.repository.TheMovieDbRepository
 import kotlinx.coroutines.CoroutineScope
@@ -18,7 +20,7 @@ class CharacterDetailViewModel(
     private val repository = RickAndMortyRepository()
     private val theMovieDbRepository = TheMovieDbRepository()
 
-    fun onCharacterReceived(character: CharactersRemoteEntity) {
+    fun onCharacterReceived(character: CharacterData) {
         if (NetworkManager.isInternetConnection()) {
             getFirstEpisode(character)
         } else {
@@ -26,13 +28,13 @@ class CharacterDetailViewModel(
         }
     }
 
-    private fun getFirstEpisode(character: CharactersRemoteEntity) {
-        val firstEpisode = character.episode.first().split("/").last()
+    private fun getFirstEpisode(character: CharacterData) {
+        val firstEpisode = character.episodes.first().split("/").last()
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = repository.getSingleEpisode(firstEpisode.toInt())
                 withContext(Dispatchers.Main) {
-                    view.showEpisode(response)
+                    view.showEpisode(response.toEpisode())
                 }
                 getRatingAndImageEpisode(response.episode)
             } catch (e: Exception) {
@@ -55,7 +57,7 @@ class CharacterDetailViewModel(
 
                 val tmdbResponse = theMovieDbRepository.getRickAndMortyEpisodeDetails(season, episode)
                 withContext(Dispatchers.Main) {
-                    view.showEpisodeRatingAndImage(tmdbResponse)
+                    view.showEpisodeRatingAndImage(tmdbResponse.toTheMovieDbEpisode())
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
@@ -67,9 +69,9 @@ class CharacterDetailViewModel(
 }
 
 interface CharacterDetailViewTranslator {
-    fun showEpisode(episode: EpisodeRemoteEntity)
+    fun showEpisode(episode: Episode)
     fun showEpisodeError()
     fun showNoInternetConnection()
-    fun showEpisodeRatingAndImage(theMovieDbEpisodeRemoteEntity: TheMovieDbEpisodeRemoteEntity)
+    fun showEpisodeRatingAndImage(theMovieDbEpisode: TheMovieDbEpisode)
     fun showEpisodeDetailsError()
 }

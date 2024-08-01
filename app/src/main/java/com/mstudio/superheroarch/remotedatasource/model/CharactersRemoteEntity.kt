@@ -2,6 +2,7 @@ package com.mstudio.superheroarch.remotedatasource.model
 
 import com.google.gson.annotations.SerializedName
 import com.mstudio.superheroarch.localdatasource.model.CharacterLocalEntity
+import com.mstudio.superheroarch.presentation.model.CharacterData
 import java.io.Serializable
 
 
@@ -34,4 +35,16 @@ fun CharactersRemoteEntity.toCharacterLocalEntity(): CharacterLocalEntity =
         origin = origin.name,
         location = location.name,
         episode = episode.joinToString()
+    )
+
+fun CharactersRemoteEntity.toCharacterData(): CharacterData =
+    CharacterData(
+        id = id,
+        name = name,
+        status = status,
+        image = image,
+        species = species,
+        origin = origin.name,
+        location = location.name,
+        episodes = episode
     )
