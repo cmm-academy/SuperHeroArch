@@ -29,10 +29,9 @@ class CharacterDetailViewModel(
     }
 
     private fun getFirstEpisode(character: CharacterData) {
-        val firstEpisode = character.episodes.first().split("/").last()
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = repository.getSingleEpisode(firstEpisode.toInt())
+                val response = repository.getSingleEpisode(character.firstEpisode.toInt())
                 withContext(Dispatchers.Main) {
                     view.showEpisode(response.toEpisode())
                 }

@@ -46,5 +46,5 @@ fun CharactersRemoteEntity.toCharacterData(): CharacterData =
         species = species,
         origin = origin.name,
         location = location.name,
-        episodes = episode
+        firstEpisode = episode.first().split("/").last()
     )

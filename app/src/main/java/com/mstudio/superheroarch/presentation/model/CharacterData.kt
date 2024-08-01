@@ -10,5 +10,5 @@ data class CharacterData(
     val species: String,
     val origin: String,
     val location: String,
-    val episodes: List<String>
+    val firstEpisode: String
 ) : Serializable
