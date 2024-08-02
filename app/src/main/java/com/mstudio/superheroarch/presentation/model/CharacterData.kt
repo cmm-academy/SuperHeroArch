@@ -15,7 +15,7 @@ data class CharacterData(
     val firstEpisode: String
 ) : Serializable
 
-fun CharacterData.toCharacterAndEpisode(episode: Episode, theMovieDbEpisode: TheMovieDbEpisode): CharacterAndEpisodeData =
+fun CharacterData.toCharacterAndEpisode(episode: Episode, theMovieDbEpisode: TheMovieDbEpisode?): CharacterAndEpisodeData =
     CharacterAndEpisodeData(
         id = id,
         name = name,
@@ -29,7 +29,6 @@ fun CharacterData.toCharacterAndEpisode(episode: Episode, theMovieDbEpisode: The
             name = episode.name,
             airDate = episode.airDate,
             episodeNumber = episode.episode,
-            image = theMovieDbEpisode.image,
-            voteAverage = theMovieDbEpisode.voteAverage
+            episodeExtraData = theMovieDbEpisode
         )
     )

@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.databinding.CharacterDetailActivityBinding
 import com.mstudio.superheroarch.presentation.model.CharacterData
+import com.mstudio.superheroarch.presentation.model.TheMovieDbEpisode
 import com.mstudio.superheroarch.presentation.overview.MainActivity.Companion.CHARACTER_DATA_KEY
 import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
 
@@ -43,12 +44,8 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
             episodeNumberDetail.visibility = View.VISIBLE
             episodeDateDetail.visibility = View.VISIBLE
             topDividerFirstEpisode.visibility = View.VISIBLE
-            bottomDividerFirstEpisode.visibility = View.VISIBLE
-            scoreIcon.visibility = View.VISIBLE
             episodeNumberDetail.text = resources.getString(R.string.first_episode_number, characterAndEpisodeData.firsEpisode.episodeNumber)
             episodeDateDetail.text = resources.getString(R.string.first_episode_air_date, characterAndEpisodeData.firsEpisode.airDate)
-            episodeScoreDetail.text = characterAndEpisodeData.firsEpisode.voteAverage.toString()
-            episodeImage.load(characterAndEpisodeData.firsEpisode.image)
         }
     }
 
@@ -60,5 +57,18 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
 
     override fun showNoInternetConnection() {
         Snackbar.make(findViewById(android.R.id.content), resources.getString(R.string.no_internet_message), Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun showEpisodeExtraData(episodeExtraData: TheMovieDbEpisode) {
+        with(binding) {
+            bottomDividerFirstEpisode.visibility = View.VISIBLE
+            scoreIcon.visibility = View.VISIBLE
+            episodeScoreDetail.text = episodeExtraData.voteAverage.toString()
+            episodeImage.load(episodeExtraData.image)
+        }
+    }
+
+    override fun showEpisodeExtraDataError() {
+        Snackbar.make(findViewById(android.R.id.content), resources.getString(R.string.episode_details_error_message), Snackbar.LENGTH_LONG).show()
     }
 }
