@@ -1,7 +1,5 @@
 package com.mstudio.superheroarch.usecase
 
-import com.mstudio.superheroarch.presentation.model.TheMovieDbEpisode
-
 data class CharacterAndEpisodeData(
     val id: Int,
     val name: String,
@@ -10,13 +8,14 @@ data class CharacterAndEpisodeData(
     val species: String,
     val origin: String,
     val location: String,
-    val firsEpisode: FirstEpisodeData
+    val episodeData: EpisodeData
 )
 
-data class FirstEpisodeData(
+data class EpisodeData(
     val episode: String,
     val name: String,
     val airDate: String,
     val episodeNumber: String,
-    val episodeExtraData: TheMovieDbEpisode?
+    val image: String?,
+    val voteAverage: Double?
 )

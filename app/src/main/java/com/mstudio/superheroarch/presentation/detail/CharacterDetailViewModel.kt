@@ -1,7 +1,6 @@
 package com.mstudio.superheroarch.presentation.detail
 
 import com.mstudio.superheroarch.presentation.model.CharacterData
-import com.mstudio.superheroarch.presentation.model.TheMovieDbEpisode
 import com.mstudio.superheroarch.presentation.network.NetworkManager
 import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
@@ -31,7 +30,7 @@ class CharacterDetailViewModel(
                 withContext(Dispatchers.Main) {
                     response?.let { result ->
                         view.showEpisode(result)
-                        checkEpisodeExtraDataAvailability(result.firsEpisode.episodeExtraData)
+                        checkEpisodeExtraDataAvailability(result.episodeData.image, result.episodeData.voteAverage)
                     } ?: view.showEpisodeError()
                 }
             } catch (e: Exception) {
@@ -42,10 +41,12 @@ class CharacterDetailViewModel(
         }
     }
 
-    private fun checkEpisodeExtraDataAvailability(episodeExtraData: TheMovieDbEpisode?) {
-        episodeExtraData?.let {
-            view.showEpisodeExtraData(it)
-        } ?: view.showEpisodeExtraDataError()
+    private fun checkEpisodeExtraDataAvailability(image: String?, voteAverage: Double?) {
+        if (image != null && voteAverage != null) {
+            view.showEpisodeExtraData(image, voteAverage)
+        } else {
+            view.showEpisodeExtraDataError()
+        }
     }
 }
 
@@ -53,6 +54,6 @@ interface CharacterDetailViewTranslator {
     fun showEpisode(characterAndEpisodeData: CharacterAndEpisodeData)
     fun showEpisodeError()
     fun showNoInternetConnection()
-    fun showEpisodeExtraData(episodeExtraData: TheMovieDbEpisode)
+    fun showEpisodeExtraData(image: String, voteAverage: Double)
     fun showEpisodeExtraDataError()
 }

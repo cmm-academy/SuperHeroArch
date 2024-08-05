@@ -1,7 +1,7 @@
 package com.mstudio.superheroarch.presentation.model
 
 import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
-import com.mstudio.superheroarch.usecase.FirstEpisodeData
+import com.mstudio.superheroarch.usecase.EpisodeData
 import java.io.Serializable
 
 data class CharacterData(
@@ -24,11 +24,12 @@ fun CharacterData.toCharacterAndEpisode(episode: Episode, theMovieDbEpisode: The
         species = species,
         origin = origin,
         location = location,
-        firsEpisode = FirstEpisodeData(
+        episodeData = EpisodeData(
             episode = episode.episode,
             name = episode.name,
             airDate = episode.airDate,
             episodeNumber = episode.episode,
-            episodeExtraData = theMovieDbEpisode
+            image = theMovieDbEpisode?.image,
+            voteAverage = theMovieDbEpisode?.voteAverage
         )
     )
