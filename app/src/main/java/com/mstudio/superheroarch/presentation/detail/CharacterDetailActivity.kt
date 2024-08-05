@@ -9,9 +9,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.databinding.CharacterDetailActivityBinding
 import com.mstudio.superheroarch.presentation.model.CharacterData
-import com.mstudio.superheroarch.presentation.model.Episode
-import com.mstudio.superheroarch.presentation.model.TheMovieDbEpisode
 import com.mstudio.superheroarch.presentation.overview.MainActivity.Companion.CHARACTER_DATA_KEY
+import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
 
 class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslator {
     private lateinit var binding: CharacterDetailActivityBinding
@@ -39,13 +38,13 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
         }
     }
 
-    override fun showEpisode(episode: Episode) {
+    override fun showEpisode(characterAndEpisodeData: CharacterAndEpisodeData) {
         with(binding) {
             episodeNumberDetail.visibility = View.VISIBLE
             episodeDateDetail.visibility = View.VISIBLE
             topDividerFirstEpisode.visibility = View.VISIBLE
-            episodeNumberDetail.text = resources.getString(R.string.first_episode_number, episode.episode)
-            episodeDateDetail.text = resources.getString(R.string.first_episode_air_date, episode.airDate)
+            episodeNumberDetail.text = resources.getString(R.string.first_episode_number, characterAndEpisodeData.episodeData.episodeNumber)
+            episodeDateDetail.text = resources.getString(R.string.first_episode_air_date, characterAndEpisodeData.episodeData.airDate)
         }
     }
 
@@ -59,16 +58,16 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
         Snackbar.make(findViewById(android.R.id.content), resources.getString(R.string.no_internet_message), Snackbar.LENGTH_LONG).show()
     }
 
-    override fun showEpisodeRatingAndImage(theMovieDbEpisode: TheMovieDbEpisode) {
+    override fun showEpisodeExtraData(image: String, voteAverage: Double) {
         with(binding) {
             bottomDividerFirstEpisode.visibility = View.VISIBLE
             scoreIcon.visibility = View.VISIBLE
-            episodeScoreDetail.text = theMovieDbEpisode.voteAverage.toString()
-            episodeImage.load(theMovieDbEpisode.image)
+            episodeScoreDetail.text = voteAverage.toString()
+            episodeImage.load(image)
         }
     }
 
-    override fun showEpisodeDetailsError() {
+    override fun showEpisodeExtraDataError() {
         Snackbar.make(findViewById(android.R.id.content), resources.getString(R.string.episode_details_error_message), Snackbar.LENGTH_LONG).show()
     }
 }

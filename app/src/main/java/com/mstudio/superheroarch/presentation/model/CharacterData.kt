@@ -1,5 +1,7 @@
 package com.mstudio.superheroarch.presentation.model
 
+import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
+import com.mstudio.superheroarch.usecase.EpisodeData
 import java.io.Serializable
 
 data class CharacterData(
@@ -12,3 +14,22 @@ data class CharacterData(
     val location: String,
     val firstEpisode: String
 ) : Serializable
+
+fun CharacterData.toCharacterAndEpisode(episode: Episode, theMovieDbEpisode: TheMovieDbEpisode?): CharacterAndEpisodeData =
+    CharacterAndEpisodeData(
+        id = id,
+        name = name,
+        status = status,
+        image = image,
+        species = species,
+        origin = origin,
+        location = location,
+        episodeData = EpisodeData(
+            episode = episode.episode,
+            name = episode.name,
+            airDate = episode.airDate,
+            episodeNumber = episode.episode,
+            image = theMovieDbEpisode?.image,
+            voteAverage = theMovieDbEpisode?.voteAverage
+        )
+    )
