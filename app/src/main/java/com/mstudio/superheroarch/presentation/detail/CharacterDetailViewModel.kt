@@ -2,7 +2,6 @@ package com.mstudio.superheroarch.presentation.detail
 
 import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.presentation.network.NetworkManager
-import com.mstudio.superheroarch.presentation.network.NetworkManagerImpl
 import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,7 +14,7 @@ class CharacterDetailViewModel(
     private val view: CharacterDetailViewTranslator,
     private val useCase: GetCharacterAndEpisodeUseCase = GetCharacterAndEpisodeUseCase(),
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private val networkManager: NetworkManagerImpl = NetworkManagerImpl()
+    private val networkManager: NetworkManager = NetworkManager()
 ) {
 
     fun onCharacterReceived(character: CharacterData) {

@@ -3,7 +3,7 @@ package com.mstudio.superheroarch.presentation
 import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
 import com.mstudio.superheroarch.presentation.detail.CharacterDetailViewModel
 import com.mstudio.superheroarch.presentation.detail.CharacterDetailViewTranslator
-import com.mstudio.superheroarch.presentation.network.NetworkManagerImpl
+import com.mstudio.superheroarch.presentation.network.NetworkManager
 import com.mstudio.superheroarch.remotedatasource.model.toCharacterData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +29,7 @@ class CharacterDetailViewModelTest {
     private lateinit var view: CharacterDetailViewTranslator
     private lateinit var useCase: GetCharacterAndEpisodeUseCase
     private val testDispatcher = UnconfinedTestDispatcher()
-    private lateinit var networkManager: NetworkManagerImpl
+    private lateinit var networkManager: NetworkManager
 
     @Before
     fun before() {
