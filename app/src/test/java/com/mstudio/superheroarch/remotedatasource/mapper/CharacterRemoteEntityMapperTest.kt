@@ -10,31 +10,31 @@ class CharacterRemoteEntityMapperTest {
 
     @Test
     fun `given a character remote entity, when mapped to character local entity, then has the correct values`() {
-        val remoteEntity = RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity()
-        val localEntity = remoteEntity.toCharacterLocalEntity()
+        val expected = RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity()
+        val actual = expected.toCharacterLocalEntity()
 
-        assertEquals(remoteEntity.id, localEntity.id)
-        assertEquals(remoteEntity.name, localEntity.name)
-        assertEquals(remoteEntity.status, localEntity.status)
-        assertEquals(remoteEntity.species, localEntity.species)
-        assertEquals(remoteEntity.origin.name, localEntity.origin)
-        assertEquals(remoteEntity.location.name, localEntity.location)
-        assertEquals(remoteEntity.episode.first(), localEntity.episode)
-        assertEquals(remoteEntity.image, localEntity.image)
+        assertEquals(expected.id, actual.id)
+        assertEquals(expected.name, actual.name)
+        assertEquals(expected.status, actual.status)
+        assertEquals(expected.species, actual.species)
+        assertEquals(expected.origin.name, actual.origin)
+        assertEquals(expected.location.name, actual.location)
+        assertEquals(expected.episode.first(), actual.episode)
+        assertEquals(expected.image, actual.image)
     }
 
     @Test
     fun `given a character remote entity, when mapped to character data, then has the correct values`() {
-        val remoteEntity = RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity()
-        val characterData = remoteEntity.toCharacterData()
+        val expected = RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity()
+        val actual = expected.toCharacterData()
 
-        assertEquals(remoteEntity.id, characterData.id)
-        assertEquals(remoteEntity.name, characterData.name)
-        assertEquals(remoteEntity.status, characterData.status)
-        assertEquals(remoteEntity.species, characterData.species)
-        assertEquals(remoteEntity.origin.name, characterData.origin)
-        assertEquals(remoteEntity.location.name, characterData.location)
-        assertEquals(remoteEntity.episode.first().split("/").last(), characterData.firstEpisode)
-        assertEquals(remoteEntity.image, characterData.image)
+        assertEquals(expected.id, actual.id)
+        assertEquals(expected.name, actual.name)
+        assertEquals(expected.status, actual.status)
+        assertEquals(expected.species, actual.species)
+        assertEquals(expected.origin.name, actual.origin)
+        assertEquals(expected.location.name, actual.location)
+        assertEquals(expected.episode.first().split("/").last(), actual.firstEpisode)
+        assertEquals(expected.image, actual.image)
     }
 }

@@ -8,8 +8,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import retrofit2.Response
@@ -30,14 +30,14 @@ class TheMovieDbRepositoryTest {
     @Test
     fun `given themoviedb repository, when retrieve episode extra data, then return extra data`() = runTest {
         val expectedResult = RickAndMortyRepositoryInstruments.givenAnEpisodeExtraData()
-        Mockito.`when`(theMovieDbApiMock.getRickAndMortyEpisodeDetails("Bearer ${BuildConfig.TMDB_API_KEY}", 1, 1)).thenReturn(Response.success(expectedResult))
+        `when`(theMovieDbApiMock.getRickAndMortyEpisodeDetails("Bearer ${BuildConfig.TMDB_API_KEY}", 1, 1)).thenReturn(Response.success(expectedResult))
         val result = theMovieDbRepository.getRickAndMortyEpisodeDetails(1, 1)
         assertEquals(expectedResult.copy("https://image.tmdb.org/t/p/w500image"), result)
     }
 
     @Test(expected = Exception::class)
     fun `given themoviedb repository, when the api call fails, return an exception`() = runTest {
-        Mockito.`when`(theMovieDbApiMock.getRickAndMortyEpisodeDetails("Bearer ${BuildConfig.TMDB_API_KEY}", 1, 1)).thenThrow(Exception())
+        `when`(theMovieDbApiMock.getRickAndMortyEpisodeDetails("Bearer ${BuildConfig.TMDB_API_KEY}", 1, 1)).thenThrow(Exception())
         theMovieDbRepository.getRickAndMortyEpisodeDetails(1, 1)
     }
 }

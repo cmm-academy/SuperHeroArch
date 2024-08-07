@@ -11,21 +11,21 @@ class CharacterDataMapperTest {
 
     @Test
     fun `given character data, when mapped to character and episode data, then return correct data`() {
-        val characterData = RickAndMortyRepositoryInstruments.givenCharacterData()
-        val episodeData = RickAndMortyRepositoryInstruments.givenAnEpisodeRemoteEntity().toEpisode()
-        val episodeExtraData = RickAndMortyRepositoryInstruments.givenAnEpisodeExtraData().toTheMovieDbEpisode()
-        val characterAndEpisodeData = characterData.toCharacterAndEpisode(episodeData, episodeExtraData)
+        val expected = RickAndMortyRepositoryInstruments.givenCharacterData()
+        val expectedEpisodeData = RickAndMortyRepositoryInstruments.givenAnEpisodeRemoteEntity().toEpisode()
+        val expectedEpisodeExtraData = RickAndMortyRepositoryInstruments.givenAnEpisodeExtraData().toTheMovieDbEpisode()
+        val actual = expected.toCharacterAndEpisode(expectedEpisodeData, expectedEpisodeExtraData)
 
-        assertEquals(characterData.id, characterAndEpisodeData.id)
-        assertEquals(characterData.name, characterAndEpisodeData.name)
-        assertEquals(characterData.status, characterAndEpisodeData.status)
-        assertEquals(characterData.species, characterAndEpisodeData.species)
-        assertEquals(characterData.origin, characterAndEpisodeData.origin)
-        assertEquals(characterData.location, characterAndEpisodeData.location)
-        assertEquals(characterData.firstEpisode, characterAndEpisodeData.episodeData.episode)
-        assertEquals(episodeData.name, characterAndEpisodeData.episodeData.name)
-        assertEquals(episodeData.airDate, characterAndEpisodeData.episodeData.airDate)
-        assertEquals(episodeExtraData.image, characterAndEpisodeData.episodeData.image)
-        assertEquals(episodeExtraData.voteAverage, characterAndEpisodeData.episodeData.voteAverage)
+        assertEquals(expected.id, actual.id)
+        assertEquals(expected.name, actual.name)
+        assertEquals(expected.status, actual.status)
+        assertEquals(expected.species, actual.species)
+        assertEquals(expected.origin, actual.origin)
+        assertEquals(expected.location, actual.location)
+        assertEquals(expected.firstEpisode, actual.episodeData.episode)
+        assertEquals(expectedEpisodeData.name, actual.episodeData.name)
+        assertEquals(expectedEpisodeData.airDate, actual.episodeData.airDate)
+        assertEquals(expectedEpisodeExtraData.image, actual.episodeData.image)
+        assertEquals(expectedEpisodeExtraData.voteAverage, actual.episodeData.voteAverage)
     }
 }

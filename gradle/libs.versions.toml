@@ -19,6 +19,7 @@ room = "2.6.1"
 serialization = "1.7.1"
 coil = "2.6.0"
 ksp = "2.0.0-1.0.23"
+viewmodel = "2.8.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,6 +42,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+viewmodel = {module = 'androidx.lifecycle:lifecycle-viewmodel-ktx', version.ref = "viewmodel" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

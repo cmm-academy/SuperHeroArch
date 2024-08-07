@@ -1,5 +1,7 @@
 package com.mstudio.superheroarch.presentation.overview
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApiHelper
 import com.mstudio.superheroarch.remotedatasource.model.toCharacterData
@@ -14,7 +16,7 @@ class MainViewModel(
     private val view: MainViewTranslator,
     private val repository: RickAndMortyRepository = RickAndMortyRepository(api = RickAndMortyApiHelper.create()),
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) {
+) : ViewModel(){
 
     private var allCharacters = listOf<CharacterData>()
 
@@ -23,7 +25,7 @@ class MainViewModel(
     }
 
     private fun getCharacters() {
-        CoroutineScope(dispatcher).launch {
+        viewModelScope.launch(dispatcher) {
             try {
                 val result = repository.getCharacters()
                 withContext(Dispatchers.Main) {

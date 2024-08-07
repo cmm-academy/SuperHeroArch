@@ -9,10 +9,10 @@ class TheMovieDbRemoteEntityMapperTest {
 
     @Test
     fun `given a the movie db remote entity, when mapped to the movie db episode, the has correct values`() {
-        val remoteEntity = RickAndMortyRepositoryInstruments.givenAnEpisodeExtraData()
-        val theMovieDbEpisode = remoteEntity.toTheMovieDbEpisode()
+        val expected = RickAndMortyRepositoryInstruments.givenAnEpisodeExtraData()
+        val actual = expected.toTheMovieDbEpisode()
 
-        assertEquals(remoteEntity.image, theMovieDbEpisode.image)
-        assertEquals(remoteEntity.voteAverage.toString(), theMovieDbEpisode.voteAverage.toString())
+        assertEquals(expected.image, actual.image)
+        assertEquals(expected.voteAverage.toString(), actual.voteAverage.toString())
     }
 }

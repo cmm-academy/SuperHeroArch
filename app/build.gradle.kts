@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.serialization)
     implementation(libs.room)
     implementation(libs.room.ktx)
+    implementation(libs.viewmodel)
     ksp(libs.room.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)

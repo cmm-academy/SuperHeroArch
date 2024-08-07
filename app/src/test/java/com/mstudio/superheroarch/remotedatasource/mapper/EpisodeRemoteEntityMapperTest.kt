@@ -9,11 +9,11 @@ class EpisodeRemoteEntityMapperTest {
 
     @Test
     fun `given an episode remote entity, when mapped to episode, then has the correct values`() {
-        val remoteEntity = RickAndMortyRepositoryInstruments.givenAnEpisodeRemoteEntity()
-        val episode = remoteEntity.toEpisode()
+        val expected = RickAndMortyRepositoryInstruments.givenAnEpisodeRemoteEntity()
+        val actual = expected.toEpisode()
 
-        assertEquals(remoteEntity.episode, episode.episode)
-        assertEquals(remoteEntity.name, episode.name)
-        assertEquals(remoteEntity.airDate, episode.airDate)
+        assertEquals(expected.episode, actual.episode)
+        assertEquals(expected.name, actual.name)
+        assertEquals(expected.airDate, actual.airDate)
     }
 }
