@@ -43,7 +43,7 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
             episodeNumberDetail.visibility = View.VISIBLE
             episodeDateDetail.visibility = View.VISIBLE
             topDividerFirstEpisode.visibility = View.VISIBLE
-            episodeNumberDetail.text = resources.getString(R.string.first_episode_number, characterAndEpisodeData.episodeData.episodeNumber)
+            episodeNumberDetail.text = resources.getString(R.string.first_episode_number, characterAndEpisodeData.episodeData.episode)
             episodeDateDetail.text = resources.getString(R.string.first_episode_air_date, characterAndEpisodeData.episodeData.airDate)
         }
     }

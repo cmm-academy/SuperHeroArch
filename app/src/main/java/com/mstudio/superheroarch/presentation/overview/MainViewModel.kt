@@ -1,18 +1,21 @@
 package com.mstudio.superheroarch.presentation.overview
 
 import com.mstudio.superheroarch.presentation.model.CharacterData
+import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApiHelper
 import com.mstudio.superheroarch.remotedatasource.model.toCharacterData
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainViewModel(
-    private val view: MainViewTranslator
+    private val view: MainViewTranslator,
+    private val repository: RickAndMortyRepository = RickAndMortyRepository(api = RickAndMortyApiHelper.create()),
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
 
-    private val repository = RickAndMortyRepository()
     private var allCharacters = listOf<CharacterData>()
 
     fun onCreate() {
@@ -20,7 +23,7 @@ class MainViewModel(
     }
 
     private fun getCharacters() {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
             try {
                 val result = repository.getCharacters()
                 withContext(Dispatchers.Main) {

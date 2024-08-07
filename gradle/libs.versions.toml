@@ -6,9 +6,14 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
+coroutines = "1.8.1"
 material = "1.10.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
+mockitocore = "5.12.0"
+mockito = "5.4.0"
+androidxTestCore = "1.6.1"
+roboelectric = "4.12.2"
 retrofit = "2.11.0"
 room = "2.6.1"
 serialization = "1.7.1"
@@ -17,8 +22,14 @@ ksp = "2.0.0-1.0.23"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitocore" }
+mockito = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
+roboletric = { group = "org.robolectric", name = "robolectric", version.ref = "roboelectric" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = {module = 'androidx.room:room-ktx', version.ref = "room" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

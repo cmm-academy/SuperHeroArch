@@ -9,8 +9,8 @@ import com.mstudio.superheroarch.localdatasource.model.CharacterLocalEntity
 @Dao
 interface CharactersDao {
     @Query("SELECT * FROM CharacterLocalEntity")
-    fun getCharacters(): List<CharacterLocalEntity>
+    suspend fun getCharacters(): List<CharacterLocalEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCharacters(characters: List<CharacterLocalEntity>)
+    suspend fun insertCharacters(characters: List<CharacterLocalEntity>)
 }

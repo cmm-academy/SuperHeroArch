@@ -28,7 +28,6 @@ fun CharacterData.toCharacterAndEpisode(episode: Episode, theMovieDbEpisode: The
             episode = episode.episode,
             name = episode.name,
             airDate = episode.airDate,
-            episodeNumber = episode.episode,
             image = theMovieDbEpisode?.image,
             voteAverage = theMovieDbEpisode?.voteAverage
         )

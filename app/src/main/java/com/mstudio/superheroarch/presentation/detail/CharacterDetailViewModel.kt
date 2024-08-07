@@ -2,21 +2,24 @@ package com.mstudio.superheroarch.presentation.detail
 
 import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.presentation.network.NetworkManager
+import com.mstudio.superheroarch.presentation.network.NetworkManagerImpl
 import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CharacterDetailViewModel(
-    private val view: CharacterDetailViewTranslator
+    private val view: CharacterDetailViewTranslator,
+    private val useCase: GetCharacterAndEpisodeUseCase = GetCharacterAndEpisodeUseCase(),
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val networkManager: NetworkManagerImpl = NetworkManagerImpl()
 ) {
 
-    private val useCase = GetCharacterAndEpisodeUseCase()
-
     fun onCharacterReceived(character: CharacterData) {
-        if (NetworkManager.isInternetConnection()) {
+        if (networkManager.hasInternetConnection()) {
             getFirstEpisode(character)
         } else {
             view.showNoInternetConnection()
@@ -24,7 +27,7 @@ class CharacterDetailViewModel(
     }
 
     private fun getFirstEpisode(character: CharacterData) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
             try {
                 val response = useCase.getCharacterAndEpisode(character)
                 withContext(Dispatchers.Main) {

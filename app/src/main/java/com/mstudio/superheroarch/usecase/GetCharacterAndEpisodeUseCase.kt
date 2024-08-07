@@ -2,21 +2,23 @@ package com.mstudio.superheroarch.usecase
 
 import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.presentation.model.toCharacterAndEpisode
+import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApiHelper
+import com.mstudio.superheroarch.remotedatasource.api.TheMovieDbApiHelper
 import com.mstudio.superheroarch.remotedatasource.model.TheMovieDbEpisodeRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.toEpisode
 import com.mstudio.superheroarch.remotedatasource.model.toTheMovieDbEpisode
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.repository.TheMovieDbRepository
 
-class GetCharacterAndEpisodeUseCase {
+class GetCharacterAndEpisodeUseCase(
+    private val rickAndMortyRepository: RickAndMortyRepository = RickAndMortyRepository(api = RickAndMortyApiHelper.create()),
+    private val theMovieDbRepository: TheMovieDbRepository = TheMovieDbRepository(TheMovieDbApiHelper.create())
+) {
 
     companion object {
         private const val SEASON_REGEX_PATTERN = "S([0-9.]+)"
         private const val EPISODE_REGEX_PATTERN = "E([0-9.]+)"
     }
-
-    private val rickAndMortyRepository = RickAndMortyRepository()
-    private val theMovieDbRepository = TheMovieDbRepository()
 
     suspend fun getCharacterAndEpisode(characterData: CharacterData): CharacterAndEpisodeData? {
         try {
