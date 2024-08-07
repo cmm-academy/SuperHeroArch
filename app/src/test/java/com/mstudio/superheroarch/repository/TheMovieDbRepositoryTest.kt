@@ -8,9 +8,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
+import org.mockito.Mockito.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import retrofit2.Response
@@ -19,15 +18,12 @@ import retrofit2.Response
 @RunWith(RobolectricTestRunner::class)
 class TheMovieDbRepositoryTest {
 
-    @Mock
     private lateinit var theMovieDbApiMock: TheMovieDbApi
-
-    @Mock
     private lateinit var theMovieDbRepository: TheMovieDbRepository
 
     @Before
     fun before() {
-        MockitoAnnotations.openMocks(this)
+        theMovieDbApiMock = mock()
         theMovieDbRepository = TheMovieDbRepository(theMovieDbApiMock)
     }
 

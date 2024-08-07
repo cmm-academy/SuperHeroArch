@@ -22,19 +22,14 @@ import retrofit2.Response
 @RunWith(RobolectricTestRunner::class)
 class RickAndMortyRepositoryTest {
 
-    @Mock
     private lateinit var rickAndMortyApiMock: RickAndMortyApi
-
-    @Mock
     private lateinit var rickAndMortyDatabase: RickAndMortyDatabase
-
-    @Mock
     private lateinit var rickAndMortyRepository: RickAndMortyRepository
 
     @Before
     fun before() {
-        MockitoAnnotations.openMocks(this)
-        `when`(rickAndMortyDatabase.characterDao()).thenReturn(mock())
+        rickAndMortyDatabase = mock()
+        rickAndMortyApiMock = mock()
         rickAndMortyRepository = RickAndMortyRepository(ApplicationProvider.getApplicationContext(), rickAndMortyApiMock)
     }
 

@@ -10,7 +10,7 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
+import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -19,15 +19,13 @@ class GetCharacterAndEpisodeUseCaseTest {
 
     private lateinit var usecase: GetCharacterAndEpisodeUseCase
     private var characterData = RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData()
-
-    @Mock
     private lateinit var rickAndMortyRepository: RickAndMortyRepository
-
-    @Mock
     private lateinit var theMovieDbRepository: TheMovieDbRepository
 
     @Before
     fun before() {
+        rickAndMortyRepository = mock()
+        theMovieDbRepository = mock()
         usecase = GetCharacterAndEpisodeUseCase(rickAndMortyRepository, theMovieDbRepository)
     }
 
