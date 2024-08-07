@@ -1,6 +1,8 @@
 package com.mstudio.superheroarch
 
-class RickAndMortyRepository(private val apiRick: ApiRick, private val characterDao: CharacterDao, private val episodeDao: EpisodeDao) {
+import java.io.IOException
+
+class RickAndMortyRepository(private val apiRick: ApiRick, private val characterDao: CharacterDao) {
 
     suspend fun fetchCharacters(): Result<List<Character>> {
         return try {
@@ -28,7 +30,6 @@ class RickAndMortyRepository(private val apiRick: ApiRick, private val character
             if (response.isSuccessful) {
                 val episode = response.body()
                 if (episode != null) {
-                    episodeDao.insertEpisode(episode)
                     Result.success(episode)
                 } else {
                     Result.failure(Exception("Episode not found"))
@@ -36,17 +37,8 @@ class RickAndMortyRepository(private val apiRick: ApiRick, private val character
             } else {
                 Result.failure(Exception("Error fetching episode details"))
             }
-        } catch (e: Exception) {
-            val episodeCode = episodeUrl.split("/").last()
-            val localEpisode = episodeDao.getEpisodeByCode(episodeCode)
-            if (localEpisode != null) {
-                Result.success(localEpisode)
-            } else {
-                Result.failure(e)
-            }
+        } catch (e: IOException) {
+            Result.failure(e)
         }
-    }
-    suspend fun getEpisodeFromDb(episodeCode: String): Episode? {
-        return episodeDao.getEpisodeByCode(episodeCode)
     }
 }

@@ -21,10 +21,9 @@ data class Ubication(
     val url: String
 ) : Serializable
 
-@Entity(tableName = "episodes")
 data class Episode(
     val air_date: String,
-    @PrimaryKey val episode: String,
+    val episode: String,
 ) : Serializable
 
 data class CharacterResponse(

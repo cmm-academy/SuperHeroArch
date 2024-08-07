@@ -26,9 +26,8 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
 
         val database = AppDatabase.getDatabase(this)
         val characterDao = database.characterDao()
-        val episodeDao = database.episodeDao()
         val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
-        val repository = RickAndMortyRepository(apiRick, characterDao, episodeDao)
+        val repository = RickAndMortyRepository(apiRick, characterDao)
         viewModel = MainViewModel(this, repository)
 
         viewModel.onCreate()

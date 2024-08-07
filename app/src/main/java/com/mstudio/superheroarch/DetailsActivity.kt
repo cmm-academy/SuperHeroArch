@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso
 
 class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
 
-    private lateinit var viewModel: DetailsViewModel
+    private var viewModel: DetailsViewModel? = null
 
     private var characterNameTextView: TextView? = null
     private var characterStatusTextView: TextView? = null
@@ -26,8 +26,7 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
 
         val db = AppDatabase.getDatabase(this)
         val characterDao = db.characterDao()
-        val episodeDao = db.episodeDao()
-        val repository = RickAndMortyRepository(ApiService.retrofit.create(ApiRick::class.java), characterDao, episodeDao)
+        val repository = RickAndMortyRepository(ApiService.retrofit.create(ApiRick::class.java), characterDao)
         viewModel = DetailsViewModel(this, repository)
 
         characterNameTextView = findViewById(R.id.character_name)
@@ -45,7 +44,7 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
 
         val character = intent.getSerializableExtra(MainActivity.EXTRA_CHARACTER) as? Character
         character?.let {
-            viewModel.fetchCharacterDetails(it)
+            viewModel?.fetchCharacterDetails(it)
         }
     }
 

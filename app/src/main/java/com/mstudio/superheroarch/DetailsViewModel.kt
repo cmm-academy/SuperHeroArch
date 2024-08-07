@@ -1,36 +1,32 @@
 package com.mstudio.superheroarch
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class DetailsViewModel(private val view: DetailsViewTranslator, private val repository: RickAndMortyRepository) : ViewModel() {
+class DetailsViewModel(
+    private val view: DetailsViewTranslator,
+    private val repository: RickAndMortyRepository
+) : ViewModel() {
 
     fun fetchCharacterDetails(character: Character) {
         view.displayCharacterDetails(character)
         character.episode.firstOrNull()?.let { episodeUrl ->
-            fetchFirstEpisodeDetails(episodeUrl)
+            viewModelScope.launch {
+                fetchFirstEpisodeDetails(episodeUrl)
+            }
         }
     }
 
-    private fun fetchFirstEpisodeDetails(episodeUrl: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val result = repository.fetchEpisodeDetails(episodeUrl)
-            withContext(Dispatchers.Main) {
-                result.onSuccess { episode ->
-                    view.displayFirstEpisodeDetails(episode)
-                }.onFailure {
-                    val episodeCode = episodeUrl.split("/").last()
-                    val cachedEpisode = repository.getEpisodeFromDb(episodeCode)
-                    if (cachedEpisode != null) {
-                        view.displayFirstEpisodeDetails(cachedEpisode)
-                    } else {
-                        view.showError("Error fetching episode details")
-                    }
-                }
-            }
+    private suspend fun fetchFirstEpisodeDetails(episodeUrl: String) {
+        try {
+            val episodeResult = repository.fetchEpisodeDetails(episodeUrl)
+            episodeResult.fold(
+                onSuccess = { view.displayFirstEpisodeDetails(it) },
+                onFailure = { view.showError("Failed to load episode details") }
+            )
+        } catch (e: Exception) {
+            view.showError("Failed to load episode details")
         }
     }
 }
