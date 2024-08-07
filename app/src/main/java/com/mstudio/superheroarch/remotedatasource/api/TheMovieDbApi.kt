@@ -15,3 +15,8 @@ interface TheMovieDbApi {
         @Path("episode") episode: Int
     ): Response<TheMovieDbEpisodeRemoteEntity>
 }
+
+object TheMovieDbApiHelper {
+    private const val TMDB_BASE_URL = "https://api.themoviedb.org/3/tv/60625/"
+    fun create(): TheMovieDbApi = RetrofitInstance.retrofit(TMDB_BASE_URL).create(TheMovieDbApi::class.java)
+}

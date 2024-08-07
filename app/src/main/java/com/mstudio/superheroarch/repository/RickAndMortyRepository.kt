@@ -1,20 +1,31 @@
 package com.mstudio.superheroarch.repository
 
-import com.mstudio.superheroarch.localdatasource.DataBaseInstance
+import android.content.Context
+import androidx.room.Room
+import com.mstudio.superheroarch.RickAndMortyApplication
+import com.mstudio.superheroarch.localdatasource.RickAndMortyDatabase
 import com.mstudio.superheroarch.localdatasource.model.CharacterLocalEntity
 import com.mstudio.superheroarch.localdatasource.model.toCharactersRemoteEntity
-import com.mstudio.superheroarch.remotedatasource.api.RetrofitInstance
 import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApi
 import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.EpisodeRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.toCharacterLocalEntity
 
-class RickAndMortyRepository {
+class RickAndMortyRepository(
+    val context: Context = RickAndMortyApplication.instance,
+    private val api: RickAndMortyApi
+) {
+
+    private fun database(context: Context) = Room.databaseBuilder(
+        context,
+        RickAndMortyDatabase::class.java,
+        "rickandmorty_database"
+    ).build()
 
     suspend fun getCharacters(): List<CharactersRemoteEntity>? {
         val charactersFromLocal = getCharactersFromLocal()
         if (charactersFromLocal.isEmpty()) {
-            val response = RetrofitInstance.retrofit().create(RickAndMortyApi::class.java).getCharacters()
+            val response = api.getCharacters()
             if (response.isSuccessful) {
                 val remoteResponse = response.body()?.characters ?: emptyList()
                 if (remoteResponse.isNotEmpty()) {
@@ -30,7 +41,7 @@ class RickAndMortyRepository {
     }
 
     suspend fun getSingleEpisode(id: Int): EpisodeRemoteEntity {
-        val response = RetrofitInstance.retrofit().create(RickAndMortyApi::class.java).getSingleEpisode(id)
+        val response = api.getSingleEpisode(id)
         if (response.isSuccessful) {
             response.body()?.let {
                 return it
@@ -40,10 +51,10 @@ class RickAndMortyRepository {
         }
     }
 
-    private fun getCharactersFromLocal(): List<CharacterLocalEntity> =
-        DataBaseInstance.database.characterDao().getCharacters()
+    private suspend fun getCharactersFromLocal(): List<CharacterLocalEntity> =
+        database(context).characterDao().getCharacters() ?: emptyList()
 
-    private fun saveCharacters(characters: List<CharacterLocalEntity>) {
-        DataBaseInstance.database.characterDao().insertCharacters(characters)
+    private suspend fun saveCharacters(characters: List<CharacterLocalEntity>) {
+        database(context).characterDao().insertCharacters(characters)
     }
 }

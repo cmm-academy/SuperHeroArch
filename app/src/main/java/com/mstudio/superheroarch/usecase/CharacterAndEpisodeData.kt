@@ -15,7 +15,6 @@ data class EpisodeData(
     val episode: String,
     val name: String,
     val airDate: String,
-    val episodeNumber: String,
     val image: String?,
     val voteAverage: Double?
 )
