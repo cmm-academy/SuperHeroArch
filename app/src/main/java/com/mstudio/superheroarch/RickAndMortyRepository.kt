@@ -20,7 +20,7 @@ class RickAndMortyRepository(private val apiRick: ApiRick, private val character
                     )
                 }
 
-                characterDao.insertAll(*characters.toTypedArray())
+                characterDao.insertAll(characters)
                 Result.success(characters)
             } else {
                 Result.failure(Exception("Error fetching characters"))
