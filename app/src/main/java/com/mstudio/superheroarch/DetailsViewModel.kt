@@ -21,10 +21,15 @@ class DetailsViewModel(
     private suspend fun fetchFirstEpisodeDetails(episodeUrl: String) {
         try {
             val episodeResult = repository.fetchEpisodeDetails(episodeUrl)
-            episodeResult.fold(
-                onSuccess = { view.displayFirstEpisodeDetails(it) },
-                onFailure = { view.showError("Failed to load episode details") }
-            )
+            if (episodeResult.isSuccess) {
+                episodeResult.getOrNull()?.let {
+                    view.displayFirstEpisodeDetails(it)
+                } ?: run {
+                    view.showError("Failed to load episode details")
+                }
+            } else {
+                view.showError("Failed to load episode details")
+            }
         } catch (e: Exception) {
             view.showError("Failed to load episode details")
         }
