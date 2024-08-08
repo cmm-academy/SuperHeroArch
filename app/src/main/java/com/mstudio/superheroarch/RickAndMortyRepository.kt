@@ -8,7 +8,18 @@ class RickAndMortyRepository(private val apiRick: ApiRick, private val character
         return try {
             val response = apiRick.getCharacter()
             if (response.isSuccessful) {
-                val characters = response.body()?.results ?: emptyList()
+                val charactersDto = response.body()?.results ?: emptyList()
+                val characters = charactersDto.map { dto ->
+                    Character(
+                        name = dto.name,
+                        status = dto.status,
+                        image = dto.image,
+                        originName = dto.origin?.name ?: "",
+                        locationName = dto.location?.name ?: "",
+                        firstEpisode = dto.episode.firstOrNull() ?: ""
+                    )
+                }
+
                 characterDao.insertAll(*characters.toTypedArray())
                 Result.success(characters)
             } else {

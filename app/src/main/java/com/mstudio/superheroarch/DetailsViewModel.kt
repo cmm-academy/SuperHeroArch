@@ -11,7 +11,7 @@ class DetailsViewModel(
 
     fun fetchCharacterDetails(character: Character) {
         view.displayCharacterDetails(character)
-        character.episode.firstOrNull()?.let { episodeUrl ->
+        character.firstEpisode.let { episodeUrl ->
             viewModelScope.launch {
                 fetchFirstEpisodeDetails(episodeUrl)
             }

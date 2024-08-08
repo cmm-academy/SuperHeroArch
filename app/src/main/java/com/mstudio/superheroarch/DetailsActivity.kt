@@ -51,8 +51,8 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
     override fun displayCharacterDetails(character: Character) {
         characterNameTextView?.text = character.name
         characterStatusTextView?.text = character.status
-        characterLocationTextView?.text = character.location.name
-        characterOriginTextView?.text = character.origin.name
+        characterLocationTextView?.text = character.locationName
+        characterOriginTextView?.text = character.originName
         Picasso.get().load(character.image).placeholder(R.drawable.placeholder)
             .error(R.drawable.error)
             .into(characterImageView)

@@ -3,11 +3,9 @@ package com.mstudio.superheroarch
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import android.content.Context
 
-@Database(entities = [Character::class], version = 1)
-@TypeConverters(UbicationConverter::class, StringListConverter::class)
+@Database(entities = [Character::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun characterDao(): CharacterDao
     companion object {
@@ -20,7 +18,8 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
-                ).build()
+                ).fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

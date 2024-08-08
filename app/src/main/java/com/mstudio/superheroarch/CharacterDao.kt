@@ -12,7 +12,4 @@ interface CharacterDao {
 
     @Query("SELECT * FROM characters")
     suspend fun getAllCharacters(): List<Character>
-
-    @Query("SELECT * FROM characters WHERE name = :name")
-    suspend fun getCharacterByName(name: String): Character?
 }
