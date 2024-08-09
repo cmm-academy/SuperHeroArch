@@ -18,7 +18,6 @@ data class Character(
 
 data class Ubication(
     val name: String,
-    val url: String
 ) : Serializable
 
 data class Episode(
