@@ -4,9 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity(tableName = "characters")
+@Entity("characters")
 data class Character(
-    @PrimaryKey val name: String,
+    @PrimaryKey val id: Int,
+    val name: String,
     val status: String,
     val image: String,
     val originName: String,
@@ -14,6 +15,7 @@ data class Character(
     val firstEpisode: String
 ) : Serializable {
     constructor(
+        id: Int,
         name: String,
         status: String,
         image: String,
@@ -21,6 +23,7 @@ data class Character(
         location: Ubication,
         episode: List<String>
     ) : this(
+        id,
         name,
         status,
         image,

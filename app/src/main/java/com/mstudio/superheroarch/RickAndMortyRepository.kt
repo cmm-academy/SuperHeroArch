@@ -15,6 +15,7 @@ class RickAndMortyRepository(private val apiRick: ApiRick, private val character
                     val charactersDto = response.body()?.results ?: emptyList()
                     val characters = charactersDto.map { dto ->
                         Character(
+                            id= dto.id,
                             name = dto.name,
                             status = dto.status,
                             image = dto.image,

@@ -45,7 +45,8 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     implementation(libs.androidx.recyclerview)
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4")
+    implementation (libs.lifecycle.viewmodel)
+
     kapt(libs.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
