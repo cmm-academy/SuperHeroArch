@@ -1,23 +1,54 @@
 package com.mstudio.superheroarch
 
+import java.io.IOException
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class RickAndMortyRepository(private val apiRick: ApiRick) {
+class RickAndMortyRepository(private val apiRick: ApiRick, private val characterDao: CharacterDao) {
 
     suspend fun fetchCharacters(): Result<List<Character>> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiRick.getCharacter()
                 if (response.isSuccessful) {
-                    val characters = response.body()?.results ?: emptyList()
+                    val charactersDto = response.body()?.results ?: emptyList()
+                    val characters = charactersDto.map { dto ->
+                        val originName = dto.origin?.name ?: ""
+                        val locationName = dto.location?.name ?: ""
+                        val firstEpisode = dto.episode.firstOrNull() ?: ""
+
+                        Character(
+                            id = dto.id,
+                            name = dto.name,
+                            status = dto.status,
+                            image = dto.image,
+                            originName = originName,
+                            locationName = locationName,
+                            firstEpisode = firstEpisode
+                        )
+                    }
+
+                    characterDao.insertAll(characters)
+
                     Result.success(characters)
                 } else {
-                    Result.failure(Exception("Error fetching characters"))
+                    Log.e("RickAndMortyRepository", "Error fetching characters: ${response.message()}")
+                    fetchCharactersFromLocal()
                 }
             } catch (e: Exception) {
-                Result.failure(e)
+                Log.e("RickAndMortyRepository", "Exception fetching characters", e)
+                fetchCharactersFromLocal(e)
             }
+        }
+    }
+
+    private suspend fun fetchCharactersFromLocal(exception: Exception? = null): Result<List<Character>> {
+        val localCharacters = characterDao.getAllCharacters()
+        return if (localCharacters.isNotEmpty()) {
+            Result.success(localCharacters)
+        } else {
+            Result.failure(exception ?: Exception("No characters found in local database"))
         }
     }
 
@@ -35,7 +66,7 @@ class RickAndMortyRepository(private val apiRick: ApiRick) {
                 } else {
                     Result.failure(Exception("Error fetching episode details"))
                 }
-            } catch (e: Exception) {
+            } catch (e: IOException) {
                 Result.failure(e)
             }
         }

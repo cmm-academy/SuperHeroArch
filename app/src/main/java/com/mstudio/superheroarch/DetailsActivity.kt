@@ -10,6 +10,8 @@ import com.squareup.picasso.Picasso
 
 class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
 
+    private var viewModel: DetailsViewModel? = null
+
     private var characterNameTextView: TextView? = null
     private var characterStatusTextView: TextView? = null
     private var characterImageView: ImageView? = null
@@ -18,14 +20,13 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
     private var firstEpisodeTextView: TextView? = null
     private var firstEpisodeDateTextView: TextView? = null
 
-    private var viewModel: DetailsViewModel? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.details_screen)
 
-        val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
-        val repository = RickAndMortyRepository(apiRick)
+        val db = AppDatabase.getDatabase(this)
+        val characterDao = db.characterDao()
+        val repository = RickAndMortyRepository(ApiService.retrofit.create(ApiRick::class.java), characterDao)
         viewModel = DetailsViewModel(this, repository)
 
         characterNameTextView = findViewById(R.id.character_name)
@@ -50,8 +51,8 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
     override fun displayCharacterDetails(character: Character) {
         characterNameTextView?.text = character.name
         characterStatusTextView?.text = character.status
-        characterLocationTextView?.text = character.location.name
-        characterOriginTextView?.text = character.origin.name
+        characterLocationTextView?.text = character.locationName
+        characterOriginTextView?.text = character.originName
         Picasso.get().load(character.image).placeholder(R.drawable.placeholder)
             .error(R.drawable.error)
             .into(characterImageView)
