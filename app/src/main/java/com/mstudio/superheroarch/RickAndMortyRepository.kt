@@ -14,14 +14,18 @@ class RickAndMortyRepository(private val apiRick: ApiRick, private val character
                 if (response.isSuccessful) {
                     val charactersDto = response.body()?.results ?: emptyList()
                     val characters = charactersDto.map { dto ->
+                        val originName = dto.origin?.name ?: ""
+                        val locationName = dto.location?.name ?: ""
+                        val firstEpisode = dto.episode.firstOrNull() ?: ""
+
                         Character(
-                            id= dto.id,
+                            id = dto.id,
                             name = dto.name,
                             status = dto.status,
                             image = dto.image,
-                            originName = dto.origin?.name ?: "",
-                            locationName = dto.location?.name ?: "",
-                            firstEpisode = dto.episode.firstOrNull() ?: ""
+                            originName = originName,
+                            locationName = locationName,
+                            firstEpisode = firstEpisode
                         )
                     }
 

@@ -13,25 +13,8 @@ data class Character(
     val originName: String,
     val locationName: String,
     val firstEpisode: String
-) : Serializable {
-    constructor(
-        id: Int,
-        name: String,
-        status: String,
-        image: String,
-        origin: Ubication,
-        location: Ubication,
-        episode: List<String>
-    ) : this(
-        id,
-        name,
-        status,
-        image,
-        origin.name,
-        location.name,
-        episode.firstOrNull() ?: ""
-    )
-}
+) : Serializable
+
 
 data class Ubication(
     val name: String,
