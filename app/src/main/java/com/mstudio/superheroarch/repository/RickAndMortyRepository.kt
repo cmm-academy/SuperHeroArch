@@ -3,24 +3,20 @@ package com.mstudio.superheroarch.repository
 import android.content.Context
 import androidx.room.Room
 import com.mstudio.superheroarch.RickAndMortyApplication
+import com.mstudio.superheroarch.localdatasource.DatabaseHelper
 import com.mstudio.superheroarch.localdatasource.RickAndMortyDatabase
 import com.mstudio.superheroarch.localdatasource.model.CharacterLocalEntity
 import com.mstudio.superheroarch.localdatasource.model.toCharactersRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApi
+import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApiHelper
 import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.EpisodeRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.toCharacterLocalEntity
 
 class RickAndMortyRepository(
-    val context: Context = RickAndMortyApplication.instance,
+    private val database: RickAndMortyDatabase,
     private val api: RickAndMortyApi
 ) {
-
-    private fun database(context: Context) = Room.databaseBuilder(
-        context,
-        RickAndMortyDatabase::class.java,
-        "rickandmorty_database"
-    ).build()
 
     suspend fun getCharacters(): List<CharactersRemoteEntity>? {
         val charactersFromLocal = getCharactersFromLocal()
@@ -52,9 +48,9 @@ class RickAndMortyRepository(
     }
 
     private suspend fun getCharactersFromLocal(): List<CharacterLocalEntity> =
-        database(context).characterDao().getCharacters() ?: emptyList()
+        database.characterDao().getCharacters() ?: emptyList()
 
     private suspend fun saveCharacters(characters: List<CharacterLocalEntity>) {
-        database(context).characterDao().insertCharacters(characters)
+        database.characterDao().insertCharacters(characters)
     }
 }

@@ -3,20 +3,17 @@ package com.mstudio.superheroarch.presentation.overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mstudio.superheroarch.presentation.model.CharacterData
-import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApiHelper
-import com.mstudio.superheroarch.remotedatasource.model.toCharacterData
-import com.mstudio.superheroarch.repository.RickAndMortyRepository
+import com.mstudio.superheroarch.usecase.GetAllCharactersUseCase
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val view: MainViewTranslator,
-    private val repository: RickAndMortyRepository = RickAndMortyRepository(api = RickAndMortyApiHelper.create()),
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : ViewModel(){
+    private val useCase: GetAllCharactersUseCase,
+    private val dispatcher: CoroutineDispatcher
+) : ViewModel() {
 
     private var allCharacters = listOf<CharacterData>()
 
@@ -27,10 +24,10 @@ class MainViewModel(
     private fun getCharacters() {
         viewModelScope.launch(dispatcher) {
             try {
-                val result = repository.getCharacters()
+                val result = useCase.getAllCharacters()
                 withContext(Dispatchers.Main) {
                     val characters = result ?: emptyList()
-                    allCharacters = characters.map { it.toCharacterData() }
+                    allCharacters = characters
                     if (characters.isNotEmpty()) {
                         view.showCharacters(allCharacters)
                     } else {

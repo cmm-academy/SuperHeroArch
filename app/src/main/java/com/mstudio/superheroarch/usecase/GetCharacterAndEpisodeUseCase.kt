@@ -2,8 +2,6 @@ package com.mstudio.superheroarch.usecase
 
 import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.presentation.model.toCharacterAndEpisode
-import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApiHelper
-import com.mstudio.superheroarch.remotedatasource.api.TheMovieDbApiHelper
 import com.mstudio.superheroarch.remotedatasource.model.TheMovieDbEpisodeRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.toEpisode
 import com.mstudio.superheroarch.remotedatasource.model.toTheMovieDbEpisode
@@ -11,8 +9,8 @@ import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.repository.TheMovieDbRepository
 
 class GetCharacterAndEpisodeUseCase(
-    private val rickAndMortyRepository: RickAndMortyRepository = RickAndMortyRepository(api = RickAndMortyApiHelper.create()),
-    private val theMovieDbRepository: TheMovieDbRepository = TheMovieDbRepository(TheMovieDbApiHelper.create())
+    private val rickAndMortyRepository: RickAndMortyRepository,
+    private val theMovieDbRepository: TheMovieDbRepository
 ) {
 
     companion object {

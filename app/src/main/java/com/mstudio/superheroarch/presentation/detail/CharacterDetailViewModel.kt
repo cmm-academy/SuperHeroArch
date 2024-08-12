@@ -13,8 +13,8 @@ import kotlinx.coroutines.withContext
 
 class CharacterDetailViewModel(
     private val view: CharacterDetailViewTranslator,
-    private val useCase: GetCharacterAndEpisodeUseCase = GetCharacterAndEpisodeUseCase(),
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val useCase: GetCharacterAndEpisodeUseCase,
+    private val dispatcher: CoroutineDispatcher,
     private val networkManager: NetworkManagerImpl = NetworkManagerImpl()
 ) : ViewModel() {
 

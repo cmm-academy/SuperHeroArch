@@ -5,7 +5,7 @@ import com.mstudio.superheroarch.presentation.overview.MainViewModel
 import com.mstudio.superheroarch.presentation.overview.MainViewTranslator
 import com.mstudio.superheroarch.presentation.overview.StatusFilters
 import com.mstudio.superheroarch.remotedatasource.model.toCharacterData
-import com.mstudio.superheroarch.repository.RickAndMortyRepository
+import com.mstudio.superheroarch.usecase.GetAllCharactersUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -22,29 +22,29 @@ class MainViewModelTest {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var view: MainViewTranslator
-    private lateinit var repository: RickAndMortyRepository
+    private lateinit var useCase: GetAllCharactersUseCase
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun before() {
         Dispatchers.setMain(testDispatcher)
+        useCase = mock()
         view = mock()
-        repository = mock()
-        viewModel = MainViewModel(view, repository, testDispatcher)
+        viewModel = MainViewModel(view, useCase, testDispatcher)
     }
 
     @Test
     fun `given main screen, when retrieve all the characters, then show all the characters`() = runTest {
-        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity())
-        `when`(repository.getCharacters()).thenReturn(expectedCharacters)
+        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData())
+        `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
         viewModel.onCreate()
 
-        verify(view).showCharacters(expectedCharacters.map { it.toCharacterData() })
+        verify(view).showCharacters(expectedCharacters)
     }
 
-    @Test
+    @Test()
     fun `given main screen, when retrieving all characters the call return empty list, then show empty error`() = runTest {
-        `when`(repository.getCharacters()).thenReturn(emptyList())
+        `when`(useCase.getAllCharacters()).thenReturn(emptyList())
         viewModel.onCreate()
 
         verify(view).showEmptyCharactersError()
@@ -52,7 +52,7 @@ class MainViewModelTest {
 
     @Test(expected = Exception::class)
     fun `given main screen, when retrieving all character the call fails, then show generic error`() = runTest {
-        `when`(repository.getCharacters()).thenThrow(Exception())
+        `when`(useCase.getAllCharacters()).thenThrow(Exception())
         viewModel.onCreate()
 
         verify(view).showGenericError()
@@ -60,18 +60,18 @@ class MainViewModelTest {
 
     @Test
     fun `given main screen, when user clicks on dead filter, then show all dead characters only`() = runTest {
-        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity())
-        `when`(repository.getCharacters()).thenReturn(expectedCharacters)
+        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData())
+        `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
         viewModel.onFilterButtonClicked(StatusFilters.DEAD)
 
-        verify(view).showCharacters(expectedCharacters.filter { it.status == StatusFilters.DEAD.status }.map { it.toCharacterData() })
+        verify(view).showCharacters(expectedCharacters.filter { it.status == StatusFilters.DEAD.status })
     }
 
     @Test
     fun `given main screen, when user clicks on a character, then navigate to detail screen`() = runTest {
-        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity())
-        val characterSelected = expectedCharacters.first().toCharacterData()
-        `when`(repository.getCharacters()).thenReturn(expectedCharacters)
+        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData())
+        val characterSelected = expectedCharacters.first()
+        `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
         viewModel.onCharacterClicked(characterSelected)
 
         verify(view).goToDetailScreen(characterSelected)

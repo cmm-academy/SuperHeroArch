@@ -8,13 +8,31 @@ import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.databinding.CharacterDetailActivityBinding
+import com.mstudio.superheroarch.localdatasource.DatabaseHelper
 import com.mstudio.superheroarch.presentation.model.CharacterData
+import com.mstudio.superheroarch.presentation.network.NetworkManagerImpl
 import com.mstudio.superheroarch.presentation.overview.MainActivity.Companion.CHARACTER_DATA_KEY
+import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApiHelper
+import com.mstudio.superheroarch.remotedatasource.api.TheMovieDbApiHelper
+import com.mstudio.superheroarch.repository.RickAndMortyRepository
+import com.mstudio.superheroarch.repository.TheMovieDbRepository
 import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
+import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
+import kotlinx.coroutines.Dispatchers
 
 class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslator {
     private lateinit var binding: CharacterDetailActivityBinding
-    private val viewModel: CharacterDetailViewModel by lazy { CharacterDetailViewModel(this) }
+    private val viewModel: CharacterDetailViewModel by lazy {
+        CharacterDetailViewModel(
+            this,
+            GetCharacterAndEpisodeUseCase(
+                RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create()),
+                TheMovieDbRepository(TheMovieDbApiHelper.create())
+            ),
+            Dispatchers.IO,
+            NetworkManagerImpl()
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

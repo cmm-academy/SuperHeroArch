@@ -13,16 +13,11 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.verify
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
 @ExperimentalCoroutinesApi
-@Config(manifest = Config.NONE)
-@RunWith(RobolectricTestRunner::class)
 class CharacterDetailViewModelTest {
 
     private lateinit var viewModel: CharacterDetailViewModel

@@ -1,6 +1,5 @@
 package com.mstudio.superheroarch.repository
 
-import androidx.test.core.app.ApplicationProvider
 import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
 import com.mstudio.superheroarch.localdatasource.RickAndMortyDatabase
 import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApi
@@ -10,10 +9,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import retrofit2.Response
@@ -30,7 +27,8 @@ class RickAndMortyRepositoryTest {
     fun before() {
         rickAndMortyDatabase = mock()
         rickAndMortyApiMock = mock()
-        rickAndMortyRepository = RickAndMortyRepository(ApplicationProvider.getApplicationContext(), rickAndMortyApiMock)
+        `when`(rickAndMortyDatabase.characterDao()).thenReturn(mock())
+        rickAndMortyRepository = RickAndMortyRepository(rickAndMortyDatabase, rickAndMortyApiMock)
     }
 
     @Test
