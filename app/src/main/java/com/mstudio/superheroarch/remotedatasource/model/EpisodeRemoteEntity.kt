@@ -1,7 +1,7 @@
 package com.mstudio.superheroarch.remotedatasource.model
 
 import com.google.gson.annotations.SerializedName
-import com.mstudio.superheroarch.presentation.model.Episode
+import com.mstudio.superheroarch.repository.model.EpisodeEntity
 
 data class EpisodeRemoteEntity(
     @SerializedName("name") val name: String,
@@ -9,8 +9,8 @@ data class EpisodeRemoteEntity(
     @SerializedName("episode") val episode: String
 )
 
-fun EpisodeRemoteEntity.toEpisode(): Episode =
-    Episode(
+fun EpisodeRemoteEntity.toEpisodeEntity(): EpisodeEntity =
+    EpisodeEntity(
         name = name,
         airDate = airDate,
         episode = episode

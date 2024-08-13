@@ -1,9 +1,10 @@
 package com.mstudio.superheroarch.usecase
 
 import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
-import com.mstudio.superheroarch.remotedatasource.model.toCharacterData
+import com.mstudio.superheroarch.remotedatasource.model.toTheMovieDbEntity
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.repository.TheMovieDbRepository
+import com.mstudio.superheroarch.repository.model.toCharacterData
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -18,7 +19,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class GetCharacterAndEpisodeUseCaseTest {
 
     private lateinit var usecase: GetCharacterAndEpisodeUseCase
-    private var characterData = RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData()
+    private var characterData = RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData()
     private lateinit var rickAndMortyRepository: RickAndMortyRepository
     private lateinit var theMovieDbRepository: TheMovieDbRepository
 
@@ -32,8 +33,8 @@ class GetCharacterAndEpisodeUseCaseTest {
     @Test
     fun `given character detail, when screen is visited, then return the complete data`() = runTest {
         val expectedResult = RickAndMortyRepositoryInstruments.givenCharacterCompleteDetailData()
-        val episodeDetails = RickAndMortyRepositoryInstruments.givenAnEpisodeRemoteEntity()
-        val episodeExtraData = RickAndMortyRepositoryInstruments.givenAnEpisodeExtraData()
+        val episodeDetails = RickAndMortyRepositoryInstruments.givenAnEpisodeEntity()
+        val episodeExtraData = RickAndMortyRepositoryInstruments.givenAnEpisodeExtraDataRemoteEntity().toTheMovieDbEntity()
 
         `when`(rickAndMortyRepository.getSingleEpisode(1)).thenReturn(episodeDetails)
         `when`(theMovieDbRepository.getRickAndMortyEpisodeDetails(1, 1)).thenReturn(episodeExtraData)
@@ -53,7 +54,7 @@ class GetCharacterAndEpisodeUseCaseTest {
     @Test
     fun `given character detail, when episode extra data api call fails, then return everything but episode image and vote average`() = runTest {
         val expectedResult = RickAndMortyRepositoryInstruments.givenCharacterCompleteDetailData(null, null)
-        val episodeDetails = RickAndMortyRepositoryInstruments.givenAnEpisodeRemoteEntity()
+        val episodeDetails = RickAndMortyRepositoryInstruments.givenAnEpisodeEntity()
 
         `when`(rickAndMortyRepository.getSingleEpisode(1)).thenReturn(episodeDetails)
         `when`(theMovieDbRepository.getRickAndMortyEpisodeDetails(1, 1)).thenReturn(null)

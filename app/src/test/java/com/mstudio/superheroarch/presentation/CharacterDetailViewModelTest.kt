@@ -4,7 +4,7 @@ import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
 import com.mstudio.superheroarch.presentation.detail.CharacterDetailViewModel
 import com.mstudio.superheroarch.presentation.detail.CharacterDetailViewTranslator
 import com.mstudio.superheroarch.presentation.network.NetworkManagerImpl
-import com.mstudio.superheroarch.remotedatasource.model.toCharacterData
+import com.mstudio.superheroarch.repository.model.toCharacterData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -39,45 +39,48 @@ class CharacterDetailViewModelTest {
 
     @Test
     fun `given a character detail screen, when screen is visited, show all the character info`() = runTest {
+        val characterData = RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData()
 
         `when`(
             useCase.getCharacterAndEpisode(
-                RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData()
+                characterData
             )
         ).thenReturn(RickAndMortyRepositoryInstruments.givenCharacterCompleteDetailData())
-        viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData())
+        viewModel.onCharacterReceived(characterData)
 
         verify(view).showEpisode(RickAndMortyRepositoryInstruments.givenCharacterCompleteDetailData())
-        verify(view).showEpisodeExtraData("image", 7.0)
+        verify(view).showEpisodeExtraData("https://image.tmdb.org/t/p/w500image", 7.0)
     }
 
     @Test
     fun `given a character detail screen, when screen is visited and episode extra data call fails, then the episode extra data error is shown`() = runTest {
+        val characterData = RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData()
         `when`(
             useCase.getCharacterAndEpisode(
-                RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData()
+                characterData
             )
         ).thenReturn(RickAndMortyRepositoryInstruments.givenCharacterCompleteDetailData(null, null))
-        viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData())
+        viewModel.onCharacterReceived(characterData)
         verify(view).showEpisode(RickAndMortyRepositoryInstruments.givenCharacterCompleteDetailData(null, null))
         verify(view).showEpisodeExtraDataError()
     }
 
     @Test
     fun `given a character detail screen, when screen is visited and episode call fails, then the episode generic error is shown`() = runTest {
+        val characterData = RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData()
         `when`(
             useCase.getCharacterAndEpisode(
-                RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData()
+                characterData
             )
         ).thenReturn(null)
-        viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData())
+        viewModel.onCharacterReceived(characterData)
         verify(view).showEpisodeError()
     }
 
     @Test
     fun `given a character detail screen, when screen is visited and there is no internet connection, then the no internet connection error is shown`() = runTest {
         `when`(networkManager.hasInternetConnection()).thenReturn(false)
-        viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData())
+        viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
         verify(view).showNoInternetConnection()
     }
 }

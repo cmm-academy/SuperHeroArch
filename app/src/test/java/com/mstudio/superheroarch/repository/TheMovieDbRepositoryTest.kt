@@ -3,6 +3,7 @@ package com.mstudio.superheroarch.repository
 import com.mstudio.superheroarch.BuildConfig
 import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
 import com.mstudio.superheroarch.remotedatasource.api.TheMovieDbApi
+import com.mstudio.superheroarch.remotedatasource.model.toTheMovieDbEntity
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -29,10 +30,10 @@ class TheMovieDbRepositoryTest {
 
     @Test
     fun `given themoviedb repository, when retrieve episode extra data, then return extra data`() = runTest {
-        val expectedResult = RickAndMortyRepositoryInstruments.givenAnEpisodeExtraData()
+        val expectedResult = RickAndMortyRepositoryInstruments.givenAnEpisodeExtraDataRemoteEntity()
         `when`(theMovieDbApiMock.getRickAndMortyEpisodeDetails("Bearer ${BuildConfig.TMDB_API_KEY}", 1, 1)).thenReturn(Response.success(expectedResult))
         val result = theMovieDbRepository.getRickAndMortyEpisodeDetails(1, 1)
-        assertEquals(expectedResult.copy("https://image.tmdb.org/t/p/w500image"), result)
+        assertEquals(expectedResult.toTheMovieDbEntity(), result)
     }
 
     @Test(expected = Exception::class)

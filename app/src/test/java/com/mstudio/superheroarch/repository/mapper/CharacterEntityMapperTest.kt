@@ -1,16 +1,16 @@
-package com.mstudio.superheroarch.localdatasource.mapper
+package com.mstudio.superheroarch.repository.mapper
 
 import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
-import com.mstudio.superheroarch.localdatasource.model.toCharactersEntity
+import com.mstudio.superheroarch.repository.model.toCharacterData
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class CharacterLocalEntityMapperTest {
+class CharacterEntityMapperTest {
 
     @Test
-    fun `given a character local entity, when mapped to character entity, the has correct values`() {
-        val expected = RickAndMortyRepositoryInstruments.givenACharacterLocalEntity()
-        val actual = expected.toCharactersEntity()
+    fun `given a character entity, when mapped to character data, then has the correct values`() {
+        val expected = RickAndMortyRepositoryInstruments.givenACharacterEntity()
+        val actual = expected.toCharacterData()
 
         assertEquals(expected.id, actual.id)
         assertEquals(expected.name, actual.name)
@@ -18,7 +18,7 @@ class CharacterLocalEntityMapperTest {
         assertEquals(expected.species, actual.species)
         assertEquals(expected.origin, actual.origin)
         assertEquals(expected.location, actual.location)
-        assertEquals(expected.episode, actual.episode.first())
+        assertEquals(expected.episode.first().split("/").last(), actual.firstEpisode)
         assertEquals(expected.image, actual.image)
     }
 }

@@ -4,6 +4,8 @@ import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
 import com.mstudio.superheroarch.localdatasource.RickAndMortyDatabase
 import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApi
 import com.mstudio.superheroarch.remotedatasource.model.RickAndMortyRemoteEntity
+import com.mstudio.superheroarch.remotedatasource.model.toCharacterEntity
+import com.mstudio.superheroarch.remotedatasource.model.toEpisodeEntity
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -36,7 +38,7 @@ class RickAndMortyRepositoryTest {
         val characters = listOf(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity())
         `when`(rickAndMortyApiMock.getCharacters()).thenReturn(Response.success(RickAndMortyRemoteEntity(characters)))
         val result = rickAndMortyRepository.getCharacters()
-        assertEquals(characters, result)
+        assertEquals(characters.map { it.toCharacterEntity() }, result)
     }
 
     @Test
@@ -44,7 +46,7 @@ class RickAndMortyRepositoryTest {
         val episode = RickAndMortyRepositoryInstruments.givenAnEpisodeRemoteEntity()
         `when`(rickAndMortyApiMock.getSingleEpisode(1)).thenReturn(Response.success(episode))
         val result = rickAndMortyRepository.getSingleEpisode(1)
-        assertEquals(episode, result)
+        assertEquals(episode.toEpisodeEntity(), result)
     }
 
     @Test(expected = Exception::class)

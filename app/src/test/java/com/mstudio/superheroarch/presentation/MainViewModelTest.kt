@@ -4,7 +4,7 @@ import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
 import com.mstudio.superheroarch.presentation.overview.MainViewModel
 import com.mstudio.superheroarch.presentation.overview.MainViewTranslator
 import com.mstudio.superheroarch.presentation.overview.StatusFilters
-import com.mstudio.superheroarch.remotedatasource.model.toCharacterData
+import com.mstudio.superheroarch.repository.model.toCharacterData
 import com.mstudio.superheroarch.usecase.GetAllCharactersUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,7 +35,7 @@ class MainViewModelTest {
 
     @Test
     fun `given main screen, when retrieve all the characters, then show all the characters`() = runTest {
-        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData())
+        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
         `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
         viewModel.onCreate()
 
@@ -60,7 +60,7 @@ class MainViewModelTest {
 
     @Test
     fun `given main screen, when user clicks on dead filter, then show all dead characters only`() = runTest {
-        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData())
+        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
         `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
         viewModel.onFilterButtonClicked(StatusFilters.DEAD)
 
@@ -69,7 +69,7 @@ class MainViewModelTest {
 
     @Test
     fun `given main screen, when user clicks on a character, then navigate to detail screen`() = runTest {
-        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterRemoteEntity().toCharacterData())
+        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
         val characterSelected = expectedCharacters.first()
         `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
         viewModel.onCharacterClicked(characterSelected)
