@@ -1,16 +1,17 @@
 package com.mstudio.superheroarch
 
-import java.io.IOException
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.IOException
 
-class RickAndMortyRepository(private val apiRick: ApiRick, private val characterDao: CharacterDao) {
+class RickAndMortyRepository(private val remoteDataSource: CharacterRemoteDataSource, private val localDataSource: CharacterLocalDataSource
+) {
 
     suspend fun fetchCharacters(): Result<List<Character>> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiRick.getCharacter()
+                val response = remoteDataSource.getCharacters()
                 if (response.isSuccessful) {
                     val charactersDto = response.body()?.results ?: emptyList()
                     val characters = charactersDto.map { dto ->
@@ -29,8 +30,7 @@ class RickAndMortyRepository(private val apiRick: ApiRick, private val character
                         )
                     }
 
-                    characterDao.insertAll(characters)
-
+                    localDataSource.insertAll(characters)
                     Result.success(characters)
                 } else {
                     Log.e("RickAndMortyRepository", "Error fetching characters: ${response.message()}")
@@ -44,7 +44,7 @@ class RickAndMortyRepository(private val apiRick: ApiRick, private val character
     }
 
     private suspend fun fetchCharactersFromLocal(exception: Exception? = null): Result<List<Character>> {
-        val localCharacters = characterDao.getAllCharacters()
+        val localCharacters = localDataSource.getAllCharacters()
         return if (localCharacters.isNotEmpty()) {
             Result.success(localCharacters)
         } else {
@@ -55,7 +55,7 @@ class RickAndMortyRepository(private val apiRick: ApiRick, private val character
     suspend fun fetchEpisodeDetails(episodeUrl: String): Result<Episode> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiRick.getEpisode(episodeUrl)
+                val response = remoteDataSource.getEpisode(episodeUrl)
                 if (response.isSuccessful) {
                     val episode = response.body()
                     if (episode != null) {

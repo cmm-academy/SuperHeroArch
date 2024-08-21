@@ -26,7 +26,10 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
 
         val db = AppDatabase.getDatabase(this)
         val characterDao = db.characterDao()
-        val repository = RickAndMortyRepository(ApiService.retrofit.create(ApiRick::class.java), characterDao)
+        val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
+        val remoteDataSource = RemoteDataSourceImpl(apiRick)
+        val localDataSource = LocalDataSourceImpl(AppDatabase.getDatabase(this).characterDao())
+        val repository = RickAndMortyRepository(remoteDataSource, localDataSource)
         viewModel = DetailsViewModel(this, repository)
 
         characterNameTextView = findViewById(R.id.character_name)
