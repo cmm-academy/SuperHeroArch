@@ -6,8 +6,13 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.databinding.MainActivityBinding
+import com.mstudio.superheroarch.localdatasource.DatabaseHelper
 import com.mstudio.superheroarch.presentation.detail.CharacterDetailActivity
 import com.mstudio.superheroarch.presentation.model.CharacterData
+import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApiHelper
+import com.mstudio.superheroarch.repository.RickAndMortyRepository
+import com.mstudio.superheroarch.usecase.GetAllCharactersUseCase
+import kotlinx.coroutines.Dispatchers
 
 class MainActivity : AppCompatActivity(), MainViewTranslator {
 
@@ -16,7 +21,13 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
     }
 
     private lateinit var binding: MainActivityBinding
-    private val viewModel: MainViewModel by lazy { MainViewModel(this) }
+    private val viewModel: MainViewModel by lazy {
+        MainViewModel(
+            this,
+            GetAllCharactersUseCase(RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create())),
+            Dispatchers.IO
+        )
+    }
     private val adapter = CharactersAdapter {
         viewModel.onCharacterClicked(it)
     }

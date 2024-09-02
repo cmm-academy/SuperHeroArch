@@ -3,11 +3,12 @@ package com.mstudio.superheroarch.localdatasource
 import androidx.room.Room
 import com.mstudio.superheroarch.RickAndMortyApplication
 
-object DataBaseInstance {
+object DatabaseHelper {
 
-    val database = Room.databaseBuilder(
+    fun create(): RickAndMortyDatabase = Room.databaseBuilder(
         RickAndMortyApplication.instance,
         RickAndMortyDatabase::class.java,
         "rickandmorty_database"
     ).build()
+
 }

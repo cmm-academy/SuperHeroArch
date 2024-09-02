@@ -18,3 +18,7 @@ interface RickAndMortyApi {
     @GET("episode/{id}")
     suspend fun getSingleEpisode(@Path("id") id: Int): Response<EpisodeRemoteEntity>
 }
+
+object RickAndMortyApiHelper {
+    fun create(): RickAndMortyApi = RetrofitInstance.retrofit().create(RickAndMortyApi::class.java)
+}

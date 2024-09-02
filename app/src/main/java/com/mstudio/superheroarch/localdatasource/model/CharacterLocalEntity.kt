@@ -2,8 +2,7 @@ package com.mstudio.superheroarch.localdatasource.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.mstudio.superheroarch.remotedatasource.model.CharacterPlaceRemoteEntity
-import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
+import com.mstudio.superheroarch.repository.model.CharacterEntity
 
 @Entity
 data class CharacterLocalEntity(
@@ -17,14 +16,14 @@ data class CharacterLocalEntity(
     val episode: String
 )
 
-fun CharacterLocalEntity.toCharactersRemoteEntity(): CharactersRemoteEntity =
-    CharactersRemoteEntity(
+fun CharacterLocalEntity.toCharactersEntity(): CharacterEntity =
+    CharacterEntity(
         id = id,
         name = name,
         status = status,
         image = image,
         species = species,
-        origin = CharacterPlaceRemoteEntity(origin),
-        location = CharacterPlaceRemoteEntity(location),
+        origin = origin,
+        location = location,
         episode = episode.split(",")
     )

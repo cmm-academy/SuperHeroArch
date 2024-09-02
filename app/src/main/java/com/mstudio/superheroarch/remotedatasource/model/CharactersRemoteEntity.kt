@@ -1,8 +1,7 @@
 package com.mstudio.superheroarch.remotedatasource.model
 
 import com.google.gson.annotations.SerializedName
-import com.mstudio.superheroarch.localdatasource.model.CharacterLocalEntity
-import com.mstudio.superheroarch.presentation.model.CharacterData
+import com.mstudio.superheroarch.repository.model.CharacterEntity
 import java.io.Serializable
 
 
@@ -25,8 +24,8 @@ data class CharacterPlaceRemoteEntity(
     @SerializedName("name") val name: String
 ) : Serializable
 
-fun CharactersRemoteEntity.toCharacterLocalEntity(): CharacterLocalEntity =
-    CharacterLocalEntity(
+fun CharactersRemoteEntity.toCharacterEntity(): CharacterEntity =
+    CharacterEntity(
         id = id,
         name = name,
         status = status,
@@ -34,17 +33,5 @@ fun CharactersRemoteEntity.toCharacterLocalEntity(): CharacterLocalEntity =
         species = species,
         origin = origin.name,
         location = location.name,
-        episode = episode.joinToString()
-    )
-
-fun CharactersRemoteEntity.toCharacterData(): CharacterData =
-    CharacterData(
-        id = id,
-        name = name,
-        status = status,
-        image = image,
-        species = species,
-        origin = origin.name,
-        location = location.name,
-        firstEpisode = episode.first().split("/").last()
+        episode = episode
     )
