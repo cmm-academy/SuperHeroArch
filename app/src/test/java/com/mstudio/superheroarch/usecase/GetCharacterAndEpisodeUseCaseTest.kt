@@ -34,7 +34,7 @@ class GetCharacterAndEpisodeUseCaseTest {
     fun `given character detail, when screen is visited, then return the complete data`() = runTest {
         val expectedResult = RickAndMortyRepositoryInstruments.givenCharacterCompleteDetailData()
         val episodeDetails = RickAndMortyRepositoryInstruments.givenAnEpisodeEntity()
-        val episodeExtraData = RickAndMortyRepositoryInstruments.givenAnEpisodeExtraDataRemoteEntity().toTheMovieDbEntity()
+        val episodeExtraData = RickAndMortyRepositoryInstruments.givenAnEpisodeExtraDataEntity()
 
         `when`(rickAndMortyRepository.getSingleEpisode(1)).thenReturn(episodeDetails)
         `when`(theMovieDbRepository.getRickAndMortyEpisodeDetails(1, 1)).thenReturn(episodeExtraData)

@@ -49,7 +49,7 @@ class CharacterDetailViewModelTest {
         viewModel.onCharacterReceived(characterData)
 
         verify(view).showEpisode(RickAndMortyRepositoryInstruments.givenCharacterCompleteDetailData())
-        verify(view).showEpisodeExtraData("https://image.tmdb.org/t/p/w500image", 7.0)
+        verify(view).showEpisodeExtraData("imageUrl", 7.0)
     }
 
     @Test

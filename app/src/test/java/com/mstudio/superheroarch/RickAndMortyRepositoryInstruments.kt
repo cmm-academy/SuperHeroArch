@@ -72,11 +72,11 @@ object RickAndMortyRepositoryInstruments {
 
     fun givenAnEpisodeExtraDataEntity(): TheMovieDbEpisodeEntity =
         TheMovieDbEpisodeEntity(
-            image = "image",
+            image = "imageUrl",
             voteAverage = 7.0
         )
 
-    fun givenCharacterCompleteDetailData(episodeImage: String? = "https://image.tmdb.org/t/p/w500image", voteAverage: Double? = 7.0): CharacterAndEpisodeData =
+    fun givenCharacterCompleteDetailData(episodeImage: String? = "imageUrl", voteAverage: Double? = 7.0): CharacterAndEpisodeData =
         CharacterAndEpisodeData(
             id = 1,
             name = "Rick",
