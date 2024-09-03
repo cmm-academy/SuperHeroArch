@@ -91,20 +91,9 @@ class CharacterDetailViewModelTest {
     }
 
     @Test
-    fun `given character detail screen, when screen is visited and it's a favorite character, then the character is shown as favorite`() = runTest {
-        viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFav = true).toCharacterData())
-        verify(view).showCharacterAsFavorite()
-    }
-
-    @Test
-    fun `given character detail screen, when screen is visited and not a favorite character, then the character is shown as not favorite`() = runTest {
-        viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
-        verify(view).showCharacterAsNonFavorite()
-    }
-
-    @Test
     fun `given character detail screen, when user marks character as favorite, then the character is shown as favorite`() = runTest {
         viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
+        verify(view).showCharacterAsNonFavorite()
         `when`(setFavCharacterUseCase.setCharacterAsFav(true, 1)).thenReturn(Unit)
         `when`(getFavCharactersUseCase.getFavCharacters()).thenReturn(listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFav = true).toCharacterData()))
         viewModel.onFavoriteClicked()
@@ -114,6 +103,7 @@ class CharacterDetailViewModelTest {
     @Test
     fun `given character detail screen, when user marks character as not favorite, then the character is shown as not favorite`() = runTest {
         viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFav = true).toCharacterData())
+        verify(view).showCharacterAsFavorite()
         `when`(setFavCharacterUseCase.setCharacterAsFav(false, 1)).thenReturn(Unit)
         `when`(getFavCharactersUseCase.getFavCharacters()).thenReturn(listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData()))
         viewModel.onFavoriteClicked()
