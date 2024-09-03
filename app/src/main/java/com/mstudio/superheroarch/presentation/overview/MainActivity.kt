@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
 
     override fun onResume() {
         super.onResume()
-        viewModel.retrieveCharacters()
+        viewModel.onCreate()
     }
 
     private fun setUpView() {
