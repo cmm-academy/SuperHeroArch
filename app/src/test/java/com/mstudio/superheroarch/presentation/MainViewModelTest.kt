@@ -6,6 +6,7 @@ import com.mstudio.superheroarch.presentation.overview.MainViewTranslator
 import com.mstudio.superheroarch.presentation.overview.StatusFilters
 import com.mstudio.superheroarch.repository.model.toCharacterData
 import com.mstudio.superheroarch.usecase.GetAllCharactersUseCase
+import com.mstudio.superheroarch.usecase.GetFavCharactersUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -24,13 +25,15 @@ class MainViewModelTest {
     private lateinit var view: MainViewTranslator
     private lateinit var useCase: GetAllCharactersUseCase
     private val testDispatcher = UnconfinedTestDispatcher()
+    private lateinit var getFavCharactersUseCase: GetFavCharactersUseCase
 
     @Before
     fun before() {
         Dispatchers.setMain(testDispatcher)
         useCase = mock()
         view = mock()
-        viewModel = MainViewModel(view, useCase, testDispatcher)
+        getFavCharactersUseCase = mock()
+        viewModel = MainViewModel(view, useCase, testDispatcher, getFavCharactersUseCase)
     }
 
     @Test
@@ -75,5 +78,23 @@ class MainViewModelTest {
         viewModel.onCharacterClicked(characterSelected)
 
         verify(view).goToDetailScreen(characterSelected)
+    }
+
+    @Test
+    fun `given main screen, when user clicks on fav button and has favorite characters, then show all the favorite characters`() = runTest {
+        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFav = true).toCharacterData())
+
+        `when`(getFavCharactersUseCase.getFavCharacters()).thenReturn(expectedCharacters)
+        viewModel.onFavButtonClicked()
+
+        verify(view).showCharacters(expectedCharacters.filter { it.isFav })
+    }
+
+    @Test
+    fun `given main screen, when user clicks on fav button and list is empty, then show empty list message`() = runTest {
+        `when`(getFavCharactersUseCase.getFavCharacters()).thenReturn(emptyList())
+        viewModel.onFavButtonClicked()
+
+        verify(view).showEmptyFavCharactersMessage()
     }
 }

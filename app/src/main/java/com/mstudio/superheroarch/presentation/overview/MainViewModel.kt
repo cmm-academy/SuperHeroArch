@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.usecase.GetAllCharactersUseCase
+import com.mstudio.superheroarch.usecase.GetFavCharactersUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,12 +13,13 @@ import kotlinx.coroutines.withContext
 class MainViewModel(
     private val view: MainViewTranslator,
     private val useCase: GetAllCharactersUseCase,
-    private val dispatcher: CoroutineDispatcher
+    private val dispatcher: CoroutineDispatcher,
+    private val getFavCharactersUseCase: GetFavCharactersUseCase
 ) : ViewModel() {
 
     private var allCharacters = listOf<CharacterData>()
 
-    fun onCreate() {
+    fun retrieveCharacters() {
         getCharacters()
     }
 
@@ -53,6 +55,20 @@ class MainViewModel(
     fun onCharacterClicked(characterSelected: CharacterData) {
         view.goToDetailScreen(characterSelected)
     }
+
+    fun onFavButtonClicked() {
+        viewModelScope.launch(dispatcher) {
+            val result = getFavCharactersUseCase.getFavCharacters()
+
+            withContext(Dispatchers.Main) {
+                if (result.isNotEmpty()) {
+                    view.showCharacters(result)
+                } else {
+                    view.showEmptyFavCharactersMessage()
+                }
+            }
+        }
+    }
 }
 
 interface MainViewTranslator {
@@ -60,4 +76,5 @@ interface MainViewTranslator {
     fun showEmptyCharactersError()
     fun showGenericError()
     fun goToDetailScreen(characterSelected: CharacterData)
+    fun showEmptyFavCharactersMessage()
 }

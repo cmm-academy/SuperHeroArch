@@ -11,7 +11,8 @@ data class CharacterEntity(
     val species: String,
     val origin: String,
     val location: String,
-    val episode: List<String>
+    val episode: List<String>,
+    val isFav: Boolean = false
 )
 
 fun CharacterEntity.toCharacterData(): CharacterData =
@@ -23,7 +24,8 @@ fun CharacterEntity.toCharacterData(): CharacterData =
         species = species,
         origin = origin,
         location = location,
-        firstEpisode = episode.first().split("/").last()
+        firstEpisode = episode.first().split("/").last(),
+        isFav = isFav
     )
 
 fun CharacterEntity.toCharacterLocalEntity(): CharacterLocalEntity =
@@ -35,5 +37,6 @@ fun CharacterEntity.toCharacterLocalEntity(): CharacterLocalEntity =
         species = species,
         origin = origin,
         location = location,
-        episode = episode.joinToString()
+        episode = episode.joinToString(),
+        isFav = isFav
     )

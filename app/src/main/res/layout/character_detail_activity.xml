@@ -22,6 +22,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topBar" />
 
+    <ImageView
+        android:id="@+id/favoriteIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_favorite_unselected"
+        app:layout_constraintStart_toEndOf="@+id/imageDetail"
+        app:layout_constraintTop_toTopOf="@+id/imageDetail"/>
+
     <TextView
         android:id="@+id/statusDetail"
         android:layout_width="0dp"
@@ -32,7 +41,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageDetail"
-        app:layout_constraintTop_toBottomOf="@+id/topBar"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteIcon"
         tools:text="Status" />
 
     <TextView

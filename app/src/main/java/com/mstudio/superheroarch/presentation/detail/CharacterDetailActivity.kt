@@ -18,6 +18,8 @@ import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.repository.TheMovieDbRepository
 import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
+import com.mstudio.superheroarch.usecase.GetFavCharactersUseCase
+import com.mstudio.superheroarch.usecase.SetFavCharacterUseCase
 import kotlinx.coroutines.Dispatchers
 
 class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslator {
@@ -30,7 +32,9 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
                 TheMovieDbRepository(TheMovieDbApiHelper.create())
             ),
             Dispatchers.IO,
-            NetworkManagerImpl()
+            NetworkManagerImpl(),
+            SetFavCharacterUseCase(RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create())),
+            GetFavCharactersUseCase(RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create()))
         )
     }
 
@@ -53,6 +57,9 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
             speciesDetail.text = resources.getString(R.string.character_species, character.species)
             originDetail.text = resources.getString(R.string.character_origin, character.origin)
             locationDetail.text = resources.getString(R.string.character_location, character.location)
+            favoriteIcon.setOnClickListener {
+                viewModel.onFavoriteClicked()
+            }
         }
     }
 
@@ -87,5 +94,13 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
 
     override fun showEpisodeExtraDataError() {
         Snackbar.make(findViewById(android.R.id.content), resources.getString(R.string.episode_details_error_message), Snackbar.LENGTH_LONG).show()
+    }
+
+    override fun showCharacterAsFavorite() {
+        binding.favoriteIcon.setImageResource(R.drawable.ic_favorite_selected)
+    }
+
+    override fun showCharacterAsNonFavorite() {
+        binding.favoriteIcon.setImageResource(R.drawable.ic_favorite_unselected)
     }
 }

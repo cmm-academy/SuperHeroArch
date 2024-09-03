@@ -13,7 +13,8 @@ data class CharacterLocalEntity(
     val species: String,
     val origin: String,
     val location: String,
-    val episode: String
+    val episode: String,
+    val isFav: Boolean
 )
 
 fun CharacterLocalEntity.toCharactersEntity(): CharacterEntity =
@@ -25,5 +26,6 @@ fun CharacterLocalEntity.toCharactersEntity(): CharacterEntity =
         species = species,
         origin = origin,
         location = location,
-        episode = episode.split(",")
+        episode = episode.split(","),
+        isFav = isFav
     )

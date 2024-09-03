@@ -26,7 +26,7 @@ object RickAndMortyRepositoryInstruments {
             image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
         )
 
-    fun givenACharacterEntity(): CharacterEntity =
+    fun givenACharacterEntity(isFav: Boolean = false): CharacterEntity =
         CharacterEntity(
             id = 1,
             name = "Rick",
@@ -35,10 +35,11 @@ object RickAndMortyRepositoryInstruments {
             origin = "Earth",
             location = "City",
             episode = listOf("https://rickandmortyapi.com/api/episode/1"),
-            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+            isFav = isFav
         )
 
-    fun givenACharacterLocalEntity(): CharacterLocalEntity =
+    fun givenACharacterLocalEntity(isFav: Boolean = false): CharacterLocalEntity =
         CharacterLocalEntity(
             id = 1,
             name = "Rick",
@@ -47,7 +48,8 @@ object RickAndMortyRepositoryInstruments {
             origin = "Earth",
             location = "City",
             episode = "https://rickandmortyapi.com/api/episode/1",
-            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+            isFav = isFav
         )
 
     fun givenAnEpisodeRemoteEntity(): EpisodeRemoteEntity =
@@ -91,7 +93,8 @@ object RickAndMortyRepositoryInstruments {
                 airDate = "October 16, 2014",
                 image = episodeImage,
                 voteAverage = voteAverage
-            )
+            ),
+            isFav = false
         )
 
     fun givenCharacterData(): CharacterData =
@@ -103,6 +106,7 @@ object RickAndMortyRepositoryInstruments {
             origin = "Earth",
             location = "City",
             image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-            firstEpisode = "S01E01"
+            firstEpisode = "S01E01",
+            isFav = false
         )
 }

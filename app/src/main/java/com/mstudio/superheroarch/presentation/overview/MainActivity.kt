@@ -12,6 +12,7 @@ import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApiHelper
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.usecase.GetAllCharactersUseCase
+import com.mstudio.superheroarch.usecase.GetFavCharactersUseCase
 import kotlinx.coroutines.Dispatchers
 
 class MainActivity : AppCompatActivity(), MainViewTranslator {
@@ -25,7 +26,8 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         MainViewModel(
             this,
             GetAllCharactersUseCase(RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create())),
-            Dispatchers.IO
+            Dispatchers.IO,
+            GetFavCharactersUseCase(RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create()))
         )
     }
     private val adapter = CharactersAdapter {
@@ -36,9 +38,13 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel.onCreate()
         setUpView()
         setUpListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.retrieveCharacters()
     }
 
     private fun setUpView() {
@@ -48,6 +54,7 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
             deadFilterButton.text = resources.getString(R.string.dead_filter_button_title)
             unknownFilterButton.text = resources.getString(R.string.unknown_filter_button_title)
             allFilterButton.text = resources.getString(R.string.all_filter_button_title)
+            favsButton.text = resources.getString(R.string.favs_button_title)
         }
     }
 
@@ -67,6 +74,10 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
 
             allFilterButton.setOnClickListener {
                 viewModel.onFilterButtonClicked()
+            }
+
+            favsButton.setOnClickListener {
+                viewModel.onFavButtonClicked()
             }
         }
     }
@@ -93,5 +104,11 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
             putExtra(CHARACTER_DATA_KEY, characterSelected)
         }
         startActivity(intent)
+    }
+
+    override fun showEmptyFavCharactersMessage() {
+        binding.charactersRv.visibility = View.GONE
+        binding.errorBody.visibility = View.VISIBLE
+        binding.errorBody.text = resources.getString(R.string.favorite_characters_empty_message)
     }
 }

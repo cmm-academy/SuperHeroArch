@@ -8,7 +8,8 @@ data class CharacterAndEpisodeData(
     val species: String,
     val origin: String,
     val location: String,
-    val episodeData: EpisodeData
+    val episodeData: EpisodeData,
+    val isFav: Boolean
 )
 
 data class EpisodeData(
