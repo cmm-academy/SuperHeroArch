@@ -18,8 +18,7 @@ import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.repository.TheMovieDbRepository
 import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
-import com.mstudio.superheroarch.usecase.GetFavCharactersUseCase
-import com.mstudio.superheroarch.usecase.SetFavCharacterUseCase
+import com.mstudio.superheroarch.usecase.SetFavoriteCharacterUseCase
 import kotlinx.coroutines.Dispatchers
 
 class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslator {
@@ -33,8 +32,7 @@ class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslat
             ),
             Dispatchers.IO,
             NetworkManagerImpl(),
-            SetFavCharacterUseCase(RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create())),
-            GetFavCharactersUseCase(RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create()))
+            SetFavoriteCharacterUseCase(RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create()))
         )
     }
 

@@ -2,12 +2,10 @@ package com.mstudio.superheroarch.repository
 
 import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
 import com.mstudio.superheroarch.localdatasource.RickAndMortyDatabase
-import com.mstudio.superheroarch.localdatasource.model.toCharactersEntity
 import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApi
 import com.mstudio.superheroarch.remotedatasource.model.RickAndMortyRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.toCharacterEntity
 import com.mstudio.superheroarch.remotedatasource.model.toEpisodeEntity
-import com.mstudio.superheroarch.repository.model.CharacterEntity
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -64,24 +62,9 @@ class RickAndMortyRepositoryTest {
     }
 
     @Test
-    fun `given rickAndMorty repository, when retrieve all favorite characters, then return the list of favorite characters`() = runTest {
-        val characters = listOf(RickAndMortyRepositoryInstruments.givenACharacterLocalEntity(isFav = true))
-        `when`(rickAndMortyDatabase.characterDao().getFavouriteCharacters()).thenReturn(characters)
-        val result = rickAndMortyRepository.getFavCharacters()
-        assertEquals(characters.map { it.toCharactersEntity() }, result)
-    }
-
-    @Test
-    fun `given rickAndMorty repository, when retrieve an empty list of favorite character, the return empty list`() = runTest {
-        `when`(rickAndMortyDatabase.characterDao().getFavouriteCharacters()).thenReturn(emptyList())
-        val result = rickAndMortyRepository.getFavCharacters()
-        assertEquals(emptyList<CharacterEntity>(), result)
-    }
-
-    @Test
     fun `given rickAndMorty repository, when set character as favorite, then update user as favorite in database`() = runTest {
-        `when`(rickAndMortyDatabase.characterDao().updateFavCharacter(true, 1)).thenReturn(Unit)
-        val result = rickAndMortyRepository.setFavCharacter(true, 1)
+        `when`(rickAndMortyDatabase.characterDao().updateFavoriteCharacter(true, 1)).thenReturn(Unit)
+        val result = rickAndMortyRepository.setFavoriteCharacter(true, 1)
         assertEquals(result, Unit)
     }
 }

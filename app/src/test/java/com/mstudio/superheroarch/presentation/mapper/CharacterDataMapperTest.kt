@@ -27,6 +27,6 @@ class CharacterDataMapperTest {
         assertEquals(expectedEpisodeData.airDate, actual.episodeData.airDate)
         assertEquals(expectedEpisodeExtraData.image, actual.episodeData.image)
         assertEquals(expectedEpisodeExtraData.voteAverage, actual.episodeData.voteAverage)
-        assertEquals(expected.isFav, actual.isFav)
+        assertEquals(expected.isFavorite, actual.isFavorite)
     }
 }

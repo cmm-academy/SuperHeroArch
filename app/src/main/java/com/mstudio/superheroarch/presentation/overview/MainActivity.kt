@@ -12,7 +12,6 @@ import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.remotedatasource.api.RickAndMortyApiHelper
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.usecase.GetAllCharactersUseCase
-import com.mstudio.superheroarch.usecase.GetFavCharactersUseCase
 import kotlinx.coroutines.Dispatchers
 
 class MainActivity : AppCompatActivity(), MainViewTranslator {
@@ -26,8 +25,7 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         MainViewModel(
             this,
             GetAllCharactersUseCase(RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create())),
-            Dispatchers.IO,
-            GetFavCharactersUseCase(RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create()))
+            Dispatchers.IO
         )
     }
     private val adapter = CharactersAdapter {
@@ -54,7 +52,7 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
             deadFilterButton.text = resources.getString(R.string.dead_filter_button_title)
             unknownFilterButton.text = resources.getString(R.string.unknown_filter_button_title)
             allFilterButton.text = resources.getString(R.string.all_filter_button_title)
-            favsButton.text = resources.getString(R.string.favs_button_title)
+            favoritesButton.text = resources.getString(R.string.favorites_button_title)
         }
     }
 
@@ -76,8 +74,8 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
                 viewModel.onFilterButtonClicked()
             }
 
-            favsButton.setOnClickListener {
-                viewModel.onFavButtonClicked()
+            favoritesButton.setOnClickListener {
+                viewModel.onFavoriteButtonClicked()
             }
         }
     }

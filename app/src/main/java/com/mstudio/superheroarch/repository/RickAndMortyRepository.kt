@@ -51,11 +51,7 @@ class RickAndMortyRepository(
         database.characterDao().insertCharacters(characters)
     }
 
-    suspend fun getFavCharacters(): List<CharacterEntity> {
-        return database.characterDao().getFavouriteCharacters().map { it.toCharactersEntity() }
-    }
-
-    suspend fun setFavCharacter(isFav: Boolean, id: Int) {
-        database.characterDao().updateFavCharacter(isFav, id)
+    suspend fun setFavoriteCharacter(isFavorite: Boolean, id: Int) {
+        database.characterDao().updateFavoriteCharacter(isFavorite, id)
     }
 }

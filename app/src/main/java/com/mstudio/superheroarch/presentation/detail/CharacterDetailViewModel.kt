@@ -6,8 +6,7 @@ import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.presentation.network.NetworkManagerImpl
 import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
-import com.mstudio.superheroarch.usecase.GetFavCharactersUseCase
-import com.mstudio.superheroarch.usecase.SetFavCharacterUseCase
+import com.mstudio.superheroarch.usecase.SetFavoriteCharacterUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,8 +17,7 @@ class CharacterDetailViewModel(
     private val useCase: GetCharacterAndEpisodeUseCase,
     private val dispatcher: CoroutineDispatcher,
     private val networkManager: NetworkManagerImpl,
-    private val setFavCharacterUseCase: SetFavCharacterUseCase,
-    private val getFavCharactersUseCase: GetFavCharactersUseCase
+    private val setFavoriteCharacterUseCase: SetFavoriteCharacterUseCase
 ) : ViewModel() {
 
     private var characterData: CharacterData? = null
@@ -27,15 +25,15 @@ class CharacterDetailViewModel(
     fun onCharacterReceived(character: CharacterData) {
         if (networkManager.hasInternetConnection()) {
             characterData = character
-            checkIfCharacterIsFavorite(character.isFav)
+            checkIfCharacterIsFavorite(character.isFavorite)
             getFirstEpisode(character)
         } else {
             view.showNoInternetConnection()
         }
     }
 
-    private fun checkIfCharacterIsFavorite(isFav: Boolean) {
-        if (isFav) {
+    private fun checkIfCharacterIsFavorite(isFavorite: Boolean) {
+        if (isFavorite) {
             view.showCharacterAsFavorite()
         } else {
             view.showCharacterAsNonFavorite()
@@ -71,26 +69,17 @@ class CharacterDetailViewModel(
     fun onFavoriteClicked() {
         viewModelScope.launch(dispatcher) {
             characterData?.let { characterSelected ->
-                setFavCharacterUseCase.setCharacterAsFav(!characterSelected.isFav, characterSelected.id)
-                val favoriteCharacter = getFavCharactersUseCase.getFavCharacters()
+                setFavoriteCharacterUseCase.setCharacterAsFavorite(!characterSelected.isFavorite, characterSelected.id)
                 withContext(Dispatchers.Main) {
-                    if (characterSelected.isFav) {
+                    if (characterSelected.isFavorite) {
                         view.showCharacterAsNonFavorite()
+                        characterSelected.isFavorite = false
                     } else {
                         view.showCharacterAsFavorite()
+                        characterSelected.isFavorite = true
                     }
-                    modifyCharacterStatus(favoriteCharacter, characterSelected)
                 }
             }
-        }
-    }
-
-    private fun modifyCharacterStatus(favoriteCharacter: List<CharacterData>, characterSelected: CharacterData) {
-        val sameCharacter = favoriteCharacter.find { it.id == characterSelected.id }
-        if (sameCharacter != null) {
-            characterData = sameCharacter
-        } else {
-            characterSelected.isFav = false
         }
     }
 }

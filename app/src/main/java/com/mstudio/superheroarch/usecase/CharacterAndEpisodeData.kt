@@ -9,7 +9,7 @@ data class CharacterAndEpisodeData(
     val origin: String,
     val location: String,
     val episodeData: EpisodeData,
-    val isFav: Boolean
+    val isFavorite: Boolean
 )
 
 data class EpisodeData(

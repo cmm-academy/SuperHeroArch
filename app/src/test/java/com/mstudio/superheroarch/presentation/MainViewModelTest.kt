@@ -6,7 +6,6 @@ import com.mstudio.superheroarch.presentation.overview.MainViewTranslator
 import com.mstudio.superheroarch.presentation.overview.StatusFilters
 import com.mstudio.superheroarch.repository.model.toCharacterData
 import com.mstudio.superheroarch.usecase.GetAllCharactersUseCase
-import com.mstudio.superheroarch.usecase.GetFavCharactersUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -16,6 +15,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 
 @ExperimentalCoroutinesApi
@@ -25,15 +25,13 @@ class MainViewModelTest {
     private lateinit var view: MainViewTranslator
     private lateinit var useCase: GetAllCharactersUseCase
     private val testDispatcher = UnconfinedTestDispatcher()
-    private lateinit var getFavCharactersUseCase: GetFavCharactersUseCase
 
     @Before
     fun before() {
         Dispatchers.setMain(testDispatcher)
         useCase = mock()
         view = mock()
-        getFavCharactersUseCase = mock()
-        viewModel = MainViewModel(view, useCase, testDispatcher, getFavCharactersUseCase)
+        viewModel = MainViewModel(view, useCase, testDispatcher)
     }
 
     @Test
@@ -82,18 +80,18 @@ class MainViewModelTest {
 
     @Test
     fun `given main screen, when user clicks on fav button and has favorite characters, then show all the favorite characters`() = runTest {
-        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFav = true).toCharacterData())
+        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFavorite = true).toCharacterData())
+        `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
+        viewModel.onCreate()
+        viewModel.onFavoriteButtonClicked()
 
-        `when`(getFavCharactersUseCase.getFavCharacters()).thenReturn(expectedCharacters)
-        viewModel.onFavButtonClicked()
-
-        verify(view).showCharacters(expectedCharacters.filter { it.isFav })
+        verify(view, times(2)).showCharacters(expectedCharacters.filter { it.isFavorite })
     }
 
     @Test
     fun `given main screen, when user clicks on fav button and list is empty, then show empty list message`() = runTest {
-        `when`(getFavCharactersUseCase.getFavCharacters()).thenReturn(emptyList())
-        viewModel.onFavButtonClicked()
+        `when`(useCase.getAllCharacters()).thenReturn(emptyList())
+        viewModel.onFavoriteButtonClicked()
 
         verify(view).showEmptyFavCharactersMessage()
     }

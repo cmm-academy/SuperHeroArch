@@ -14,9 +14,6 @@ interface CharactersDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacters(characters: List<CharacterLocalEntity>)
 
-    @Query("SELECT * FROM CharacterLocalEntity WHERE isFav IS 1")
-    suspend fun getFavouriteCharacters(): List<CharacterLocalEntity>
-
-    @Query("UPDATE CharacterLocalEntity SET isFav = :isFav WHERE id = :id")
-    suspend fun updateFavCharacter(isFav: Boolean, id: Int)
+    @Query("UPDATE CharacterLocalEntity SET isFavorite = :isFavorite WHERE id = :id")
+    suspend fun updateFavoriteCharacter(isFavorite: Boolean, id: Int)
 }

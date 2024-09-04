@@ -2,7 +2,6 @@ package com.mstudio.superheroarch.repository.mapper
 
 import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
 import com.mstudio.superheroarch.repository.model.toCharacterData
-import kotlin.math.exp
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -21,6 +20,6 @@ class CharacterEntityMapperTest {
         assertEquals(expected.location, actual.location)
         assertEquals(expected.episode.first().split("/").last(), actual.firstEpisode)
         assertEquals(expected.image, actual.image)
-        assertEquals(expected.isFav, actual.isFav)
+        assertEquals(expected.isFavorite, actual.isFavorite)
     }
 }

@@ -21,6 +21,6 @@ class CharacterRemoteEntityMapperTest {
         assertEquals(expected.location.name, actual.location)
         assertEquals(expected.episode, actual.episode)
         assertEquals(expected.image, actual.image)
-        assertFalse(actual.isFav)
+        assertFalse(actual.isFavorite)
     }
 }

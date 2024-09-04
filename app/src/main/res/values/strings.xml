@@ -13,11 +13,11 @@
     <string name="dead_filter_button_title">Dead</string>
     <string name="unknown_filter_button_title">Unknown</string>
     <string name="all_filter_button_title">All</string>
-    <string name="favs_button_title">Favs</string>
+    <string name="favorites_button_title">Favorites</string>
     <string name="first_episode_number">First Episode: %s</string>
     <string name="first_episode_air_date">Air on: %s</string>
     <string name="episode_error_message">Couldn\'t find the first episode</string>
     <string name="no_internet_message">No Internet Connection</string>
     <string name="episode_details_error_message">Sorry, there is a problem retrieving episode details</string>
-    <string name="favorite_characters_empty_message">There is no favourite characters yet</string>
+    <string name="favorite_characters_empty_message">There is no favorite characters yet</string>
 </resources>

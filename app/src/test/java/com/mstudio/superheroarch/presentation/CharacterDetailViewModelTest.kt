@@ -6,8 +6,7 @@ import com.mstudio.superheroarch.presentation.detail.CharacterDetailViewTranslat
 import com.mstudio.superheroarch.presentation.network.NetworkManagerImpl
 import com.mstudio.superheroarch.repository.model.toCharacterData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
-import com.mstudio.superheroarch.usecase.GetFavCharactersUseCase
-import com.mstudio.superheroarch.usecase.SetFavCharacterUseCase
+import com.mstudio.superheroarch.usecase.SetFavoriteCharacterUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -27,8 +26,7 @@ class CharacterDetailViewModelTest {
     private lateinit var useCase: GetCharacterAndEpisodeUseCase
     private val testDispatcher = UnconfinedTestDispatcher()
     private lateinit var networkManager: NetworkManagerImpl
-    private lateinit var setFavCharacterUseCase: SetFavCharacterUseCase
-    private lateinit var getFavCharactersUseCase: GetFavCharactersUseCase
+    private lateinit var setFavCharacterUseCase: SetFavoriteCharacterUseCase
 
     @Before
     fun before() {
@@ -37,10 +35,9 @@ class CharacterDetailViewModelTest {
         useCase = mock()
         view = mock()
         setFavCharacterUseCase = mock()
-        getFavCharactersUseCase = mock()
         `when`(networkManager.hasInternetConnection()).thenReturn(true)
 
-        viewModel = CharacterDetailViewModel(view, useCase, testDispatcher, networkManager, setFavCharacterUseCase, getFavCharactersUseCase)
+        viewModel = CharacterDetailViewModel(view, useCase, testDispatcher, networkManager, setFavCharacterUseCase)
     }
 
     @Test
@@ -94,18 +91,16 @@ class CharacterDetailViewModelTest {
     fun `given character detail screen, when user marks character as favorite, then the character is shown as favorite`() = runTest {
         viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
         verify(view).showCharacterAsNonFavorite()
-        `when`(setFavCharacterUseCase.setCharacterAsFav(true, 1)).thenReturn(Unit)
-        `when`(getFavCharactersUseCase.getFavCharacters()).thenReturn(listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFav = true).toCharacterData()))
+        `when`(setFavCharacterUseCase.setCharacterAsFavorite(true, 1)).thenReturn(Unit)
         viewModel.onFavoriteClicked()
         verify(view).showCharacterAsFavorite()
     }
 
     @Test
     fun `given character detail screen, when user marks character as not favorite, then the character is shown as not favorite`() = runTest {
-        viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFav = true).toCharacterData())
+        viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFavorite = true).toCharacterData())
         verify(view).showCharacterAsFavorite()
-        `when`(setFavCharacterUseCase.setCharacterAsFav(false, 1)).thenReturn(Unit)
-        `when`(getFavCharactersUseCase.getFavCharacters()).thenReturn(listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData()))
+        `when`(setFavCharacterUseCase.setCharacterAsFavorite(false, 1)).thenReturn(Unit)
         viewModel.onFavoriteClicked()
         verify(view).showCharacterAsNonFavorite()
     }

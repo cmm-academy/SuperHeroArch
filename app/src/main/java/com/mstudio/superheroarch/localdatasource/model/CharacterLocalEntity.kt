@@ -14,7 +14,7 @@ data class CharacterLocalEntity(
     val origin: String,
     val location: String,
     val episode: String,
-    val isFav: Boolean
+    val isFavorite: Boolean
 )
 
 fun CharacterLocalEntity.toCharactersEntity(): CharacterEntity =
@@ -27,5 +27,5 @@ fun CharacterLocalEntity.toCharactersEntity(): CharacterEntity =
         origin = origin,
         location = location,
         episode = episode.split(","),
-        isFav = isFav
+        isFavorite = isFavorite
     )

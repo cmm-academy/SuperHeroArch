@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.usecase.GetAllCharactersUseCase
-import com.mstudio.superheroarch.usecase.GetFavCharactersUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,8 +12,7 @@ import kotlinx.coroutines.withContext
 class MainViewModel(
     private val view: MainViewTranslator,
     private val useCase: GetAllCharactersUseCase,
-    private val dispatcher: CoroutineDispatcher,
-    private val getFavCharactersUseCase: GetFavCharactersUseCase
+    private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private var allCharacters = listOf<CharacterData>()
@@ -56,17 +54,12 @@ class MainViewModel(
         view.goToDetailScreen(characterSelected)
     }
 
-    fun onFavButtonClicked() {
-        viewModelScope.launch(dispatcher) {
-            val result = getFavCharactersUseCase.getFavCharacters()
-
-            withContext(Dispatchers.Main) {
-                if (result.isNotEmpty()) {
-                    view.showCharacters(result)
-                } else {
-                    view.showEmptyFavCharactersMessage()
-                }
-            }
+    fun onFavoriteButtonClicked() {
+        val favoriteCharacters = allCharacters.filter { it.isFavorite }
+        if (favoriteCharacters.isNotEmpty()) {
+            view.showCharacters(favoriteCharacters)
+        } else {
+            view.showEmptyFavCharactersMessage()
         }
     }
 }

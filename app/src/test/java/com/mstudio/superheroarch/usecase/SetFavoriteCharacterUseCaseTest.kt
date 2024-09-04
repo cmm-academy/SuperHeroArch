@@ -8,21 +8,21 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 
-class SetFavCharacterUseCaseTest {
+class SetFavoriteCharacterUseCaseTest {
 
     private lateinit var repository: RickAndMortyRepository
-    private lateinit var useCase: SetFavCharacterUseCase
+    private lateinit var useCase: SetFavoriteCharacterUseCase
 
     @Before
     fun before() {
         repository = mock()
-        useCase = SetFavCharacterUseCase(repository)
+        useCase = SetFavoriteCharacterUseCase(repository)
     }
 
     @Test
     fun `given detail screen, when user select character as favorite, then character is mark as favorite`() = runTest {
-        `when`(repository.setFavCharacter(true, 1)).thenReturn(Unit)
-        val result = useCase.setCharacterAsFav(true, 1)
+        `when`(repository.setFavoriteCharacter(true, 1)).thenReturn(Unit)
+        val result = useCase.setCharacterAsFavorite(true, 1)
         assertEquals(Unit, result)
     }
 }

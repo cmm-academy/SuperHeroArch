@@ -26,7 +26,7 @@ object RickAndMortyRepositoryInstruments {
             image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
         )
 
-    fun givenACharacterEntity(isFav: Boolean = false): CharacterEntity =
+    fun givenACharacterEntity(isFavorite: Boolean = false): CharacterEntity =
         CharacterEntity(
             id = 1,
             name = "Rick",
@@ -36,10 +36,10 @@ object RickAndMortyRepositoryInstruments {
             location = "City",
             episode = listOf("https://rickandmortyapi.com/api/episode/1"),
             image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-            isFav = isFav
+            isFavorite = isFavorite
         )
 
-    fun givenACharacterLocalEntity(isFav: Boolean = false): CharacterLocalEntity =
+    fun givenACharacterLocalEntity(isFavorite: Boolean = false): CharacterLocalEntity =
         CharacterLocalEntity(
             id = 1,
             name = "Rick",
@@ -49,7 +49,7 @@ object RickAndMortyRepositoryInstruments {
             location = "City",
             episode = "https://rickandmortyapi.com/api/episode/1",
             image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-            isFav = isFav
+            isFavorite = isFavorite
         )
 
     fun givenAnEpisodeRemoteEntity(): EpisodeRemoteEntity =
@@ -94,7 +94,7 @@ object RickAndMortyRepositoryInstruments {
                 image = episodeImage,
                 voteAverage = voteAverage
             ),
-            isFav = false
+            isFavorite = false
         )
 
     fun givenCharacterData(): CharacterData =
@@ -107,6 +107,6 @@ object RickAndMortyRepositoryInstruments {
             location = "City",
             image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
             firstEpisode = "S01E01",
-            isFav = false
+            isFavorite = false
         )
 }
