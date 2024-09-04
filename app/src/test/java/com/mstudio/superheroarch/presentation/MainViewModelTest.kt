@@ -79,7 +79,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `given main screen, when user clicks on fav button and has favorite characters, then show all the favorite characters`() = runTest {
+    fun `given main screen, when user clicks on favorites button and has favorite characters, then show all the favorite characters`() = runTest {
         val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFavorite = true).toCharacterData())
         `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
         viewModel.onCreate()
@@ -89,10 +89,10 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `given main screen, when user clicks on fav button and list is empty, then show empty list message`() = runTest {
+    fun `given main screen, when user clicks on favorites button and list is empty, then show empty list message`() = runTest {
         `when`(useCase.getAllCharacters()).thenReturn(emptyList())
         viewModel.onFavoriteButtonClicked()
 
-        verify(view).showEmptyFavCharactersMessage()
+        verify(view).showEmptyFavoriteCharactersMessage()
     }
 }

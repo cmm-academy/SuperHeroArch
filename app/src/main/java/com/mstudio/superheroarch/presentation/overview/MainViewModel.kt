@@ -59,7 +59,7 @@ class MainViewModel(
         if (favoriteCharacters.isNotEmpty()) {
             view.showCharacters(favoriteCharacters)
         } else {
-            view.showEmptyFavCharactersMessage()
+            view.showEmptyFavoriteCharactersMessage()
         }
     }
 }
@@ -69,5 +69,5 @@ interface MainViewTranslator {
     fun showEmptyCharactersError()
     fun showGenericError()
     fun goToDetailScreen(characterSelected: CharacterData)
-    fun showEmptyFavCharactersMessage()
+    fun showEmptyFavoriteCharactersMessage()
 }

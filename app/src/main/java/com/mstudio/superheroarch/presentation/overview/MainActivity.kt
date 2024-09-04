@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         startActivity(intent)
     }
 
-    override fun showEmptyFavCharactersMessage() {
+    override fun showEmptyFavoriteCharactersMessage() {
         binding.charactersRv.visibility = View.GONE
         binding.errorBody.visibility = View.VISIBLE
         binding.errorBody.text = resources.getString(R.string.favorite_characters_empty_message)
