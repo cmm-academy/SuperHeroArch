@@ -67,18 +67,17 @@ class CharacterDetailViewModel(
     }
 
     fun onFavoriteClicked() {
-        viewModelScope.launch(dispatcher) {
-            characterData?.let { characterSelected ->
+        characterData?.let { characterSelected ->
+            viewModelScope.launch(dispatcher) {
+
                 setFavoriteCharacterUseCase.setCharacterAsFavorite(!characterSelected.isFavorite, characterSelected.id)
-                withContext(Dispatchers.Main) {
-                    if (characterSelected.isFavorite) {
-                        view.showCharacterAsNonFavorite()
-                        characterSelected.isFavorite = false
-                    } else {
-                        view.showCharacterAsFavorite()
-                        characterSelected.isFavorite = true
-                    }
-                }
+            }
+            if (characterSelected.isFavorite) {
+                view.showCharacterAsNonFavorite()
+                characterSelected.isFavorite = false
+            } else {
+                view.showCharacterAsFavorite()
+                characterSelected.isFavorite = true
             }
         }
     }

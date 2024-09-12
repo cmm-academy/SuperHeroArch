@@ -7,6 +7,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.mockito.kotlin.verify
 
 class SetFavoriteCharacterUseCaseTest {
 
@@ -24,5 +25,6 @@ class SetFavoriteCharacterUseCaseTest {
         `when`(repository.setFavoriteCharacter(true, 1)).thenReturn(Unit)
         val result = useCase.setCharacterAsFavorite(true, 1)
         assertEquals(Unit, result)
+        verify(repository).setFavoriteCharacter(true, 1)
     }
 }

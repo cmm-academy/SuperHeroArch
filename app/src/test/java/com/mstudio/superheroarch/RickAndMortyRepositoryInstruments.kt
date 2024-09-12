@@ -2,6 +2,7 @@ package com.mstudio.superheroarch
 
 import com.mstudio.superheroarch.localdatasource.model.CharacterLocalEntity
 import com.mstudio.superheroarch.presentation.model.CharacterData
+import com.mstudio.superheroarch.presentation.overview.CharactersFilters
 import com.mstudio.superheroarch.remotedatasource.model.CharacterPlaceRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.EpisodeRemoteEntity
@@ -26,11 +27,11 @@ object RickAndMortyRepositoryInstruments {
             image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
         )
 
-    fun givenACharacterEntity(isFavorite: Boolean = false): CharacterEntity =
+    fun givenACharacterEntity(isFavorite: Boolean = false, status: String = CharactersFilters.ALIVE.type.lowercase()): CharacterEntity =
         CharacterEntity(
             id = 1,
             name = "Rick",
-            status = "Alive",
+            status = status,
             species = "Human",
             origin = "Earth",
             location = "City",
@@ -82,7 +83,7 @@ object RickAndMortyRepositoryInstruments {
         CharacterAndEpisodeData(
             id = 1,
             name = "Rick",
-            status = "Alive",
+            status = "alive",
             species = "Human",
             origin = "Earth",
             location = "City",

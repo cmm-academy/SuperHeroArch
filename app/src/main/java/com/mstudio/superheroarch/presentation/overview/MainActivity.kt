@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         setUpListeners()
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         viewModel.onCreate()
     }
 
@@ -59,15 +59,15 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
     private fun setUpListeners() {
         with(binding) {
             aliveFilterButton.setOnClickListener {
-                viewModel.onFilterButtonClicked(StatusFilters.ALIVE)
+                viewModel.onFilterButtonClicked(CharactersFilters.ALIVE)
             }
 
             deadFilterButton.setOnClickListener {
-                viewModel.onFilterButtonClicked(StatusFilters.DEAD)
+                viewModel.onFilterButtonClicked(CharactersFilters.DEAD)
             }
 
             unknownFilterButton.setOnClickListener {
-                viewModel.onFilterButtonClicked(StatusFilters.UNKNOWN)
+                viewModel.onFilterButtonClicked(CharactersFilters.UNKNOWN)
             }
 
             allFilterButton.setOnClickListener {
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
             }
 
             favoritesButton.setOnClickListener {
-                viewModel.onFavoriteButtonClicked()
+                viewModel.onFilterButtonClicked(CharactersFilters.FAVORITES)
             }
         }
     }
@@ -86,10 +86,14 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         adapter.submitList(characters)
     }
 
-    override fun showEmptyCharactersError() {
+    override fun showEmptyCharactersError(isFavoriteSection: Boolean) {
         binding.charactersRv.visibility = View.GONE
         binding.errorBody.visibility = View.VISIBLE
-        binding.errorBody.text = resources.getString(R.string.main_title_empty_body)
+        binding.errorBody.text = if (isFavoriteSection) {
+            resources.getString(R.string.favorite_characters_empty_message)
+        } else {
+            resources.getString(R.string.main_title_empty_body)
+        }
     }
 
     override fun showGenericError() {
@@ -104,9 +108,9 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         startActivity(intent)
     }
 
-    override fun showEmptyFavoriteCharactersMessage() {
-        binding.charactersRv.visibility = View.GONE
-        binding.errorBody.visibility = View.VISIBLE
-        binding.errorBody.text = resources.getString(R.string.favorite_characters_empty_message)
-    }
+//    override fun showEmptyFavoriteCharactersMessage() {
+//        binding.charactersRv.visibility = View.GONE
+//        binding.errorBody.visibility = View.VISIBLE
+//        binding.errorBody.text = resources.getString(R.string.favorite_characters_empty_message)
+//    }
 }

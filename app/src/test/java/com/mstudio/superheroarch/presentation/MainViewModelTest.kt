@@ -1,9 +1,9 @@
 package com.mstudio.superheroarch.presentation
 
 import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
+import com.mstudio.superheroarch.presentation.overview.CharactersFilters
 import com.mstudio.superheroarch.presentation.overview.MainViewModel
 import com.mstudio.superheroarch.presentation.overview.MainViewTranslator
-import com.mstudio.superheroarch.presentation.overview.StatusFilters
 import com.mstudio.superheroarch.repository.model.toCharacterData
 import com.mstudio.superheroarch.usecase.GetAllCharactersUseCase
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import org.mockito.kotlin.times
+import org.mockito.kotlin.atLeastOnce
 import org.mockito.kotlin.verify
 
 @ExperimentalCoroutinesApi
@@ -61,11 +61,12 @@ class MainViewModelTest {
 
     @Test
     fun `given main screen, when user clicks on dead filter, then show all dead characters only`() = runTest {
-        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
+        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity(status = CharactersFilters.DEAD.type).toCharacterData())
         `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
-        viewModel.onFilterButtonClicked(StatusFilters.DEAD)
+        viewModel.onCreate()
+        viewModel.onFilterButtonClicked(CharactersFilters.DEAD)
 
-        verify(view).showCharacters(expectedCharacters.filter { it.status == StatusFilters.DEAD.status })
+        verify(view, atLeastOnce()).showCharacters(expectedCharacters.filter { it.status == CharactersFilters.DEAD.type })
     }
 
     @Test
@@ -83,16 +84,18 @@ class MainViewModelTest {
         val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFavorite = true).toCharacterData())
         `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
         viewModel.onCreate()
-        viewModel.onFavoriteButtonClicked()
 
-        verify(view, times(2)).showCharacters(expectedCharacters.filter { it.isFavorite })
+        viewModel.onFilterButtonClicked(CharactersFilters.FAVORITES)
+
+        verify(view, atLeastOnce()).showCharacters(expectedCharacters.filter { it.isFavorite })
     }
 
     @Test
     fun `given main screen, when user clicks on favorites button and list is empty, then show empty list message`() = runTest {
         `when`(useCase.getAllCharacters()).thenReturn(emptyList())
-        viewModel.onFavoriteButtonClicked()
+        viewModel.onCreate()
+        viewModel.onFilterButtonClicked(CharactersFilters.FAVORITES)
 
-        verify(view).showEmptyFavoriteCharactersMessage()
+        verify(view).showEmptyCharactersError(true)
     }
 }

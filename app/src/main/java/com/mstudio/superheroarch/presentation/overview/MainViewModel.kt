@@ -31,7 +31,7 @@ class MainViewModel(
                     if (characters.isNotEmpty()) {
                         view.showCharacters(allCharacters)
                     } else {
-                        view.showEmptyCharactersError()
+                        view.showEmptyCharactersError(false)
                     }
                 }
             } catch (e: Exception) {
@@ -42,32 +42,32 @@ class MainViewModel(
         }
     }
 
-    fun onFilterButtonClicked(filter: StatusFilters = StatusFilters.ALL) {
-        if (filter != StatusFilters.ALL) {
-            view.showCharacters(allCharacters.filter { it.status.equals(filter.status, ignoreCase = true) })
-        } else {
-            view.showCharacters(allCharacters)
+    fun onFilterButtonClicked(filter: CharactersFilters = CharactersFilters.ALL) {
+        when (filter) {
+            CharactersFilters.ALL -> view.showCharacters(allCharacters)
+            CharactersFilters.ALIVE, CharactersFilters.DEAD, CharactersFilters.UNKNOWN -> {
+                view.showCharacters(allCharacters.filter { it.status.equals(filter.type, ignoreCase = true) })
+            }
+
+            CharactersFilters.FAVORITES -> {
+                val favoriteCharacters = allCharacters.filter { it.isFavorite }
+                if (favoriteCharacters.isNotEmpty()) {
+                    view.showCharacters(favoriteCharacters)
+                } else {
+                    view.showEmptyCharactersError(true)
+                }
+            }
         }
     }
 
     fun onCharacterClicked(characterSelected: CharacterData) {
         view.goToDetailScreen(characterSelected)
     }
-
-    fun onFavoriteButtonClicked() {
-        val favoriteCharacters = allCharacters.filter { it.isFavorite }
-        if (favoriteCharacters.isNotEmpty()) {
-            view.showCharacters(favoriteCharacters)
-        } else {
-            view.showEmptyFavoriteCharactersMessage()
-        }
-    }
 }
 
 interface MainViewTranslator {
     fun showCharacters(characters: List<CharacterData>)
-    fun showEmptyCharactersError()
+    fun showEmptyCharactersError(isFavoriteSection: Boolean = false)
     fun showGenericError()
     fun goToDetailScreen(characterSelected: CharacterData)
-    fun showEmptyFavoriteCharactersMessage()
 }
