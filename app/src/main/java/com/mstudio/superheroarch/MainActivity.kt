@@ -73,11 +73,11 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
             .show()
     }
 
-    override fun showCharacters(characters: List<Character>) {
+    override fun showCharacters(characters: List<CharacterEntity>) {
         adapter.updateCharacters(characters)
     }
 
-    override fun navigateToDetails(character: Character) {
+    override fun navigateToDetails(character: CharacterEntity) {
         val intent = Intent(this, DetailsActivity::class.java).apply {
             putExtra(EXTRA_CHARACTER, character)
         }

@@ -25,7 +25,6 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         setContentView(R.layout.details_screen)
 
         val db = AppDatabase.getDatabase(this)
-        val characterDao = db.characterDao()
         val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
         val remoteDataSource = RemoteDataSourceImpl(apiRick)
         val localDataSource = LocalDataSourceImpl(AppDatabase.getDatabase(this).characterDao())
@@ -45,13 +44,13 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
             finish()
         }
 
-        val character = intent.getSerializableExtra(MainActivity.EXTRA_CHARACTER) as? Character
+        val character = intent.getSerializableExtra(MainActivity.EXTRA_CHARACTER) as? CharacterEntity
         character?.let {
             viewModel?.fetchCharacterDetails(it)
         }
     }
 
-    override fun displayCharacterDetails(character: Character) {
+    override fun displayCharacterDetails(character: CharacterEntity) {
         characterNameTextView?.text = character.name
         characterStatusTextView?.text = character.status
         characterLocationTextView?.text = character.locationName
@@ -61,7 +60,7 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
             .into(characterImageView)
     }
 
-    override fun displayFirstEpisodeDetails(episode: Episode) {
+    override fun displayFirstEpisodeDetails(episode: EpisodeEntity) {
         firstEpisodeTextView?.text = episode.episode
         firstEpisodeDateTextView?.text = episode.air_date
     }

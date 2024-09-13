@@ -9,7 +9,7 @@ class DetailsViewModel(
     private val repository: RickAndMortyRepository
 ) : ViewModel() {
 
-    fun fetchCharacterDetails(character: Character) {
+    fun fetchCharacterDetails(character: CharacterEntity) {
         view.displayCharacterDetails(character)
         character.firstEpisode.let { episodeUrl ->
             viewModelScope.launch {
@@ -37,7 +37,7 @@ class DetailsViewModel(
 }
 
 interface DetailsViewTranslator {
-    fun displayCharacterDetails(character: Character)
-    fun displayFirstEpisodeDetails(episode: Episode)
+    fun displayCharacterDetails(character: CharacterEntity)
+    fun displayFirstEpisodeDetails(episode: EpisodeEntity)
     fun showError(message: String)
 }

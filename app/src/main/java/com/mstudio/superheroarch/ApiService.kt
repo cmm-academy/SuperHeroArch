@@ -15,8 +15,8 @@ object ApiService {
 
 interface ApiRick {
     @GET("character")
-    suspend fun getCharacter(): Response<CharacterResponse>
+    suspend fun getCharacters(): Response<CharacterResponse>
 
     @GET
-    suspend fun getEpisode(@Url episodeUrl: String): Response<Episode>
+    suspend fun getEpisode(@Url episodeUrl: String): Response<EpisodeEntity>
 }

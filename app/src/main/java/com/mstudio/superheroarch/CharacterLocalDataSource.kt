@@ -1,6 +1,6 @@
 package com.mstudio.superheroarch
 
 interface CharacterLocalDataSource {
-    suspend fun getAllCharacters(): List<Character>
-    suspend fun insertAll(characters: List<Character>)
+    suspend fun getAllCharacters(): List<CharacterLocalEntity>
+    suspend fun insertAll(characters: List<CharacterEntity>)
 }

@@ -8,8 +8,8 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel( private val view: ViewTranslator, private val repository: RickAndMortyRepository) : ViewModel() {
 
-    private var allCharacters: List<Character> = mutableListOf()
-    private var filteredCharacters: List<Character> = mutableListOf()
+    private var allCharacters: List<CharacterEntity> = mutableListOf()
+    private var filteredCharacters: List<CharacterEntity> = mutableListOf()
 
     fun onCreate() {
         fetchCharacters()
@@ -18,6 +18,7 @@ class MainViewModel( private val view: ViewTranslator, private val repository: R
     private fun fetchCharacters() {
         CoroutineScope(Dispatchers.IO).launch {
             val result = repository.fetchCharacters()
+
             withContext(Dispatchers.Main) {
                 result.onSuccess { characters ->
                     allCharacters = characters
@@ -51,6 +52,6 @@ class MainViewModel( private val view: ViewTranslator, private val repository: R
 
 interface ViewTranslator {
     fun showEmptyError()
-    fun showCharacters(characters: List<Character>)
-    fun navigateToDetails(character: Character)
+    fun showCharacters(characters: List<CharacterEntity>)
+    fun navigateToDetails(character: CharacterEntity)
 }

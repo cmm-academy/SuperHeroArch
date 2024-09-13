@@ -1,11 +1,12 @@
 package com.mstudio.superheroarch
 
+import android.webkit.WebStorage.Origin
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
 @Entity("characters")
-data class Character(
+data class CharacterLocalEntity(
     @PrimaryKey val id: Int,
     val name: String,
     val status: String,
@@ -15,10 +16,17 @@ data class Character(
     val firstEpisode: String
 ) : Serializable
 
+fun CharacterLocalEntity.mapToEntity() = CharacterEntity(
+    id = id,
+    name = name,
+    status = status,
+    image = image,
+    originName = originName,
+    locationName = locationName,
+    firstEpisode = firstEpisode
+)
 
-data class Ubication(
-    val name: String,
-) : Serializable
+fun List<CharacterLocalEntity>.mapToEntityList() = map { it.mapToEntity() }
 
 data class Episode(
     val air_date: String,

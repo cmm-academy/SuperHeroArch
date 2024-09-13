@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import android.content.Context
 
-@Database(entities = [Character::class], version = 2)
+@Database(entities = [CharacterLocalEntity::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun characterDao(): CharacterDao
     companion object {
