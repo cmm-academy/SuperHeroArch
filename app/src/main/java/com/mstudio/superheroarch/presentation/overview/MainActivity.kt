@@ -86,14 +86,10 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         adapter.submitList(characters)
     }
 
-    override fun showEmptyCharactersError(isFavoriteSection: Boolean) {
+    override fun showEmptyCharactersError() {
         binding.charactersRv.visibility = View.GONE
         binding.errorBody.visibility = View.VISIBLE
-        binding.errorBody.text = if (isFavoriteSection) {
-            resources.getString(R.string.favorite_characters_empty_message)
-        } else {
-            resources.getString(R.string.main_title_empty_body)
-        }
+        binding.errorBody.text = resources.getString(R.string.main_title_empty_body)
     }
 
     override fun showGenericError() {

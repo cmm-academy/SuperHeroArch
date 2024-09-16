@@ -11,6 +11,7 @@ import com.mstudio.superheroarch.remotedatasource.model.toCharacterEntity
 import com.mstudio.superheroarch.remotedatasource.model.toEpisodeEntity
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -67,6 +68,8 @@ class RickAndMortyRepositoryTest {
 
     @Test
     fun `given rickAndMorty repository, when set character as favorite, then update user as favorite in database`() = runTest {
+        val previousCharacters = rickAndMortyRepository.getCharacters()
+        assertFalse(previousCharacters.first().isFavorite)
         val result = rickAndMortyRepository.updateFavoriteCharacterStatus(true, 1)
         val localCharacters = rickAndMortyRepository.getCharacters()
 

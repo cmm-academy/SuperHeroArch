@@ -23,16 +23,17 @@ import kotlinx.coroutines.Dispatchers
 
 class CharacterDetailActivity : AppCompatActivity(), CharacterDetailViewTranslator {
     private lateinit var binding: CharacterDetailActivityBinding
+    private val rickAndMortyRepository = RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create())
     private val viewModel: CharacterDetailViewModel by lazy {
         CharacterDetailViewModel(
             this,
             GetCharacterAndEpisodeUseCase(
-                RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create()),
+                rickAndMortyRepository,
                 TheMovieDbRepository(TheMovieDbApiHelper.create())
             ),
             Dispatchers.IO,
             NetworkManagerImpl(),
-            UpdateFavoriteCharacterStatusUseCase(RickAndMortyRepository(DatabaseHelper.create(), RickAndMortyApiHelper.create()))
+            UpdateFavoriteCharacterStatusUseCase(rickAndMortyRepository)
         )
     }
 

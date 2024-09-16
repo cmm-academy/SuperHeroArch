@@ -92,10 +92,11 @@ class MainViewModelTest {
 
     @Test
     fun `given main screen, when user clicks on favorites button and list is empty, then show empty list message`() = runTest {
-        `when`(useCase.getAllCharacters()).thenReturn(emptyList())
+        val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
+        `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
         viewModel.onStart()
         viewModel.onFilterButtonClicked(CharactersFilters.FAVORITES)
 
-        verify(view).showEmptyCharactersError(true)
+        verify(view).showEmptyCharactersError()
     }
 }

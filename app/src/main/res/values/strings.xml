@@ -3,7 +3,7 @@
     <string name="main_title_not_pressed">Button not pressed</string>
     <string name="main_title_pressed">Button pressed</string>
     <string name="main_title_error_body">There is an error. Try later</string>
-    <string name="main_title_empty_body">The character is gone</string>
+    <string name="main_title_empty_body">There is no characters with this filter</string>
     <string name="character_name">Name: %s</string>
     <string name="character_status">Status: %s</string>
     <string name="character_species">Species: %s</string>
@@ -19,5 +19,4 @@
     <string name="episode_error_message">Couldn\'t find the first episode</string>
     <string name="no_internet_message">No Internet Connection</string>
     <string name="episode_details_error_message">Sorry, there is a problem retrieving episode details</string>
-    <string name="favorite_characters_empty_message">There is no favorite characters yet</string>
 </resources>

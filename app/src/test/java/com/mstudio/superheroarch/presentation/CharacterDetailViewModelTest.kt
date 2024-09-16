@@ -15,6 +15,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.times
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.verify
 
@@ -91,10 +92,10 @@ class CharacterDetailViewModelTest {
     fun `given character detail screen, when user marks character as favorite, then the character is shown as favorite`() = runTest {
         viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
         `when`(setFavCharacterUseCase.updateCharacterFavoriteStatus(true, 1)).thenReturn(Unit)
+        verify(view).showCharacterAsNonFavorite()
 
         viewModel.onFavoriteClicked()
 
-        verify(view).showCharacterAsNonFavorite()
         verify(view).showCharacterAsFavorite()
     }
 

@@ -31,7 +31,7 @@ class MainViewModel(
                     if (characters.isNotEmpty()) {
                         view.showCharacters(allCharacters)
                     } else {
-                        view.showEmptyCharactersError(false)
+                        view.showEmptyCharactersError()
                     }
                 }
             } catch (e: Exception) {
@@ -54,7 +54,7 @@ class MainViewModel(
                 if (favoriteCharacters.isNotEmpty()) {
                     view.showCharacters(favoriteCharacters)
                 } else {
-                    view.showEmptyCharactersError(true)
+                    view.showEmptyCharactersError()
                 }
             }
         }
@@ -67,7 +67,7 @@ class MainViewModel(
 
 interface MainViewTranslator {
     fun showCharacters(characters: List<CharacterData>)
-    fun showEmptyCharactersError(isFavoriteSection: Boolean = false)
+    fun showEmptyCharactersError()
     fun showGenericError()
     fun goToDetailScreen(characterSelected: CharacterData)
 }
