@@ -9,22 +9,22 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.mockito.kotlin.verify
 
-class SetFavoriteCharacterUseCaseTest {
+class UpdateFavoriteCharacterStatusUseCaseTest {
 
     private lateinit var repository: RickAndMortyRepository
-    private lateinit var useCase: SetFavoriteCharacterUseCase
+    private lateinit var useCase: UpdateFavoriteCharacterStatusUseCase
 
     @Before
     fun before() {
         repository = mock()
-        useCase = SetFavoriteCharacterUseCase(repository)
+        useCase = UpdateFavoriteCharacterStatusUseCase(repository)
     }
 
     @Test
     fun `given detail screen, when user select character as favorite, then character is mark as favorite`() = runTest {
-        `when`(repository.setFavoriteCharacter(true, 1)).thenReturn(Unit)
-        val result = useCase.setCharacterAsFavorite(true, 1)
+        `when`(repository.updateFavoriteCharacterStatus(true, 1)).thenReturn(Unit)
+        val result = useCase.updateCharacterFavoriteStatus(true, 1)
         assertEquals(Unit, result)
-        verify(repository).setFavoriteCharacter(true, 1)
+        verify(repository).updateFavoriteCharacterStatus(true, 1)
     }
 }

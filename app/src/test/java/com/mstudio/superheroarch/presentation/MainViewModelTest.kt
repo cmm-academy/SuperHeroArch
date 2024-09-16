@@ -14,8 +14,8 @@ import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.times
 import org.mockito.Mockito.`when`
-import org.mockito.kotlin.atLeastOnce
 import org.mockito.kotlin.verify
 
 @ExperimentalCoroutinesApi
@@ -38,7 +38,7 @@ class MainViewModelTest {
     fun `given main screen, when retrieve all the characters, then show all the characters`() = runTest {
         val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
         `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
-        viewModel.onCreate()
+        viewModel.onStart()
 
         verify(view).showCharacters(expectedCharacters)
     }
@@ -46,7 +46,7 @@ class MainViewModelTest {
     @Test()
     fun `given main screen, when retrieving all characters the call return empty list, then show empty error`() = runTest {
         `when`(useCase.getAllCharacters()).thenReturn(emptyList())
-        viewModel.onCreate()
+        viewModel.onStart()
 
         verify(view).showEmptyCharactersError()
     }
@@ -54,7 +54,7 @@ class MainViewModelTest {
     @Test(expected = Exception::class)
     fun `given main screen, when retrieving all character the call fails, then show generic error`() = runTest {
         `when`(useCase.getAllCharacters()).thenThrow(Exception())
-        viewModel.onCreate()
+        viewModel.onStart()
 
         verify(view).showGenericError()
     }
@@ -63,10 +63,10 @@ class MainViewModelTest {
     fun `given main screen, when user clicks on dead filter, then show all dead characters only`() = runTest {
         val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity(status = CharactersFilters.DEAD.type).toCharacterData())
         `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
-        viewModel.onCreate()
+        viewModel.onStart()
         viewModel.onFilterButtonClicked(CharactersFilters.DEAD)
 
-        verify(view, atLeastOnce()).showCharacters(expectedCharacters.filter { it.status == CharactersFilters.DEAD.type })
+        verify(view, times(2)).showCharacters(expectedCharacters.filter { it.status == CharactersFilters.DEAD.type })
     }
 
     @Test
@@ -83,17 +83,17 @@ class MainViewModelTest {
     fun `given main screen, when user clicks on favorites button and has favorite characters, then show all the favorite characters`() = runTest {
         val expectedCharacters = listOf(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFavorite = true).toCharacterData())
         `when`(useCase.getAllCharacters()).thenReturn(expectedCharacters)
-        viewModel.onCreate()
+        viewModel.onStart()
 
         viewModel.onFilterButtonClicked(CharactersFilters.FAVORITES)
 
-        verify(view, atLeastOnce()).showCharacters(expectedCharacters.filter { it.isFavorite })
+        verify(view, times(2)).showCharacters(expectedCharacters.filter { it.isFavorite })
     }
 
     @Test
     fun `given main screen, when user clicks on favorites button and list is empty, then show empty list message`() = runTest {
         `when`(useCase.getAllCharacters()).thenReturn(emptyList())
-        viewModel.onCreate()
+        viewModel.onStart()
         viewModel.onFilterButtonClicked(CharactersFilters.FAVORITES)
 
         verify(view).showEmptyCharactersError(true)

@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
 
     override fun onStart() {
         super.onStart()
-        viewModel.onCreate()
+        viewModel.onStart()
     }
 
     private fun setUpView() {
@@ -107,10 +107,4 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         }
         startActivity(intent)
     }
-
-//    override fun showEmptyFavoriteCharactersMessage() {
-//        binding.charactersRv.visibility = View.GONE
-//        binding.errorBody.visibility = View.VISIBLE
-//        binding.errorBody.text = resources.getString(R.string.favorite_characters_empty_message)
-//    }
 }

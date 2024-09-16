@@ -6,7 +6,7 @@ import com.mstudio.superheroarch.presentation.detail.CharacterDetailViewTranslat
 import com.mstudio.superheroarch.presentation.network.NetworkManagerImpl
 import com.mstudio.superheroarch.repository.model.toCharacterData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
-import com.mstudio.superheroarch.usecase.SetFavoriteCharacterUseCase
+import com.mstudio.superheroarch.usecase.UpdateFavoriteCharacterStatusUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -26,7 +26,7 @@ class CharacterDetailViewModelTest {
     private lateinit var useCase: GetCharacterAndEpisodeUseCase
     private val testDispatcher = UnconfinedTestDispatcher()
     private lateinit var networkManager: NetworkManagerImpl
-    private lateinit var setFavCharacterUseCase: SetFavoriteCharacterUseCase
+    private lateinit var setFavCharacterUseCase: UpdateFavoriteCharacterStatusUseCase
 
     @Before
     fun before() {
@@ -90,9 +90,11 @@ class CharacterDetailViewModelTest {
     @Test
     fun `given character detail screen, when user marks character as favorite, then the character is shown as favorite`() = runTest {
         viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterEntity().toCharacterData())
-        verify(view).showCharacterAsNonFavorite()
-        `when`(setFavCharacterUseCase.setCharacterAsFavorite(true, 1)).thenReturn(Unit)
+        `when`(setFavCharacterUseCase.updateCharacterFavoriteStatus(true, 1)).thenReturn(Unit)
+
         viewModel.onFavoriteClicked()
+
+        verify(view).showCharacterAsNonFavorite()
         verify(view).showCharacterAsFavorite()
     }
 
@@ -100,7 +102,7 @@ class CharacterDetailViewModelTest {
     fun `given character detail screen, when user marks character as not favorite, then the character is shown as not favorite`() = runTest {
         viewModel.onCharacterReceived(RickAndMortyRepositoryInstruments.givenACharacterEntity(isFavorite = true).toCharacterData())
         verify(view).showCharacterAsFavorite()
-        `when`(setFavCharacterUseCase.setCharacterAsFavorite(false, 1)).thenReturn(Unit)
+        `when`(setFavCharacterUseCase.updateCharacterFavoriteStatus(false, 1)).thenReturn(Unit)
         viewModel.onFavoriteClicked()
         verify(view).showCharacterAsNonFavorite()
     }

@@ -6,7 +6,7 @@ import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.presentation.network.NetworkManagerImpl
 import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
-import com.mstudio.superheroarch.usecase.SetFavoriteCharacterUseCase
+import com.mstudio.superheroarch.usecase.UpdateFavoriteCharacterStatusUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ class CharacterDetailViewModel(
     private val useCase: GetCharacterAndEpisodeUseCase,
     private val dispatcher: CoroutineDispatcher,
     private val networkManager: NetworkManagerImpl,
-    private val setFavoriteCharacterUseCase: SetFavoriteCharacterUseCase
+    private val updateFavoriteCharacterStatusUseCase: UpdateFavoriteCharacterStatusUseCase
 ) : ViewModel() {
 
     private var characterData: CharacterData? = null
@@ -70,7 +70,7 @@ class CharacterDetailViewModel(
         characterData?.let { characterSelected ->
             viewModelScope.launch(dispatcher) {
 
-                setFavoriteCharacterUseCase.setCharacterAsFavorite(!characterSelected.isFavorite, characterSelected.id)
+                updateFavoriteCharacterStatusUseCase.updateCharacterFavoriteStatus(!characterSelected.isFavorite, characterSelected.id)
             }
             if (characterSelected.isFavorite) {
                 view.showCharacterAsNonFavorite()

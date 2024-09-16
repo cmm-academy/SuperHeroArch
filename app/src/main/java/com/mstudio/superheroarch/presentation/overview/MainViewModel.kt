@@ -17,7 +17,7 @@ class MainViewModel(
 
     private var allCharacters = listOf<CharacterData>()
 
-    fun onCreate() {
+    fun onStart() {
         getCharacters()
     }
 
