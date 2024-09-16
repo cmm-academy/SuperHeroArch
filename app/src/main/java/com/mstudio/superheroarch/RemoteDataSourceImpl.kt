@@ -17,6 +17,16 @@ class RemoteDataSourceImpl(private val apiRick: ApiRick) : CharacterRemoteDataSo
     }
 
     override suspend fun getEpisode(episodeUrl: String): Response<EpisodeEntity> {
-        return apiRick.getEpisode(episodeUrl)
+        val response = apiRick.getEpisode(episodeUrl)
+
+        if (response.isSuccessful){
+            val responseBody = response.body()
+            val episodeEntity = responseBody?.mapToEntity()
+
+            if (responseBody != null){
+                return Response.success(episodeEntity)
+            }
+        }
+        throw Exception("")
     }
 }

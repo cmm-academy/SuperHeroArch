@@ -29,16 +29,16 @@ class RickAndMortyRepository(
     }
 
     suspend fun fetchEpisodeDetails(episodeUrl: String): Result<EpisodeEntity>{
-        try {
+        return try {
             val response = remoteDataSource.getEpisode(episodeUrl)
             val episode = response.body()
             if (episode != null){
-                return Result.success(episode)
+                Result.success(episode)
             }else{
-                return Result.failure(Exception("Error fetching episode details"))
+                Result.failure(Exception("Error fetching episode details"))
             }
         }catch (e: IOException){
-            return Result.failure(e)
+            Result.failure(e)
         }
     }
 }

@@ -18,5 +18,5 @@ interface ApiRick {
     suspend fun getCharacters(): Response<CharacterResponse>
 
     @GET
-    suspend fun getEpisode(@Url episodeUrl: String): Response<EpisodeEntity>
+    suspend fun getEpisode(@Url episodeUrl: String): Response<EpisodeRemoteEntity>
 }

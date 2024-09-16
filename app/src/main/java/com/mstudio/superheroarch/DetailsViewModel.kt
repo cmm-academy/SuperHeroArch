@@ -21,14 +21,8 @@ class DetailsViewModel(
     private suspend fun fetchFirstEpisodeDetails(episodeUrl: String) {
         try {
             val episodeResult = repository.fetchEpisodeDetails(episodeUrl)
-            if (episodeResult.isSuccess) {
-                episodeResult.getOrNull()?.let {
-                    view.displayFirstEpisodeDetails(it)
-                } ?: run {
-                    view.showError("Failed to load episode details")
-                }
-            } else {
-                view.showError("Failed to load episode details")
+            episodeResult.getOrNull()?.let {
+                view.displayFirstEpisodeDetails(it)
             }
         } catch (e: Exception) {
             view.showError("Failed to load episode details")
