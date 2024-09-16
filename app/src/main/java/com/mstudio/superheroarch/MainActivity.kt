@@ -12,10 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity(), ViewTranslator {
 
-    private val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
-    private val repository = RickAndMortyRepository(apiRick)
-    private val viewModel: MainViewModel = MainViewModel(this, repository)
-
+    private var viewModel: MainViewModel? = null
     private val adapter = CharacterAdapter()
 
     companion object {
@@ -27,7 +24,15 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        viewModel.onCreate()
+        val database = AppDatabase.getDatabase(this)
+        val characterDao = database.characterDao()
+        val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
+        val remoteDataSource = RemoteDataSourceImpl(apiRick)
+        val localDataSource = LocalDataSourceImpl(characterDao)
+        val repository = RickAndMortyRepository(remoteDataSource, localDataSource)
+
+        viewModel = MainViewModel(this, repository)
+        viewModel?.onCreate()
 
         val allButton = findViewById<Button>(R.id.all)
         val aliveButton = findViewById<Button>(R.id.alive)
@@ -45,21 +50,21 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
 
         adapter.setOnItemClickListener(object : CharacterAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                viewModel.onCharacterClicked(position)
+                viewModel?.onCharacterClicked(position)
             }
         })
 
         allButton.setOnClickListener {
-            viewModel.onFilterClicked(null)
+            viewModel?.onFilterClicked(null)
         }
         aliveButton.setOnClickListener {
-            viewModel.onFilterClicked("Alive")
+            viewModel?.onFilterClicked("Alive")
         }
         deadButton.setOnClickListener {
-            viewModel.onFilterClicked("Dead")
+            viewModel?.onFilterClicked("Dead")
         }
         unknownButton.setOnClickListener {
-            viewModel.onFilterClicked("unknown")
+            viewModel?.onFilterClicked("unknown")
         }
     }
 
@@ -68,11 +73,11 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
             .show()
     }
 
-    override fun showCharacters(characters: List<Character>) {
+    override fun showCharacters(characters: List<CharacterEntity>) {
         adapter.updateCharacters(characters)
     }
 
-    override fun navigateToDetails(character: Character) {
+    override fun navigateToDetails(character: CharacterEntity) {
         val intent = Intent(this, DetailsActivity::class.java).apply {
             putExtra(EXTRA_CHARACTER, character)
         }

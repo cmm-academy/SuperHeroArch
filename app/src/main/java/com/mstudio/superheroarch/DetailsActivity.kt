@@ -10,6 +10,8 @@ import com.squareup.picasso.Picasso
 
 class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
 
+    private var viewModel: DetailsViewModel? = null
+
     private var characterNameTextView: TextView? = null
     private var characterStatusTextView: TextView? = null
     private var characterImageView: ImageView? = null
@@ -18,14 +20,15 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
     private var firstEpisodeTextView: TextView? = null
     private var firstEpisodeDateTextView: TextView? = null
 
-    private var viewModel: DetailsViewModel? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.details_screen)
 
+        val db = AppDatabase.getDatabase(this)
         val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
-        val repository = RickAndMortyRepository(apiRick)
+        val remoteDataSource = RemoteDataSourceImpl(apiRick)
+        val localDataSource = LocalDataSourceImpl(db.characterDao())
+        val repository = RickAndMortyRepository(remoteDataSource, localDataSource)
         viewModel = DetailsViewModel(this, repository)
 
         characterNameTextView = findViewById(R.id.character_name)
@@ -41,23 +44,23 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
             finish()
         }
 
-        val character = intent.getSerializableExtra(MainActivity.EXTRA_CHARACTER) as? Character
+        val character = intent.getSerializableExtra(MainActivity.EXTRA_CHARACTER) as? CharacterEntity
         character?.let {
             viewModel?.fetchCharacterDetails(it)
         }
     }
 
-    override fun displayCharacterDetails(character: Character) {
+    override fun displayCharacterDetails(character: CharacterEntity) {
         characterNameTextView?.text = character.name
         characterStatusTextView?.text = character.status
-        characterLocationTextView?.text = character.location.name
-        characterOriginTextView?.text = character.origin.name
+        characterLocationTextView?.text = character.locationName
+        characterOriginTextView?.text = character.originName
         Picasso.get().load(character.image).placeholder(R.drawable.placeholder)
             .error(R.drawable.error)
             .into(characterImageView)
     }
 
-    override fun displayFirstEpisodeDetails(episode: Episode) {
+    override fun displayFirstEpisodeDetails(episode: EpisodeEntity) {
         firstEpisodeTextView?.text = episode.episode
         firstEpisodeDateTextView?.text = episode.air_date
     }

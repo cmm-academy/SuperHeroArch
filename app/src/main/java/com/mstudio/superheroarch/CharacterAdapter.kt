@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso
 class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
 
     private var mListener: OnItemClickListener? = null
-    private var characters: List<Character> = emptyList()
+    private var characters: List<CharacterEntity> = emptyList()
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
@@ -34,7 +34,7 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
             }
         }
 
-        fun bind(character: Character) {
+        fun bind(character: CharacterEntity) {
             name.text = character.name
             status.text = character.status
             Picasso.get().load(character.image).placeholder(R.drawable.placeholder)
@@ -56,7 +56,7 @@ class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHold
     override fun getItemCount(): Int = characters.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateCharacters(newCharacters: List<Character>) {
+    fun updateCharacters(newCharacters: List<CharacterEntity>) {
         characters = newCharacters
         notifyDataSetChanged()
     }
