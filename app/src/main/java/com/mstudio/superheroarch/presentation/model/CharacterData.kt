@@ -12,7 +12,8 @@ data class CharacterData(
     val species: String,
     val origin: String,
     val location: String,
-    val firstEpisode: String
+    val firstEpisode: String,
+    var isFavorite: Boolean
 ) : Serializable
 
 fun CharacterData.toCharacterAndEpisode(episode: Episode, theMovieDbEpisode: TheMovieDbEpisode?): CharacterAndEpisodeData =
@@ -30,5 +31,6 @@ fun CharacterData.toCharacterAndEpisode(episode: Episode, theMovieDbEpisode: The
             airDate = episode.airDate,
             image = theMovieDbEpisode?.image,
             voteAverage = theMovieDbEpisode?.voteAverage
-        )
+        ),
+        isFavorite = isFavorite
     )

@@ -13,4 +13,7 @@ interface CharactersDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacters(characters: List<CharacterLocalEntity>)
+
+    @Query("UPDATE CharacterLocalEntity SET isFavorite = :isFavorite WHERE id = :id")
+    suspend fun updateFavoriteCharacter(isFavorite: Boolean, id: Int)
 }

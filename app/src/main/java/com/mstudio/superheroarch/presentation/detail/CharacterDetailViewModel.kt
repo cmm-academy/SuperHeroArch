@@ -6,6 +6,7 @@ import com.mstudio.superheroarch.presentation.model.CharacterData
 import com.mstudio.superheroarch.presentation.network.NetworkManagerImpl
 import com.mstudio.superheroarch.usecase.CharacterAndEpisodeData
 import com.mstudio.superheroarch.usecase.GetCharacterAndEpisodeUseCase
+import com.mstudio.superheroarch.usecase.UpdateFavoriteCharacterStatusUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,14 +16,27 @@ class CharacterDetailViewModel(
     private val view: CharacterDetailViewTranslator,
     private val useCase: GetCharacterAndEpisodeUseCase,
     private val dispatcher: CoroutineDispatcher,
-    private val networkManager: NetworkManagerImpl = NetworkManagerImpl()
+    private val networkManager: NetworkManagerImpl,
+    private val updateFavoriteCharacterStatusUseCase: UpdateFavoriteCharacterStatusUseCase
 ) : ViewModel() {
+
+    private var characterData: CharacterData? = null
 
     fun onCharacterReceived(character: CharacterData) {
         if (networkManager.hasInternetConnection()) {
+            characterData = character
+            checkIfCharacterIsFavorite(character.isFavorite)
             getFirstEpisode(character)
         } else {
             view.showNoInternetConnection()
+        }
+    }
+
+    private fun checkIfCharacterIsFavorite(isFavorite: Boolean) {
+        if (isFavorite) {
+            view.showCharacterAsFavorite()
+        } else {
+            view.showCharacterAsNonFavorite()
         }
     }
 
@@ -51,6 +65,22 @@ class CharacterDetailViewModel(
             view.showEpisodeExtraDataError()
         }
     }
+
+    fun onFavoriteClicked() {
+        characterData?.let { characterSelected ->
+            viewModelScope.launch(dispatcher) {
+
+                updateFavoriteCharacterStatusUseCase.updateCharacterFavoriteStatus(!characterSelected.isFavorite, characterSelected.id)
+            }
+            if (characterSelected.isFavorite) {
+                view.showCharacterAsNonFavorite()
+                characterSelected.isFavorite = false
+            } else {
+                view.showCharacterAsFavorite()
+                characterSelected.isFavorite = true
+            }
+        }
+    }
 }
 
 interface CharacterDetailViewTranslator {
@@ -59,4 +89,6 @@ interface CharacterDetailViewTranslator {
     fun showNoInternetConnection()
     fun showEpisodeExtraData(image: String, voteAverage: Double)
     fun showEpisodeExtraDataError()
+    fun showCharacterAsFavorite()
+    fun showCharacterAsNonFavorite()
 }

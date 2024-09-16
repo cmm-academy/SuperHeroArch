@@ -3,6 +3,7 @@ package com.mstudio.superheroarch.remotedatasource.mapper
 import com.mstudio.superheroarch.RickAndMortyRepositoryInstruments
 import com.mstudio.superheroarch.remotedatasource.model.toCharacterEntity
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Test
 
 class CharacterRemoteEntityMapperTest {
@@ -20,5 +21,6 @@ class CharacterRemoteEntityMapperTest {
         assertEquals(expected.location.name, actual.location)
         assertEquals(expected.episode, actual.episode)
         assertEquals(expected.image, actual.image)
+        assertFalse(actual.isFavorite)
     }
 }

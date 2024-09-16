@@ -49,6 +49,17 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Button" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/favoritesButton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/allFilterButton"
+        tools:text="Favorites" />
+
     <TextView
         android:id="@+id/errorBody"
         android:layout_width="wrap_content"
@@ -58,7 +69,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aliveFilterButton" />
+        app:layout_constraintTop_toBottomOf="@+id/favoritesButton" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/charactersRv"
@@ -69,5 +80,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aliveFilterButton" />
+        app:layout_constraintTop_toBottomOf="@+id/favoritesButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,7 @@ class MainViewModel(
 
     private var allCharacters = listOf<CharacterData>()
 
-    fun onCreate() {
+    fun onStart() {
         getCharacters()
     }
 
@@ -42,11 +42,21 @@ class MainViewModel(
         }
     }
 
-    fun onFilterButtonClicked(filter: StatusFilters = StatusFilters.ALL) {
-        if (filter != StatusFilters.ALL) {
-            view.showCharacters(allCharacters.filter { it.status.equals(filter.status, ignoreCase = true) })
-        } else {
-            view.showCharacters(allCharacters)
+    fun onFilterButtonClicked(filter: CharactersFilters = CharactersFilters.ALL) {
+        when (filter) {
+            CharactersFilters.ALL -> view.showCharacters(allCharacters)
+            CharactersFilters.ALIVE, CharactersFilters.DEAD, CharactersFilters.UNKNOWN -> {
+                view.showCharacters(allCharacters.filter { it.status.equals(filter.type, ignoreCase = true) })
+            }
+
+            CharactersFilters.FAVORITES -> {
+                val favoriteCharacters = allCharacters.filter { it.isFavorite }
+                if (favoriteCharacters.isNotEmpty()) {
+                    view.showCharacters(favoriteCharacters)
+                } else {
+                    view.showEmptyCharactersError()
+                }
+            }
         }
     }
 

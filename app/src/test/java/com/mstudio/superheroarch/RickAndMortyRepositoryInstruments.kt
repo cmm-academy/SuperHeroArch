@@ -2,6 +2,7 @@ package com.mstudio.superheroarch
 
 import com.mstudio.superheroarch.localdatasource.model.CharacterLocalEntity
 import com.mstudio.superheroarch.presentation.model.CharacterData
+import com.mstudio.superheroarch.presentation.overview.CharactersFilters
 import com.mstudio.superheroarch.remotedatasource.model.CharacterPlaceRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.CharactersRemoteEntity
 import com.mstudio.superheroarch.remotedatasource.model.EpisodeRemoteEntity
@@ -26,19 +27,20 @@ object RickAndMortyRepositoryInstruments {
             image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
         )
 
-    fun givenACharacterEntity(): CharacterEntity =
+    fun givenACharacterEntity(isFavorite: Boolean = false, status: String = CharactersFilters.ALIVE.type.lowercase()): CharacterEntity =
         CharacterEntity(
             id = 1,
             name = "Rick",
-            status = "Alive",
+            status = status,
             species = "Human",
             origin = "Earth",
             location = "City",
             episode = listOf("https://rickandmortyapi.com/api/episode/1"),
-            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+            isFavorite = isFavorite
         )
 
-    fun givenACharacterLocalEntity(): CharacterLocalEntity =
+    fun givenACharacterLocalEntity(isFavorite: Boolean = false): CharacterLocalEntity =
         CharacterLocalEntity(
             id = 1,
             name = "Rick",
@@ -47,7 +49,8 @@ object RickAndMortyRepositoryInstruments {
             origin = "Earth",
             location = "City",
             episode = "https://rickandmortyapi.com/api/episode/1",
-            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+            isFavorite = isFavorite
         )
 
     fun givenAnEpisodeRemoteEntity(): EpisodeRemoteEntity =
@@ -80,7 +83,7 @@ object RickAndMortyRepositoryInstruments {
         CharacterAndEpisodeData(
             id = 1,
             name = "Rick",
-            status = "Alive",
+            status = "alive",
             species = "Human",
             origin = "Earth",
             location = "City",
@@ -91,7 +94,8 @@ object RickAndMortyRepositoryInstruments {
                 airDate = "October 16, 2014",
                 image = episodeImage,
                 voteAverage = voteAverage
-            )
+            ),
+            isFavorite = false
         )
 
     fun givenCharacterData(): CharacterData =
@@ -103,6 +107,7 @@ object RickAndMortyRepositoryInstruments {
             origin = "Earth",
             location = "City",
             image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-            firstEpisode = "S01E01"
+            firstEpisode = "S01E01",
+            isFavorite = false
         )
 }

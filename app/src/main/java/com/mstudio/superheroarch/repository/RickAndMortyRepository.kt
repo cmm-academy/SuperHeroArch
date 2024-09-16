@@ -50,4 +50,8 @@ class RickAndMortyRepository(
     private suspend fun saveCharacters(characters: List<CharacterLocalEntity>) {
         database.characterDao().insertCharacters(characters)
     }
+
+    suspend fun updateFavoriteCharacterStatus(isFavorite: Boolean, id: Int) {
+        database.characterDao().updateFavoriteCharacter(isFavorite, id)
+    }
 }

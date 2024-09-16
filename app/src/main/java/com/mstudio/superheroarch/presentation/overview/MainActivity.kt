@@ -36,9 +36,13 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel.onCreate()
         setUpView()
         setUpListeners()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.onStart()
     }
 
     private fun setUpView() {
@@ -48,25 +52,30 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
             deadFilterButton.text = resources.getString(R.string.dead_filter_button_title)
             unknownFilterButton.text = resources.getString(R.string.unknown_filter_button_title)
             allFilterButton.text = resources.getString(R.string.all_filter_button_title)
+            favoritesButton.text = resources.getString(R.string.favorites_button_title)
         }
     }
 
     private fun setUpListeners() {
         with(binding) {
             aliveFilterButton.setOnClickListener {
-                viewModel.onFilterButtonClicked(StatusFilters.ALIVE)
+                viewModel.onFilterButtonClicked(CharactersFilters.ALIVE)
             }
 
             deadFilterButton.setOnClickListener {
-                viewModel.onFilterButtonClicked(StatusFilters.DEAD)
+                viewModel.onFilterButtonClicked(CharactersFilters.DEAD)
             }
 
             unknownFilterButton.setOnClickListener {
-                viewModel.onFilterButtonClicked(StatusFilters.UNKNOWN)
+                viewModel.onFilterButtonClicked(CharactersFilters.UNKNOWN)
             }
 
             allFilterButton.setOnClickListener {
                 viewModel.onFilterButtonClicked()
+            }
+
+            favoritesButton.setOnClickListener {
+                viewModel.onFilterButtonClicked(CharactersFilters.FAVORITES)
             }
         }
     }

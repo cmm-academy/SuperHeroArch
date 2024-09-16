@@ -20,5 +20,6 @@ class CharacterEntityMapperTest {
         assertEquals(expected.location, actual.location)
         assertEquals(expected.episode.first().split("/").last(), actual.firstEpisode)
         assertEquals(expected.image, actual.image)
+        assertEquals(expected.isFavorite, actual.isFavorite)
     }
 }
