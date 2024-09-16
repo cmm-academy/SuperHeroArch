@@ -13,20 +13,20 @@ class RemoteDataSourceImpl(private val apiRick: ApiRick) : CharacterRemoteDataSo
                 return responseBody.results.mapToEntityList()
             }
         }
-        throw Exception("")
+        throw CharactersFetchException("Response: $response")
     }
 
-    override suspend fun getEpisode(episodeUrl: String): Response<EpisodeEntity> {
+    override suspend fun getEpisode(episodeUrl: String): EpisodeEntity {
         val response = apiRick.getEpisode(episodeUrl)
 
         if (response.isSuccessful){
             val responseBody = response.body()
             val episodeEntity = responseBody?.mapToEntity()
 
-            if (responseBody != null){
-                return Response.success(episodeEntity)
+            if (episodeEntity != null){
+                return episodeEntity
             }
         }
-        throw Exception("")
+        throw EpisodeFetchException(episodeUrl, "Response: $response")
     }
 }

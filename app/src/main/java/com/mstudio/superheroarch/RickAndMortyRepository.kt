@@ -1,7 +1,5 @@
 package com.mstudio.superheroarch
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.IOException
 
 class RickAndMortyRepository(
@@ -31,12 +29,7 @@ class RickAndMortyRepository(
     suspend fun fetchEpisodeDetails(episodeUrl: String): Result<EpisodeEntity>{
         return try {
             val response = remoteDataSource.getEpisode(episodeUrl)
-            val episode = response.body()
-            if (episode != null){
-                Result.success(episode)
-            }else{
-                Result.failure(Exception("Error fetching episode details"))
-            }
+            Result.success(response)
         }catch (e: IOException){
             Result.failure(e)
         }
