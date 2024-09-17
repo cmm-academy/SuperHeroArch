@@ -1,10 +1,8 @@
 package com.mstudio.superheroarch.presentation
 
 import androidx.lifecycle.ViewModel
-import com.mstudio.superheroarch.domain.FilterCharactersByStatusUseCase
 import com.mstudio.superheroarch.domain.GetCharactersUseCase
 import com.mstudio.superheroarch.repository.CharacterEntity
-import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,7 +11,6 @@ import kotlinx.coroutines.withContext
 class MainViewModel(
     private val view: ViewTranslator,
     private val getCharactersUseCase: GetCharactersUseCase,
-    private val filterCharactersByStatusUseCase: FilterCharactersByStatusUseCase
 ) : ViewModel() {
 
     private var allCharacters: List<CharacterEntity> = mutableListOf()
@@ -49,7 +46,11 @@ class MainViewModel(
     }
 
     fun onFilterClicked(status: String?) {
-        filteredCharacters = filterCharactersByStatusUseCase(allCharacters, status)
+        filteredCharacters = if (status == null) {
+            allCharacters
+        } else {
+            allCharacters.filter { it.status.equals(status, ignoreCase = true) }
+        }
         view.showCharacters(filteredCharacters)
     }
 }

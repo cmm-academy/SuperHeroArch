@@ -17,7 +17,6 @@ import com.mstudio.superheroarch.repository.CharacterEntity
 import com.mstudio.superheroarch.data_local.LocalDataSourceImpl
 import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.data_remote.RemoteDataSourceImpl
-import com.mstudio.superheroarch.domain.FilterCharactersByStatusUseCase
 import com.mstudio.superheroarch.domain.GetCharactersUseCase
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.presentation.MainViewModel
@@ -45,9 +44,8 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
         val repository = RickAndMortyRepository(remoteDataSource, localDataSource)
 
         val getCharactersUseCase = GetCharactersUseCase(repository)
-        val filterCharactersByStatusUseCase = FilterCharactersByStatusUseCase()
 
-        viewModel = MainViewModel(this, getCharactersUseCase, filterCharactersByStatusUseCase)
+        viewModel = MainViewModel(this, getCharactersUseCase)
         viewModel?.onCreate()
 
         val allButton = findViewById<Button>(R.id.all)
