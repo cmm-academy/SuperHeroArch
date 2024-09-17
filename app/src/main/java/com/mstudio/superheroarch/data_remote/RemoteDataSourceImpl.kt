@@ -1,6 +1,9 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.data_remote
 
-import retrofit2.Response
+import com.mstudio.superheroarch.repository.CharacterEntity
+import com.mstudio.superheroarch.repository.EpisodeEntity
+import com.mstudio.superheroarch.CharactersFetchException
+import com.mstudio.superheroarch.EpisodeFetchException
 
 class RemoteDataSourceImpl(private val apiRick: ApiRick) : CharacterRemoteDataSource {
     override suspend fun getCharacters(): List<CharacterEntity> {

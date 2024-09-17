@@ -1,4 +1,6 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.data_remote
+
+import com.mstudio.superheroarch.repository.CharacterEntity
 
 data class CharacterRemoteEntity(
     val id: Int,

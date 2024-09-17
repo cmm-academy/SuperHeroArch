@@ -1,4 +1,4 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,19 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.mstudio.superheroarch.data_remote.ApiRick
+import com.mstudio.superheroarch.data_remote.ApiService
+import com.mstudio.superheroarch.data_local.AppDatabase
+import com.mstudio.superheroarch.ui.adapter.CharacterAdapter
+import com.mstudio.superheroarch.repository.CharacterEntity
+import com.mstudio.superheroarch.data_local.LocalDataSourceImpl
+import com.mstudio.superheroarch.R
+import com.mstudio.superheroarch.data_remote.RemoteDataSourceImpl
+import com.mstudio.superheroarch.domain.FilterCharactersByStatusUseCase
+import com.mstudio.superheroarch.domain.GetCharactersUseCase
+import com.mstudio.superheroarch.repository.RickAndMortyRepository
+import com.mstudio.superheroarch.presentation.MainViewModel
+import com.mstudio.superheroarch.presentation.ViewTranslator
 
 class MainActivity : AppCompatActivity(), ViewTranslator {
 
@@ -16,7 +29,7 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
     private val adapter = CharacterAdapter()
 
     companion object {
-        const val EXTRA_CHARACTER = "com.mstudio.superheroarch.MainActivity.EXTRA_CHARACTER"
+        const val EXTRA_CHARACTER = "com.mstudio.superheroarch.ui.activity.MainActivity.EXTRA_CHARACTER"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +44,10 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
         val localDataSource = LocalDataSourceImpl(characterDao)
         val repository = RickAndMortyRepository(remoteDataSource, localDataSource)
 
-        viewModel = MainViewModel(this, repository)
+        val getCharactersUseCase = GetCharactersUseCase(repository)
+        val filterCharactersByStatusUseCase = FilterCharactersByStatusUseCase()
+
+        viewModel = MainViewModel(this, getCharactersUseCase, filterCharactersByStatusUseCase)
         viewModel?.onCreate()
 
         val allButton = findViewById<Button>(R.id.all)

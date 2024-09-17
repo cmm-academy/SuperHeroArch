@@ -1,12 +1,20 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.presentation
 
 import androidx.lifecycle.ViewModel
+import com.mstudio.superheroarch.domain.FilterCharactersByStatusUseCase
+import com.mstudio.superheroarch.domain.GetCharactersUseCase
+import com.mstudio.superheroarch.repository.CharacterEntity
+import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel( private val view: ViewTranslator, private val repository: RickAndMortyRepository) : ViewModel() {
+class MainViewModel(
+    private val view: ViewTranslator,
+    private val getCharactersUseCase: GetCharactersUseCase,
+    private val filterCharactersByStatusUseCase: FilterCharactersByStatusUseCase
+) : ViewModel() {
 
     private var allCharacters: List<CharacterEntity> = mutableListOf()
     private var filteredCharacters: List<CharacterEntity> = mutableListOf()
@@ -17,7 +25,7 @@ class MainViewModel( private val view: ViewTranslator, private val repository: R
 
     private fun fetchCharacters() {
         CoroutineScope(Dispatchers.IO).launch {
-            val result = repository.fetchCharacters()
+            val result = getCharactersUseCase()
 
             withContext(Dispatchers.Main) {
                 result.onSuccess { characters ->
@@ -41,11 +49,7 @@ class MainViewModel( private val view: ViewTranslator, private val repository: R
     }
 
     fun onFilterClicked(status: String?) {
-        filteredCharacters = if (status == null) {
-            allCharacters
-        } else {
-            allCharacters.filter { it.status.equals(status, ignoreCase = true) }
-        }
+        filteredCharacters = filterCharactersByStatusUseCase(allCharacters, status)
         view.showCharacters(filteredCharacters)
     }
 }

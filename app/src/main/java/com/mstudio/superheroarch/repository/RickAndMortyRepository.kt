@@ -1,5 +1,8 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.repository
 
+import com.mstudio.superheroarch.data_local.CharacterLocalDataSource
+import com.mstudio.superheroarch.data_local.mapToEntityList
+import com.mstudio.superheroarch.data_remote.CharacterRemoteDataSource
 import java.io.IOException
 
 class RickAndMortyRepository(

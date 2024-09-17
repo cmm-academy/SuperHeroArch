@@ -1,5 +1,6 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.repository
 
+import com.mstudio.superheroarch.data_local.CharacterLocalEntity
 import java.io.Serializable
 
 data class CharacterEntity(

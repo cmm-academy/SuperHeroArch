@@ -1,13 +1,16 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mstudio.superheroarch.domain.GetEpisodeDetailsUseCase
+import com.mstudio.superheroarch.repository.CharacterEntity
+import com.mstudio.superheroarch.repository.EpisodeEntity
+import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(
     private val view: DetailsViewTranslator,
-    private val repository: RickAndMortyRepository
-) : ViewModel() {
+    private val getEpisodeDetailsUseCase: GetEpisodeDetailsUseCase): ViewModel() {
 
     fun fetchCharacterDetails(character: CharacterEntity) {
         view.displayCharacterDetails(character)
@@ -20,7 +23,7 @@ class DetailsViewModel(
 
     private suspend fun fetchFirstEpisodeDetails(episodeUrl: String) {
         try {
-            val episodeResult = repository.fetchEpisodeDetails(episodeUrl)
+            val episodeResult = getEpisodeDetailsUseCase(episodeUrl)
             episodeResult.getOrNull()?.let {
                 view.displayFirstEpisodeDetails(it)
             }

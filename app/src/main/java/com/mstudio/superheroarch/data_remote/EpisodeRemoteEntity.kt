@@ -1,4 +1,6 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.data_remote
+
+import com.mstudio.superheroarch.repository.EpisodeEntity
 
 data class EpisodeRemoteEntity(
     val air_date: String,
