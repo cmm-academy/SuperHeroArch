@@ -1,4 +1,4 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.ui.activity
 
 import android.os.Bundle
 import android.widget.ImageButton
@@ -6,6 +6,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.mstudio.superheroarch.data_remote.ApiRick
+import com.mstudio.superheroarch.data_remote.ApiService
+import com.mstudio.superheroarch.data_local.AppDatabase
+import com.mstudio.superheroarch.repository.CharacterEntity
+import com.mstudio.superheroarch.repository.EpisodeEntity
+import com.mstudio.superheroarch.data_local.LocalDataSourceImpl
+import com.mstudio.superheroarch.R
+import com.mstudio.superheroarch.data_remote.RemoteDataSourceImpl
+import com.mstudio.superheroarch.domain.GetEpisodeDetailsUseCase
+import com.mstudio.superheroarch.repository.RickAndMortyRepository
+import com.mstudio.superheroarch.presentation.DetailsViewModel
+import com.mstudio.superheroarch.presentation.DetailsViewTranslator
 import com.squareup.picasso.Picasso
 
 class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
@@ -28,8 +40,12 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
         val remoteDataSource = RemoteDataSourceImpl(apiRick)
         val localDataSource = LocalDataSourceImpl(db.characterDao())
+
         val repository = RickAndMortyRepository(remoteDataSource, localDataSource)
-        viewModel = DetailsViewModel(this, repository)
+
+        val getEpisodeDetailsUseCase = GetEpisodeDetailsUseCase(repository)
+
+        viewModel = DetailsViewModel(this, getEpisodeDetailsUseCase)
 
         characterNameTextView = findViewById(R.id.character_name)
         characterStatusTextView = findViewById(R.id.character_status)

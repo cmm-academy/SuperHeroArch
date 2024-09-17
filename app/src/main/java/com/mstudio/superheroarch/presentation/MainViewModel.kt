@@ -1,12 +1,17 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.presentation
 
 import androidx.lifecycle.ViewModel
+import com.mstudio.superheroarch.domain.GetCharactersUseCase
+import com.mstudio.superheroarch.repository.CharacterEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MainViewModel( private val view: ViewTranslator, private val repository: RickAndMortyRepository) : ViewModel() {
+class MainViewModel(
+    private val view: ViewTranslator,
+    private val getCharactersUseCase: GetCharactersUseCase,
+) : ViewModel() {
 
     private var allCharacters: List<CharacterEntity> = mutableListOf()
     private var filteredCharacters: List<CharacterEntity> = mutableListOf()
@@ -17,7 +22,7 @@ class MainViewModel( private val view: ViewTranslator, private val repository: R
 
     private fun fetchCharacters() {
         CoroutineScope(Dispatchers.IO).launch {
-            val result = repository.fetchCharacters()
+            val result = getCharactersUseCase()
 
             withContext(Dispatchers.Main) {
                 result.onSuccess { characters ->

@@ -1,4 +1,4 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.data_local
 
 import androidx.room.Database
 import androidx.room.Room

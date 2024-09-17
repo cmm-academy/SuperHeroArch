@@ -1,4 +1,4 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.data_remote
 
 import retrofit2.Response
 import retrofit2.Retrofit

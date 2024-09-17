@@ -1,4 +1,4 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.data_local
 
 import androidx.room.Dao
 import androidx.room.Insert

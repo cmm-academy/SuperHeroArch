@@ -1,4 +1,4 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.ui.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.mstudio.superheroarch.repository.CharacterEntity
+import com.mstudio.superheroarch.R
 import com.squareup.picasso.Picasso
 
 class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {

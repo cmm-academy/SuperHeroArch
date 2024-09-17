@@ -1,8 +1,8 @@
-package com.mstudio.superheroarch
+package com.mstudio.superheroarch.data_local
 
-import android.webkit.WebStorage.Origin
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.mstudio.superheroarch.repository.CharacterEntity
 import java.io.Serializable
 
 @Entity("characters")
