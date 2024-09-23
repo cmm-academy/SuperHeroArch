@@ -16,7 +16,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
+
+        val tmdbApiKey: String = project.findProperty("tmdb_api_key") as String? ?: ""
+        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbApiKey\"")    }
 
     buildTypes {
         release {
