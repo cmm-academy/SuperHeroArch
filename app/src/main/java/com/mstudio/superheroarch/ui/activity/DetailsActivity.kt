@@ -22,7 +22,7 @@ import com.mstudio.superheroarch.domain.GetEpisodeTMDBDetailsUseCase
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.presentation.DetailsViewModel
 import com.mstudio.superheroarch.presentation.DetailsViewTranslator
-import com.mstudio.superheroarch.repository.TmdbReposirory
+import com.mstudio.superheroarch.repository.TmdbRepository
 import com.squareup.picasso.Picasso
 
 class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
@@ -49,7 +49,7 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
 
         val repository = RickAndMortyRepository(remoteDataSource, localDataSource)
         val tmdbRemoteDataSource = TmdbRemoteDataSourceImpl(apiTmdb)
-        val tmdbRepository = TmdbReposirory(tmdbRemoteDataSource)
+        val tmdbRepository = TmdbRepository(tmdbRemoteDataSource)
 
         val getEpisodeDetailsUseCase = GetEpisodeDetailsUseCase(repository)
         val getEpisodeTMDBDetailsUseCase = GetEpisodeTMDBDetailsUseCase(tmdbRepository)
