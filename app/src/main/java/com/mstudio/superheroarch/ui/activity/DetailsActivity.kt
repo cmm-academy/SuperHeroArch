@@ -14,10 +14,15 @@ import com.mstudio.superheroarch.repository.EpisodeEntity
 import com.mstudio.superheroarch.data_local.LocalDataSourceImpl
 import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.data_remote.RemoteDataSourceImpl
+import com.mstudio.superheroarch.data_remote.TmdbApi
+import com.mstudio.superheroarch.data_remote.TmdbApiService
+import com.mstudio.superheroarch.data_remote.TmdbRemoteDataSourceImpl
 import com.mstudio.superheroarch.domain.GetEpisodeDetailsUseCase
+import com.mstudio.superheroarch.domain.GetEpisodeTMDBDetailsUseCase
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.presentation.DetailsViewModel
 import com.mstudio.superheroarch.presentation.DetailsViewTranslator
+import com.mstudio.superheroarch.repository.TmdbReposirory
 import com.squareup.picasso.Picasso
 
 class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
@@ -38,14 +43,18 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
 
         val db = AppDatabase.getDatabase(this)
         val apiRick: ApiRick = ApiService.retrofit.create(ApiRick::class.java)
+        val apiTmdb: TmdbApi = TmdbApiService.retrofit.create(TmdbApi::class.java)
         val remoteDataSource = RemoteDataSourceImpl(apiRick)
         val localDataSource = LocalDataSourceImpl(db.characterDao())
 
         val repository = RickAndMortyRepository(remoteDataSource, localDataSource)
+        val tmdbRemoteDataSource = TmdbRemoteDataSourceImpl(apiTmdb)
+        val tmdbRepository = TmdbReposirory(tmdbRemoteDataSource)
 
         val getEpisodeDetailsUseCase = GetEpisodeDetailsUseCase(repository)
+        val getEpisodeTMDBDetailsUseCase = GetEpisodeTMDBDetailsUseCase(tmdbRepository)
 
-        viewModel = DetailsViewModel(this, getEpisodeDetailsUseCase)
+        viewModel = DetailsViewModel(this, getEpisodeDetailsUseCase, getEpisodeTMDBDetailsUseCase)
 
         characterNameTextView = findViewById(R.id.character_name)
         characterStatusTextView = findViewById(R.id.character_status)
@@ -64,6 +73,12 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         character?.let {
             viewModel?.fetchCharacterDetails(it)
         }
+    }
+
+    override fun displayEpisodeRatingAndImage(rating: Double, imageUrl: String?) {
+        val ratingTextView: TextView = findViewById(R.id.episode_rating)
+
+        ratingTextView.text = "Rating: $rating"
     }
 
     override fun displayCharacterDetails(character: CharacterEntity) {
