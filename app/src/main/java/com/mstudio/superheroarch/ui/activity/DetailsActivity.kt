@@ -17,12 +17,11 @@ import com.mstudio.superheroarch.data_remote.RemoteDataSourceImpl
 import com.mstudio.superheroarch.data_remote.TmdbApi
 import com.mstudio.superheroarch.data_remote.TmdbApiService
 import com.mstudio.superheroarch.data_remote.TmdbRemoteDataSourceImpl
-import com.mstudio.superheroarch.domain.GetEpisodeDetailsUseCase
-import com.mstudio.superheroarch.domain.GetEpisodeTMDBDetailsUseCase
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.presentation.DetailsViewModel
 import com.mstudio.superheroarch.presentation.DetailsViewTranslator
 import com.mstudio.superheroarch.repository.TmdbRepository
+import com.mstudio.superheroarch.domain.FetchDataUseCase
 import com.squareup.picasso.Picasso
 
 class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
@@ -36,6 +35,7 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
     private var characterOriginTextView: TextView? = null
     private var firstEpisodeTextView: TextView? = null
     private var firstEpisodeDateTextView: TextView? = null
+    private var episodeImageView: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,10 +51,9 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         val tmdbRemoteDataSource = TmdbRemoteDataSourceImpl(apiTmdb)
         val tmdbRepository = TmdbRepository(tmdbRemoteDataSource)
 
-        val getEpisodeDetailsUseCase = GetEpisodeDetailsUseCase(repository)
-        val getEpisodeTMDBDetailsUseCase = GetEpisodeTMDBDetailsUseCase(tmdbRepository)
+        val fetchDataUseCase = FetchDataUseCase(repository, tmdbRepository)
 
-        viewModel = DetailsViewModel(this, getEpisodeDetailsUseCase, getEpisodeTMDBDetailsUseCase)
+        viewModel = DetailsViewModel(this, fetchDataUseCase)
 
         characterNameTextView = findViewById(R.id.character_name)
         characterStatusTextView = findViewById(R.id.character_status)
@@ -63,6 +62,7 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         characterOriginTextView = findViewById(R.id.origin)
         firstEpisodeTextView = findViewById(R.id.first_episode)
         firstEpisodeDateTextView = findViewById(R.id.first_episode_date)
+        episodeImageView = findViewById(R.id.episode_image)
 
         val backButton: ImageButton = findViewById(R.id.back)
         backButton.setOnClickListener {
@@ -79,6 +79,15 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         val ratingTextView: TextView = findViewById(R.id.episode_rating)
 
         ratingTextView.text = "Rating: $rating"
+
+        imageUrl?.let {
+            Picasso.get().load(it)
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.error)
+                .into(episodeImageView)
+        } ?: run {
+            episodeImageView?.setImageResource(R.drawable.error)
+        }
     }
 
     override fun displayCharacterDetails(character: CharacterEntity) {

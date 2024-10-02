@@ -1,7 +1,8 @@
 package com.mstudio.superheroarch.presentation
 
 import androidx.lifecycle.ViewModel
-import com.mstudio.superheroarch.domain.GetCharactersUseCase
+import com.mstudio.superheroarch.domain.DataRequest
+import com.mstudio.superheroarch.domain.FetchDataUseCase
 import com.mstudio.superheroarch.repository.CharacterEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +11,7 @@ import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val view: ViewTranslator,
-    private val getCharactersUseCase: GetCharactersUseCase,
+    private val fetchDataUseCase: FetchDataUseCase
 ) : ViewModel() {
 
     private var allCharacters: List<CharacterEntity> = mutableListOf()
@@ -22,16 +23,20 @@ class MainViewModel(
 
     private fun fetchCharacters() {
         CoroutineScope(Dispatchers.IO).launch {
-            val result = getCharactersUseCase()
+            val result = fetchDataUseCase(DataRequest.Characters)
 
             withContext(Dispatchers.Main) {
                 result.onSuccess { characters ->
-                    allCharacters = characters
-                    filteredCharacters = characters
-                    if (allCharacters.isEmpty()) {
-                        view.showEmptyError()
+                    if (characters is List<*>) {
+                        allCharacters = characters.filterIsInstance<CharacterEntity>()
+                        filteredCharacters = allCharacters
+                        if (allCharacters.isEmpty()) {
+                            view.showEmptyError()
+                        } else {
+                            view.showCharacters(filteredCharacters)
+                        }
                     } else {
-                        view.showCharacters(filteredCharacters)
+                        view.showEmptyError()
                     }
                 }.onFailure {
                     view.showEmptyError()
