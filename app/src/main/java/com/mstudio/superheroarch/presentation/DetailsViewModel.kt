@@ -3,16 +3,16 @@ package com.mstudio.superheroarch.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mstudio.superheroarch.domain.FetchDataUseCase
-import com.mstudio.superheroarch.domain.DataRequest
+import com.mstudio.superheroarch.domain.GetEpisodeDetailsUseCase
+import com.mstudio.superheroarch.domain.GetEpisodeTMDBDetailsUseCase
 import com.mstudio.superheroarch.repository.CharacterEntity
 import com.mstudio.superheroarch.repository.EpisodeEntity
-import com.mstudio.superheroarch.repository.EpisodeTMDBInfoEntity
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(
     private val view: DetailsViewTranslator,
-    private val fetchDataUseCase: FetchDataUseCase
+    private val getEpisodeDetailsUseCase: GetEpisodeDetailsUseCase,
+    private val getEpisodeTMDBDetailsUseCase: GetEpisodeTMDBDetailsUseCase
 ) : ViewModel() {
 
     fun fetchCharacterDetails(character: CharacterEntity) {
@@ -25,34 +25,15 @@ class DetailsViewModel(
         }
     }
 
-    private suspend fun fetchFirstEpisodeDetails(episodeUrl: String) {
+    private fun fetchTMDBEpisodeDetails(seasonNumber: Int, episodeNumber: Int) {
         viewModelScope.launch {
-            val episodeResult = fetchDataUseCase(DataRequest.EpisodeDetails(episodeUrl))
-            episodeResult.onSuccess { episodeEntity ->
-                val episode = episodeEntity as EpisodeEntity
-                view.displayFirstEpisodeDetails(episode)
-
-                val seasonAndEpisode = extractSeasonAndEpisode(episode.episode)
-                seasonAndEpisode?.let { (season, episodeNumber) ->
-                    fetchTMDBEpisodeDetails(season, episodeNumber)
-                } ?: run {
-                    view.showError("Invalid episode format")
+            try {
+                val episodeTMDBResult = getEpisodeTMDBDetailsUseCase(seasonNumber, episodeNumber)
+                episodeTMDBResult?.let {
+                    view.displayEpisodeRatingAndImage(it.rating, "https://image.tmdb.org/t/p/w500" + it.imageUrl)
                 }
-            }.onFailure {
-                view.showError("Failed to load episode details: ${it.message}")
-            }
-        }
-    }
-
-    private suspend fun fetchTMDBEpisodeDetails(seasonNumber: Int, episodeNumber: Int) {
-        viewModelScope.launch {
-            val tmdbResult = fetchDataUseCase(DataRequest.TmdbEpisodeDetails(seasonNumber, episodeNumber))
-            tmdbResult.onSuccess { tmdbDetails ->
-                val episodeTMDB = tmdbDetails as EpisodeTMDBInfoEntity
-                val imageUrl = "https://image.tmdb.org/t/p/w500${episodeTMDB.imageUrl}"
-                view.displayEpisodeRatingAndImage(episodeTMDB.rating, imageUrl)
-            }.onFailure {
-                view.showError("Failed to load TMDB episode details: ${it.message}")
+            } catch (e: Exception) {
+                view.showError("Failed to load TMDB episode rating: ${e.message}")
             }
         }
     }
@@ -72,7 +53,29 @@ class DetailsViewModel(
             null
         }
     }
+
+    private suspend fun fetchFirstEpisodeDetails(episodeUrl: String) {
+        try {
+            val episodeResult = getEpisodeDetailsUseCase(episodeUrl)
+            episodeResult.getOrNull()?.let { episodeEntity ->
+                view.displayFirstEpisodeDetails(episodeEntity)
+
+                val episodeCode = episodeEntity.episode
+
+                val seasonAndEpisode = extractSeasonAndEpisode(episodeCode)
+
+                seasonAndEpisode?.let { (season, episode) ->
+                    fetchTMDBEpisodeDetails(season, episode)
+                } ?: run {
+                    view.showError("Invalid episode format")
+                }
+            }
+        } catch (e: Exception) {
+            view.showError("Failed to load episode details: ${e.message}")
+        }
+    }
 }
+
 interface DetailsViewTranslator {
     fun displayCharacterDetails(character: CharacterEntity)
     fun displayFirstEpisodeDetails(episode: EpisodeEntity)

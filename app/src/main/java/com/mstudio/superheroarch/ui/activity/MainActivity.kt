@@ -17,14 +17,10 @@ import com.mstudio.superheroarch.repository.CharacterEntity
 import com.mstudio.superheroarch.data_local.LocalDataSourceImpl
 import com.mstudio.superheroarch.R
 import com.mstudio.superheroarch.data_remote.RemoteDataSourceImpl
+import com.mstudio.superheroarch.domain.GetCharactersUseCase
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.presentation.MainViewModel
 import com.mstudio.superheroarch.presentation.ViewTranslator
-import com.mstudio.superheroarch.domain.FetchDataUseCase
-import com.mstudio.superheroarch.data_remote.TmdbApi
-import com.mstudio.superheroarch.data_remote.TmdbApiService
-import com.mstudio.superheroarch.data_remote.TmdbRemoteDataSourceImpl
-import com.mstudio.superheroarch.repository.TmdbRepository
 
 class MainActivity : AppCompatActivity(), ViewTranslator {
 
@@ -47,13 +43,9 @@ class MainActivity : AppCompatActivity(), ViewTranslator {
         val localDataSource = LocalDataSourceImpl(characterDao)
         val repository = RickAndMortyRepository(remoteDataSource, localDataSource)
 
-        val apiTmdb: TmdbApi = TmdbApiService.retrofit.create(TmdbApi::class.java)
-        val tmdbRemoteDataSource = TmdbRemoteDataSourceImpl(apiTmdb)
-        val tmdbRepository = TmdbRepository(tmdbRemoteDataSource)
+        val getCharactersUseCase = GetCharactersUseCase(repository)
 
-        val fetchDataUseCase = FetchDataUseCase(repository, tmdbRepository)
-
-        viewModel = MainViewModel(this, fetchDataUseCase)
+        viewModel = MainViewModel(this, getCharactersUseCase)
         viewModel?.onCreate()
 
         val allButton = findViewById<Button>(R.id.all)

@@ -17,11 +17,12 @@ import com.mstudio.superheroarch.data_remote.RemoteDataSourceImpl
 import com.mstudio.superheroarch.data_remote.TmdbApi
 import com.mstudio.superheroarch.data_remote.TmdbApiService
 import com.mstudio.superheroarch.data_remote.TmdbRemoteDataSourceImpl
+import com.mstudio.superheroarch.domain.GetEpisodeDetailsUseCase
+import com.mstudio.superheroarch.domain.GetEpisodeTMDBDetailsUseCase
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.presentation.DetailsViewModel
 import com.mstudio.superheroarch.presentation.DetailsViewTranslator
 import com.mstudio.superheroarch.repository.TmdbRepository
-import com.mstudio.superheroarch.domain.FetchDataUseCase
 import com.squareup.picasso.Picasso
 
 class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
@@ -51,9 +52,10 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         val tmdbRemoteDataSource = TmdbRemoteDataSourceImpl(apiTmdb)
         val tmdbRepository = TmdbRepository(tmdbRemoteDataSource)
 
-        val fetchDataUseCase = FetchDataUseCase(repository, tmdbRepository)
+        val getEpisodeDetailsUseCase = GetEpisodeDetailsUseCase(repository)
+        val getEpisodeTMDBDetailsUseCase = GetEpisodeTMDBDetailsUseCase(tmdbRepository)
 
-        viewModel = DetailsViewModel(this, fetchDataUseCase)
+        viewModel = DetailsViewModel(this, getEpisodeDetailsUseCase, getEpisodeTMDBDetailsUseCase)
 
         characterNameTextView = findViewById(R.id.character_name)
         characterStatusTextView = findViewById(R.id.character_status)
@@ -77,6 +79,7 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
 
     override fun displayEpisodeRatingAndImage(rating: Double, imageUrl: String?) {
         val ratingTextView: TextView = findViewById(R.id.episode_rating)
+        val episodeImageView: ImageView = findViewById(R.id.episode_image)
 
         ratingTextView.text = "Rating: $rating"
 
@@ -86,7 +89,7 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
                 .error(R.drawable.error)
                 .into(episodeImageView)
         } ?: run {
-            episodeImageView?.setImageResource(R.drawable.error)
+            episodeImageView.setImageResource(R.drawable.error)
         }
     }
 
