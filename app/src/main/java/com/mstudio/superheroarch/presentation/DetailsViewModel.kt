@@ -3,14 +3,14 @@ package com.mstudio.superheroarch.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mstudio.superheroarch.domain.UnificatedUseCase
+import com.mstudio.superheroarch.domain.GetEpisodeAndDetailsUseCase
 import com.mstudio.superheroarch.repository.CharacterEntity
 import com.mstudio.superheroarch.repository.EpisodeEntity
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(
     private val view: DetailsViewTranslator,
-    private val unificatedUseCase: UnificatedUseCase
+    private val getEpisodeAndDetailsUseCase: GetEpisodeAndDetailsUseCase
 ) : ViewModel() {
 
     fun fetchCharacterDetails(character: CharacterEntity) {
@@ -25,7 +25,7 @@ class DetailsViewModel(
 
     private suspend fun fetchFirstEpisodeDetails(episodeUrl: String) {
         try {
-            val result = unificatedUseCase(episodeUrl)
+            val result = getEpisodeAndDetailsUseCase(episodeUrl)
             if (result.isSuccess) {
                 val (episodeEntity, tmdbInfo) = result.getOrThrow()
                 view.displayFirstEpisodeDetails(episodeEntity)

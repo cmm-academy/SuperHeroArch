@@ -5,7 +5,7 @@ import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.repository.TmdbRepository
 import com.mstudio.superheroarch.repository.EpisodeTMDBInfoEntity
 
-class UnificatedUseCase(
+class GetEpisodeAndDetailsUseCase(
     private val repository: RickAndMortyRepository,
     private val tmdbRepository: TmdbRepository
 ) {
