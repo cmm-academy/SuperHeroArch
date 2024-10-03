@@ -17,8 +17,7 @@ import com.mstudio.superheroarch.data_remote.RemoteDataSourceImpl
 import com.mstudio.superheroarch.data_remote.TmdbApi
 import com.mstudio.superheroarch.data_remote.TmdbApiService
 import com.mstudio.superheroarch.data_remote.TmdbRemoteDataSourceImpl
-import com.mstudio.superheroarch.domain.GetEpisodeDetailsUseCase
-import com.mstudio.superheroarch.domain.GetEpisodeTMDBDetailsUseCase
+import com.mstudio.superheroarch.domain.UnificatedUseCase
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.presentation.DetailsViewModel
 import com.mstudio.superheroarch.presentation.DetailsViewTranslator
@@ -52,10 +51,9 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         val tmdbRemoteDataSource = TmdbRemoteDataSourceImpl(apiTmdb)
         val tmdbRepository = TmdbRepository(tmdbRemoteDataSource)
 
-        val getEpisodeDetailsUseCase = GetEpisodeDetailsUseCase(repository)
-        val getEpisodeTMDBDetailsUseCase = GetEpisodeTMDBDetailsUseCase(tmdbRepository)
+        val unificatedUseCase = UnificatedUseCase(repository, tmdbRepository)
 
-        viewModel = DetailsViewModel(this, getEpisodeDetailsUseCase, getEpisodeTMDBDetailsUseCase)
+        viewModel = DetailsViewModel(this, unificatedUseCase)
 
         characterNameTextView = findViewById(R.id.character_name)
         characterStatusTextView = findViewById(R.id.character_status)
