@@ -1,15 +1,14 @@
 package com.mstudio.superheroarch.domain
 
-import com.mstudio.superheroarch.repository.EpisodeEntity
+
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.repository.TmdbRepository
-import com.mstudio.superheroarch.repository.EpisodeTMDBInfoEntity
 
 class GetEpisodeAndDetailsUseCase(
     private val repository: RickAndMortyRepository,
     private val tmdbRepository: TmdbRepository
 ) {
-    suspend operator fun invoke(episodeUrl: String): Result<Pair<EpisodeEntity, EpisodeTMDBInfoEntity>> {
+    suspend operator fun invoke(episodeUrl: String): Result<EpisodeDetailsEntity> {
         val episodeResult = repository.fetchEpisodeDetails(episodeUrl)
         if (episodeResult.isSuccess) {
             val episodeEntity = episodeResult.getOrNull()
@@ -28,7 +27,8 @@ class GetEpisodeAndDetailsUseCase(
                 return Result.failure(Exception("TMDB episode info is null"))
             }
 
-            return Result.success(Pair(episodeEntity, tmdbResult))
+            val episodeDetails = episodeEntity.toDomain(tmdbResult)
+            return Result.success(episodeDetails)
         }
         return Result.failure(Exception("Failed to load episode details"))
     }
