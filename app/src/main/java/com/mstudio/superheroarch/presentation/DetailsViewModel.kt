@@ -28,15 +28,14 @@ class DetailsViewModel(
             val result = getEpisodeAndDetailsUseCase(episodeUrl)
             if (result.isSuccess) {
                 val (episodeEntity, tmdbInfo) = result.getOrThrow()
-                view.displayFirstEpisodeDetails(episodeEntity)
 
-                val seasonAndEpisode = extractSeasonAndEpisode(episodeEntity.episode)
+                val episodeDetailsViewEntity = mapToEpisodeDetailsViewEntity(episodeEntity, tmdbInfo)
 
-                seasonAndEpisode?.let { (season, episode) ->
-                    view.displayEpisodeRatingAndImage(tmdbInfo.rating, "https://image.tmdb.org/t/p/w500" + tmdbInfo.imageUrl)
-                } ?: run {
-                    view.showError("Invalid episode format")
-                }
+                view.displayFirstEpisodeDetails(episodeDetailsViewEntity.episodeEntity)
+                view.displayEpisodeRatingAndImage(
+                    episodeDetailsViewEntity.tmdbInfo.rating,
+                    "https://image.tmdb.org/t/p/w500" + episodeDetailsViewEntity.tmdbInfo.imageUrl
+                )
             } else {
                 view.showError("Failed to load episode details")
             }
@@ -44,6 +43,7 @@ class DetailsViewModel(
             view.showError("Failed to load episode details: ${e.message}")
         }
     }
+
 
     fun extractSeasonAndEpisode(firstEpisode: String): Pair<Int, Int>? {
         return if (firstEpisode.isNotEmpty()) {
