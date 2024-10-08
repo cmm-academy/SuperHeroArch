@@ -25,14 +25,7 @@ class DetailsViewModel(
         try {
             val result = getEpisodeAndDetailsUseCase(episodeUrl)
             if (result.isSuccess) {
-                val (episodeEntity, tmdbInfo) = result.getOrThrow()
-
-                val episodeDetailsViewEntity = mapToEpisodeDetailsViewEntity(
-                    air_date = episodeEntity.air_date,
-                    episode = episodeEntity.episode,
-                    rating = tmdbInfo.rating,
-                    imageUrl = "https://image.tmdb.org/t/p/w500" + tmdbInfo.imageUrl
-                )
+                val episodeDetailsViewEntity = result.getOrThrow()
 
                 view.displayFirstEpisodeDetails(episodeDetailsViewEntity)
                 view.displayEpisodeRatingAndImage(episodeDetailsViewEntity)
