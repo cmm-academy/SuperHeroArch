@@ -1,19 +1,24 @@
 package com.mstudio.superheroarch.presentation
 
-import com.mstudio.superheroarch.repository.EpisodeEntity
-import com.mstudio.superheroarch.repository.EpisodeTMDBInfoEntity
 
 data class EpisodeDetailsViewEntity(
-    val episodeEntity: EpisodeEntity,
-    val tmdbInfo: EpisodeTMDBInfoEntity
+    val air_date: String,
+    val episode: String,
+    val rating: Double,
+    val imageUrl: String
 )
 
 fun mapToEpisodeDetailsViewEntity(
-    episodeEntity: EpisodeEntity,
-    tmdbInfo: EpisodeTMDBInfoEntity
+    air_date: String,
+    episode: String,
+    rating: Double,
+    imageUrl: String
 ): EpisodeDetailsViewEntity {
     return EpisodeDetailsViewEntity(
-        episodeEntity = episodeEntity,
-        tmdbInfo = tmdbInfo
+        air_date = air_date,
+        episode = episode,
+        rating = rating,
+        imageUrl = imageUrl
+
     )
 }

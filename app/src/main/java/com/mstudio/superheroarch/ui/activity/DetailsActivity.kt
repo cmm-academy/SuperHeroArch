@@ -1,6 +1,7 @@
 package com.mstudio.superheroarch.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,6 +22,7 @@ import com.mstudio.superheroarch.domain.GetEpisodeAndDetailsUseCase
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.presentation.DetailsViewModel
 import com.mstudio.superheroarch.presentation.DetailsViewTranslator
+import com.mstudio.superheroarch.presentation.EpisodeDetailsViewEntity
 import com.mstudio.superheroarch.repository.TmdbRepository
 import com.squareup.picasso.Picasso
 
@@ -75,13 +77,14 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         }
     }
 
-    override fun displayEpisodeRatingAndImage(rating: Double, imageUrl: String?) {
+    override fun displayEpisodeRatingAndImage(episodeDetailsViewEntity: EpisodeDetailsViewEntity) {
         val ratingTextView: TextView = findViewById(R.id.episode_rating)
         val episodeImageView: ImageView = findViewById(R.id.episode_image)
+        Log.d("DetailsActivity", "Displaying episode rating: ${episodeDetailsViewEntity.rating}, imageUrl: ${episodeDetailsViewEntity.imageUrl}")
 
-        ratingTextView.text = "Rating: $rating"
+        ratingTextView.text = "Rating: ${episodeDetailsViewEntity.rating}"
 
-        imageUrl?.let {
+        episodeDetailsViewEntity.imageUrl.let {
             Picasso.get().load(it)
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.error)
@@ -101,9 +104,12 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
             .into(characterImageView)
     }
 
-    override fun displayFirstEpisodeDetails(episode: EpisodeEntity) {
-        firstEpisodeTextView?.text = episode.episode
-        firstEpisodeDateTextView?.text = episode.air_date
+    override fun displayFirstEpisodeDetails(episodeDetailsViewEntity: EpisodeDetailsViewEntity) {
+        Log.d("DetailsActivity", "Episode: ${episodeDetailsViewEntity.episode}")
+        Log.d("DetailsActivity", "Air Date: ${episodeDetailsViewEntity.air_date}")
+
+        firstEpisodeTextView?.text = episodeDetailsViewEntity.episode
+        firstEpisodeDateTextView?.text = episodeDetailsViewEntity.air_date
     }
 
     override fun showError(message: String) {

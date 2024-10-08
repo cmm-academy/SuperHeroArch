@@ -1,11 +1,9 @@
 package com.mstudio.superheroarch.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mstudio.superheroarch.domain.GetEpisodeAndDetailsUseCase
 import com.mstudio.superheroarch.repository.CharacterEntity
-import com.mstudio.superheroarch.repository.EpisodeEntity
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(
@@ -29,13 +27,15 @@ class DetailsViewModel(
             if (result.isSuccess) {
                 val (episodeEntity, tmdbInfo) = result.getOrThrow()
 
-                val episodeDetailsViewEntity = mapToEpisodeDetailsViewEntity(episodeEntity, tmdbInfo)
-
-                view.displayFirstEpisodeDetails(episodeDetailsViewEntity.episodeEntity)
-                view.displayEpisodeRatingAndImage(
-                    episodeDetailsViewEntity.tmdbInfo.rating,
-                    "https://image.tmdb.org/t/p/w500" + episodeDetailsViewEntity.tmdbInfo.imageUrl
+                val episodeDetailsViewEntity = mapToEpisodeDetailsViewEntity(
+                    air_date = episodeEntity.air_date,
+                    episode = episodeEntity.episode,
+                    rating = tmdbInfo.rating,
+                    imageUrl = "https://image.tmdb.org/t/p/w500" + tmdbInfo.imageUrl
                 )
+
+                view.displayFirstEpisodeDetails(episodeDetailsViewEntity)
+                view.displayEpisodeRatingAndImage(episodeDetailsViewEntity)
             } else {
                 view.showError("Failed to load episode details")
             }
@@ -44,27 +44,11 @@ class DetailsViewModel(
         }
     }
 
-
-    fun extractSeasonAndEpisode(firstEpisode: String): Pair<Int, Int>? {
-        return if (firstEpisode.isNotEmpty()) {
-            try {
-                val season = firstEpisode.substring(1, 3).toInt()
-                val episode = firstEpisode.substring(4, 6).toInt()
-                Pair(season, episode)
-            } catch (e: Exception) {
-                Log.e("DetailsViewModel", "Error parsing season and episode: ${e.message}")
-                null
-            }
-        } else {
-            Log.e("DetailsViewModel", "Error: firstEpisode string is empty")
-            null
-        }
-    }
 }
 
 interface DetailsViewTranslator {
     fun displayCharacterDetails(character: CharacterEntity)
-    fun displayFirstEpisodeDetails(episode: EpisodeEntity)
-    fun displayEpisodeRatingAndImage(rating: Double, imageUrl: String?)
+    fun displayFirstEpisodeDetails(episodeDetailsViewEntity: EpisodeDetailsViewEntity)
+    fun displayEpisodeRatingAndImage(episodeDetailsViewEntity: EpisodeDetailsViewEntity)
     fun showError(message: String)
 }
