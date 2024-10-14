@@ -2,7 +2,6 @@ package com.mstudio.superheroarch.domain
 
 import com.mstudio.superheroarch.presentation.EpisodeDetailsViewEntity
 import com.mstudio.superheroarch.presentation.SeasonAndEpisode
-import com.mstudio.superheroarch.presentation.mapToEpisodeDetailsViewEntity
 import com.mstudio.superheroarch.repository.RickAndMortyRepository
 import com.mstudio.superheroarch.repository.TmdbRepository
 
@@ -11,43 +10,51 @@ class GetEpisodeAndDetailsUseCase(
     private val tmdbRepository: TmdbRepository
 ) {
     suspend operator fun invoke(episodeUrl: String): Result<EpisodeDetailsViewEntity> {
-        val episodeResult = repository.fetchEpisodeDetails(episodeUrl)
-        if (episodeResult.isSuccess) {
-            val episodeEntity = episodeResult.getOrThrow()
+        return try {
+            val episodeEntity = repository.fetchEpisodeDetails(episodeUrl)
 
             val seasonAndEpisode = extractSeasonAndEpisode(episodeEntity.episode)
-            val seasonNumber = seasonAndEpisode.seasonNumber ?: 0
-            val episodeNumber = seasonAndEpisode.episodeNumber ?: 0
+            if (seasonAndEpisode != null) {
+                val seasonNumber = seasonAndEpisode.seasonNumber
+                val episodeNumber = seasonAndEpisode.episodeNumber
 
-            val tmdbResult = tmdbRepository.getEpisodeTMDBInfo(seasonNumber, episodeNumber)
+                val tmdbResult = tmdbRepository.getEpisodeTMDBInfo(seasonNumber, episodeNumber)
 
-            if (tmdbResult != null) {
-                val episodeDetailsViewEntity = mapToEpisodeDetailsViewEntity(
-                    air_date = episodeEntity.air_date,
-                    episode = episodeEntity.episode,
-                    rating = tmdbResult.rating,
-                    imageUrl = "https://image.tmdb.org/t/p/w500${tmdbResult.imageUrl}"
-                )
-                return Result.success(episodeDetailsViewEntity)
+                if (tmdbResult != null) {
+                    val episodeDetailsViewEntity = EpisodeDetailsViewEntity(
+                        air_date = episodeEntity.air_date,
+                        episode = episodeEntity.episode,
+                        rating = tmdbResult.rating,
+                        imageUrl = "https://image.tmdb.org/t/p/w500${tmdbResult.imageUrl}"
+                    )
+                    Result.success(episodeDetailsViewEntity)
+                } else {
+                    Result.failure(Exception("TMDB episode info is null"))
+                }
             } else {
-                return Result.failure(Exception("TMDB episode info is null"))
+                Result.failure(Exception("Season and episode not found"))
             }
+        } catch (e: Exception) {
+            Result.failure(e)
         }
-        return Result.failure(Exception("Failed to load episode details"))
     }
 
-    private fun extractSeasonAndEpisode(episodeCode: String?): SeasonAndEpisode {
-        return if (!episodeCode.isNullOrEmpty()) {
-            try {
-                val season = episodeCode.substring(1, 3).toInt()
-                val episode = episodeCode.substring(4, 6).toInt()
-                SeasonAndEpisode(season, episode)
-            } catch (e: Exception) {
-                throw IllegalArgumentException("Invalid episode code: $episodeCode")
-            }
+
+    private fun extractSeasonAndEpisode(episodeCode: String?): SeasonAndEpisode? {
+        if (episodeCode.isNullOrEmpty()) {
+            return null
+        }
+
+        val regex = Regex("S(\\d{2})E(\\d{2})")
+        val matchResult = regex.find(episodeCode)
+
+        return if (matchResult != null) {
+            val (season, episode) = matchResult.destructured
+            SeasonAndEpisode(season.toInt(), episode.toInt())
         } else {
-            throw IllegalArgumentException("Episode code cannot be null or empty")
+            null
         }
     }
+
 
 }

@@ -1,6 +1,5 @@
 package com.mstudio.superheroarch.presentation
 
-
 data class EpisodeDetailsViewEntity(
     val air_date: String,
     val episode: String,
@@ -8,7 +7,7 @@ data class EpisodeDetailsViewEntity(
     val imageUrl: String
 )
 
-fun mapToEpisodeDetailsViewEntity(
+fun EpisodeDetailsViewEntity.mapToViewEntity(
     air_date: String,
     episode: String,
     rating: Double,
@@ -19,6 +18,5 @@ fun mapToEpisodeDetailsViewEntity(
         episode = episode,
         rating = rating,
         imageUrl = imageUrl
-
     )
 }
