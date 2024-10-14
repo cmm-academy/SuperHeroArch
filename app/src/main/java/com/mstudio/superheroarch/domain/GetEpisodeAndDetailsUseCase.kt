@@ -37,16 +37,17 @@ class GetEpisodeAndDetailsUseCase(
     }
 
     private fun extractSeasonAndEpisode(episodeCode: String?): SeasonAndEpisode {
-        return if (episodeCode != null && episodeCode.isNotEmpty()) {
+        return if (!episodeCode.isNullOrEmpty()) {
             try {
                 val season = episodeCode.substring(1, 3).toInt()
                 val episode = episodeCode.substring(4, 6).toInt()
                 SeasonAndEpisode(season, episode)
             } catch (e: Exception) {
-                SeasonAndEpisode(null, null)
+                throw IllegalArgumentException("Invalid episode code: $episodeCode")
             }
         } else {
-            SeasonAndEpisode(null, null)
+            throw IllegalArgumentException("Episode code cannot be null or empty")
         }
     }
+
 }

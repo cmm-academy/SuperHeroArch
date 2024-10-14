@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mstudio.superheroarch.domain.GetEpisodeAndDetailsUseCase
 import com.mstudio.superheroarch.repository.CharacterEntity
+import com.mstudio.superheroarch.repository.EpisodeEntity
 import kotlinx.coroutines.launch
 
 class DetailsViewModel(
@@ -27,8 +28,8 @@ class DetailsViewModel(
             if (result.isSuccess) {
                 val episodeDetailsViewEntity = result.getOrThrow()
 
-                view.displayFirstEpisodeDetails(episodeDetailsViewEntity)
-                view.displayEpisodeRatingAndImage(episodeDetailsViewEntity)
+                val episodeEntity: EpisodeEntity? = null
+                view.displayEpisodeDetails(episodeEntity, episodeDetailsViewEntity)
             } else {
                 view.showError("Failed to load episode details")
             }
@@ -41,7 +42,9 @@ class DetailsViewModel(
 
 interface DetailsViewTranslator {
     fun displayCharacterDetails(character: CharacterEntity)
-    fun displayFirstEpisodeDetails(episodeDetailsViewEntity: EpisodeDetailsViewEntity)
-    fun displayEpisodeRatingAndImage(episodeDetailsViewEntity: EpisodeDetailsViewEntity)
+    fun displayEpisodeDetails(
+        episodeEntity: EpisodeEntity?,
+        episodeDetailsViewEntity: EpisodeDetailsViewEntity?
+    )
     fun showError(message: String)
 }

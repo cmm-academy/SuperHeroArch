@@ -77,19 +77,6 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         }
     }
 
-    override fun displayEpisodeRatingAndImage(episodeDetailsViewEntity: EpisodeDetailsViewEntity) {
-        val ratingTextView: TextView = findViewById(R.id.episode_rating)
-        val episodeImageView: ImageView = findViewById(R.id.episode_image)
-        Log.d("DetailsActivity", "Displaying episode rating: ${episodeDetailsViewEntity.rating}, imageUrl: ${episodeDetailsViewEntity.imageUrl}")
-
-        ratingTextView.text = getString(R.string.rating, "${ episodeDetailsViewEntity.rating}")
-
-            Picasso.get().load(episodeDetailsViewEntity.imageUrl)
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.error)
-                .into(episodeImageView)
-    }
-
     override fun displayCharacterDetails(character: CharacterEntity) {
         characterNameTextView?.text = character.name
         characterStatusTextView?.text = character.status
@@ -100,12 +87,24 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
             .into(characterImageView)
     }
 
-    override fun displayFirstEpisodeDetails(episodeDetailsViewEntity: EpisodeDetailsViewEntity) {
-        Log.d("DetailsActivity", "Episode: ${episodeDetailsViewEntity.episode}")
-        Log.d("DetailsActivity", "Air Date: ${episodeDetailsViewEntity.air_date}")
+    override fun displayEpisodeDetails(
+        episodeEntity: EpisodeEntity?,
+        episodeDetailsViewEntity: EpisodeDetailsViewEntity?
+    ) {
+        if (episodeDetailsViewEntity != null) {
+            firstEpisodeTextView?.text = episodeDetailsViewEntity.episode
+            firstEpisodeDateTextView?.text = episodeDetailsViewEntity.air_date
+            val ratingTextView: TextView = findViewById(R.id.episode_rating)
 
-        firstEpisodeTextView?.text = episodeDetailsViewEntity.episode
-        firstEpisodeDateTextView?.text = episodeDetailsViewEntity.air_date
+            ratingTextView.text = getString(R.string.rating, "${episodeDetailsViewEntity.rating}")
+
+            Picasso.get().load(episodeDetailsViewEntity.imageUrl)
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.error)
+                .into(episodeImageView)
+        } else {
+            showError("Failed to load episode information")
+        }
     }
 
     override fun showError(message: String) {
