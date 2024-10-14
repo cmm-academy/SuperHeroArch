@@ -82,16 +82,12 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         val episodeImageView: ImageView = findViewById(R.id.episode_image)
         Log.d("DetailsActivity", "Displaying episode rating: ${episodeDetailsViewEntity.rating}, imageUrl: ${episodeDetailsViewEntity.imageUrl}")
 
-        ratingTextView.text = "Rating: ${episodeDetailsViewEntity.rating}"
+        ratingTextView.text = getString(R.string.rating, "${ episodeDetailsViewEntity.rating}")
 
-        episodeDetailsViewEntity.imageUrl.let {
-            Picasso.get().load(it)
+            Picasso.get().load(episodeDetailsViewEntity.imageUrl)
                 .placeholder(R.drawable.placeholder)
                 .error(R.drawable.error)
                 .into(episodeImageView)
-        } ?: run {
-            episodeImageView.setImageResource(R.drawable.error)
-        }
     }
 
     override fun displayCharacterDetails(character: CharacterEntity) {
