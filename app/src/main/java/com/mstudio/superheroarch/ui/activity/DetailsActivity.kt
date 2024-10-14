@@ -1,7 +1,6 @@
 package com.mstudio.superheroarch.ui.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -93,7 +92,7 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
     ) {
         if (episodeDetailsViewEntity != null) {
             firstEpisodeTextView?.text = episodeDetailsViewEntity.episode
-            firstEpisodeDateTextView?.text = episodeDetailsViewEntity.air_date
+            firstEpisodeDateTextView?.text = episodeDetailsViewEntity.airDate
             val ratingTextView: TextView = findViewById(R.id.episode_rating)
 
             ratingTextView.text = getString(R.string.rating, "${episodeDetailsViewEntity.rating}")

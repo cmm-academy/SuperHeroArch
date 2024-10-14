@@ -30,10 +30,6 @@ class RickAndMortyRepository(
     }
 
     suspend fun fetchEpisodeDetails(episodeUrl: String): EpisodeEntity {
-        return try {
-            remoteDataSource.getEpisode(episodeUrl)
-        } catch (e: IOException) {
-            throw e
-        }
+        return  remoteDataSource.getEpisode(episodeUrl)
     }
 }

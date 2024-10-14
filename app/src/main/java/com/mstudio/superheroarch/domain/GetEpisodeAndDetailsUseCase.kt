@@ -22,7 +22,7 @@ class GetEpisodeAndDetailsUseCase(
 
                 if (tmdbResult != null) {
                     val episodeDetailsViewEntity = EpisodeDetailsViewEntity(
-                        air_date = episodeEntity.air_date,
+                        airDate = episodeEntity.air_date,
                         episode = episodeEntity.episode,
                         rating = tmdbResult.rating,
                         imageUrl = "https://image.tmdb.org/t/p/w500${tmdbResult.imageUrl}"

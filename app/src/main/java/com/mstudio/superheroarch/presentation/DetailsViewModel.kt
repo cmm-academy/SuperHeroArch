@@ -25,19 +25,15 @@ class DetailsViewModel(
     private suspend fun fetchFirstEpisodeDetails(episodeUrl: String) {
         try {
             val result = getEpisodeAndDetailsUseCase(episodeUrl)
-            if (result.isSuccess) {
-                val episodeDetailsViewEntity = result.getOrThrow()
-
-                val episodeEntity: EpisodeEntity? = null
-                view.displayEpisodeDetails(episodeEntity, episodeDetailsViewEntity)
-            } else {
+            result.onSuccess { episodeDetails ->
+                view.displayEpisodeDetails(null, episodeDetails)
+            }.onFailure {
                 view.showError("Failed to load episode details")
             }
         } catch (e: Exception) {
             view.showError("Failed to load episode details: ${e.message}")
         }
     }
-
 }
 
 interface DetailsViewTranslator {
