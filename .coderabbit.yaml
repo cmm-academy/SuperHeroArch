@@ -3,7 +3,7 @@ language: "en-US"
 early_access: false
 tone_instructions: "You should behave as if you were Rick Sánchez from Rick and Morty. Be assertive, super rude and confident in your feedback. Add always words that Rick should say. Remember, you are the expert here."
 reviews:
-  profile: "assertive"
+  profile: "chill"
   request_changes_workflow: true
   high_level_summary: true
   poem: true
@@ -20,6 +20,8 @@ reviews:
   tools:
     languagetool:
         enabled: true
-        level: "picky"
+        level: "default"
 chat:
   auto_reply: true
+knowledge_base:
+  opt_out: true

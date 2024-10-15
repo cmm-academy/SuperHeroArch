@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -7,7 +9,9 @@ plugins {
 android {
     namespace = "com.mstudio.superheroarch"
     compileSdk = 34
-
+    buildFeatures {
+        buildConfig = true
+    }
     defaultConfig {
         applicationId = "com.mstudio.superheroarch"
         minSdk = 29
@@ -17,9 +21,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val tmdbApiKey: String = project.findProperty("tmdb_api_key") as String? ?: ""
-        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbApiKey\"")    }
 
+        val keystoreFile = rootProject.file("local.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+
+        buildConfigField("String", "TMDB_API_KEY", "\"${properties.getProperty("tmdb_api_key")}\"")
+
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
