@@ -23,15 +23,15 @@ class DetailsViewModel(
     }
 
     private suspend fun fetchFirstEpisodeDetails(episodeUrl: String) {
-        try {
-            val result = getEpisodeAndDetailsUseCase(episodeUrl)
-            result.onSuccess { episodeDetails ->
+        val result = getEpisodeAndDetailsUseCase(episodeUrl)
+        result.onSuccess { episodeDetails ->
+            if (episodeDetails != null) {
                 view.displayEpisodeDetails(null, episodeDetails)
-            }.onFailure {
+            } else {
                 view.showError("Failed to load episode details")
             }
-        } catch (e: Exception) {
-            view.showError("Failed to load episode details: ${e.message}")
+        }.onFailure {
+            view.showError("Failed to load episode details")
         }
     }
 }
@@ -42,5 +42,6 @@ interface DetailsViewTranslator {
         episodeEntity: EpisodeEntity?,
         episodeDetailsViewEntity: EpisodeDetailsViewEntity?
     )
+
     fun showError(message: String)
 }

@@ -90,20 +90,16 @@ class DetailsActivity : AppCompatActivity(), DetailsViewTranslator {
         episodeEntity: EpisodeEntity?,
         episodeDetailsViewEntity: EpisodeDetailsViewEntity?
     ) {
-        if (episodeDetailsViewEntity != null) {
-            firstEpisodeTextView?.text = episodeDetailsViewEntity.episode
-            firstEpisodeDateTextView?.text = episodeDetailsViewEntity.airDate
-            val ratingTextView: TextView = findViewById(R.id.episode_rating)
+        firstEpisodeTextView?.text = episodeDetailsViewEntity?.episode
+        firstEpisodeDateTextView?.text = episodeDetailsViewEntity?.airDate
+        val ratingTextView: TextView = findViewById(R.id.episode_rating)
 
-            ratingTextView.text = getString(R.string.rating, "${episodeDetailsViewEntity.rating}")
+        ratingTextView.text = getString(R.string.rating, "${episodeDetailsViewEntity?.rating}")
 
-            Picasso.get().load(episodeDetailsViewEntity.imageUrl)
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.error)
-                .into(episodeImageView)
-        } else {
-            showError("Failed to load episode information")
-        }
+        Picasso.get().load(episodeDetailsViewEntity?.imageUrl)
+            .placeholder(R.drawable.placeholder)
+            .error(R.drawable.error)
+            .into(episodeImageView)
     }
 
     override fun showError(message: String) {

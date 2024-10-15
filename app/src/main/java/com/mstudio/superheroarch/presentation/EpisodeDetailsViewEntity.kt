@@ -8,13 +8,13 @@ data class EpisodeDetailsViewEntity(
 )
 
 fun EpisodeDetailsViewEntity.mapToViewEntity(
-    air_date: String,
+    airDate: String,
     episode: String,
     rating: Double,
     imageUrl: String
 ): EpisodeDetailsViewEntity {
     return EpisodeDetailsViewEntity(
-        airDate = air_date,
+        airDate = airDate,
         episode = episode,
         rating = rating,
         imageUrl = imageUrl
