@@ -25,11 +25,7 @@ class DetailsViewModel(
     private suspend fun fetchFirstEpisodeDetails(episodeUrl: String) {
         val result = getEpisodeAndDetailsUseCase(episodeUrl)
         result.onSuccess { episodeDetails ->
-            if (episodeDetails != null) {
-                view.displayEpisodeDetails(null, episodeDetails)
-            } else {
-                view.showError("Failed to load episode details")
-            }
+            view.displayEpisodeDetails(null, episodeDetails)
         }.onFailure {
             view.showError("Failed to load episode details")
         }
