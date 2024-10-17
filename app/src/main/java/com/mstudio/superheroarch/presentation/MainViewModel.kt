@@ -2,6 +2,7 @@ package com.mstudio.superheroarch.presentation
 
 import androidx.lifecycle.ViewModel
 import com.mstudio.superheroarch.domain.GetCharactersUseCase
+import com.mstudio.superheroarch.domain.toEntity
 import com.mstudio.superheroarch.repository.CharacterEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,8 +27,9 @@ class MainViewModel(
 
             withContext(Dispatchers.Main) {
                 result.onSuccess { characters ->
-                    allCharacters = characters
-                    filteredCharacters = characters
+                    val characterEntities = characters.map { it.toEntity() }
+                    allCharacters = characterEntities
+                    filteredCharacters = characterEntities
                     if (allCharacters.isEmpty()) {
                         view.showEmptyError()
                     } else {
