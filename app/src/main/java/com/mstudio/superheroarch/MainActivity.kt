@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import android.view.View
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity(), MainViewTranslator {
 
@@ -41,6 +43,11 @@ class MainActivity : AppCompatActivity(), MainViewTranslator {
         }
 
         viewModel.onViewCreated()
+    }
+
+    fun ClickedButton(View: View) {
+        val displayedText = findViewById<TextView>(R.id.TextBelowButton)
+        displayedText.text = "The button has been clicked"
     }
 
     override fun showCharacters(characterList: List<Character>) {
