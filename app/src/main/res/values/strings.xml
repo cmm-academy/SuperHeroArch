@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SuperHeroArch</string>
+    <string name="button_NotClicked_text">Nobody has clicked on the button yet from string</string>
+    <string name="button_clicked_text">The button has been clicked from string</string>
 </resources>
