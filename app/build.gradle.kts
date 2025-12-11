@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.mstudio.superheroarch"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.mstudio.superheroarch"
@@ -32,6 +32,10 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy.force("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -42,4 +46,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
 }

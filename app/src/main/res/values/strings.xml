@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SuperHeroArch</string>
+    <string name="button_NotClicked_text">Nobody has clicked on the button yet from string</string>
+    <string name="button_clicked_text">The button has been clicked from string</string>
+    <string name="loading_characters">Characters are being loaded...</string>
+    <string name="character_load_error">It does not work due to this error: %1$s</string>
 </resources>
