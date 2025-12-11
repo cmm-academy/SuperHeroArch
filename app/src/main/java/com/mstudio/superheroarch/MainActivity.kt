@@ -7,8 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -20,12 +23,25 @@ class MainActivity : AppCompatActivity() {
             insets
         }
     }
-    fun setClickListener (){
+
+    private fun setClickListener() {
         val myButton = findViewById<Button>(R.id.button)
         myButton.setOnClickListener {
-            val buttonText = findViewById<TextView>(R.id.buttonText)
-            buttonText.text = getString(R.string.button_clicked_text)
+            getCharacters()
+        }
+    }
+
+    private fun getCharacters() {
+        val buttonText = findViewById<TextView>(R.id.buttonText)
+        buttonText.text = "Characters are being loaded..."
+        lifecycleScope.launch {
+            try {
+                val response = RetroFitClient.apiService.getCharacters()
+                val firstCharacterName = response
+                buttonText.text = firstCharacterName.toString()
+            } catch (e: Exception) {
+                buttonText.text = "It does not work due to this error: ${e.message}"
+            }
         }
     }
 }
-
