@@ -4,4 +4,5 @@
     <string name="button_clicked_text">The button has been clicked from string</string>
     <string name="loading_characters">Characters are being loaded...</string>
     <string name="character_load_error">It does not work due to this error: %1$s</string>
+    <string name="character_TheFirstCharacter">The First Character is:</string>
 </resources>

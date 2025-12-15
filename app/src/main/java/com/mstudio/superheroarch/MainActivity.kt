@@ -37,8 +37,8 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val response = RetroFitClient.apiService.getCharacters()
-                val firstCharacterName = response
-                buttonText.text = firstCharacterName.toString()
+                val firstCharacter = response.results.firstOrNull()
+                buttonText.text = getString(R.string.character_TheFirstCharacter)+" ${firstCharacter?.name} ${firstCharacter?.status} ${firstCharacter?.image}"
             } catch (e: Exception) {
                 buttonText.text = getString(R.string.character_load_error, e.message)
             }
