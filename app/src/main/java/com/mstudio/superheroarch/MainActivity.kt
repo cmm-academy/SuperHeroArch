@@ -33,14 +33,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun getCharacters() {
         val buttonText = findViewById<TextView>(R.id.buttonText)
-        buttonText.text = "Characters are being loaded..."
+        buttonText.text = getString(R.string.loading_characters)
         lifecycleScope.launch {
             try {
                 val response = RetroFitClient.apiService.getCharacters()
                 val firstCharacterName = response
                 buttonText.text = firstCharacterName.toString()
             } catch (e: Exception) {
-                buttonText.text = "It does not work due to this error: ${e.message}"
+                buttonText.text = getString(R.string.character_load_error, e.message)
             }
         }
     }
