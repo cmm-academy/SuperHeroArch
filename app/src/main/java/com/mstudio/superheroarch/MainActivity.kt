@@ -1,35 +1,47 @@
 package com.mstudio.superheroarch
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var recyclerView : RecyclerView
-
+    private lateinit var characterAdapter: CharacterAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        setupRecyclerView()
         setClickListener()
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.adapter = CharacterAdapter(emptyList())
+    }
 
+    private fun setupRecyclerView() {
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        characterAdapter = CharacterAdapter { character ->
+            val intent = Intent(this, CharacterDetailsActivity::class.java)
+            intent.putExtra("character", character)
+            startActivity(intent)
+        }
+        recyclerView.adapter = characterAdapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
     private fun setClickListener() {
@@ -41,20 +53,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getCharacters() {
-
         lifecycleScope.launch {
             try {
                 val response = RetroFitClient.apiService.getCharacters()
-                val adaptor = CharacterAdapter(response.results)
-                println(adaptor)
-                adaptor.notifyItemChanged(response.results.size-1)
-                recyclerView.adapter = adaptor
-
-
-
+                characterAdapter.submitList(response.results)
             } catch (e: Exception) {
-                val errorMessage = "Error: ${e.message}"
-                println(errorMessage)
+                Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
